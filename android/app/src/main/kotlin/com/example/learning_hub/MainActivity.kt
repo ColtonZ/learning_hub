@@ -1,4 +1,4 @@
-package com.example.learning_hub
+package com.coltonz.learning_hub
 
 import io.flutter.embedding.android.FlutterActivity
 
