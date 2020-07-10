@@ -6,6 +6,7 @@ import 'custom_app_bar.dart';
 class HomePage extends StatefulWidget {
   final GoogleSignInAccount account;
 
+  //home page takes in a Google Account
   HomePage({this.account});
 
   @override
@@ -20,36 +21,36 @@ class HomePageState extends State<HomePage> {
     account = widget.account;
 
     return Scaffold(
+      //returns the custom app bar with the home page title
       appBar: CustomAppBar.create(context, "Account Details"),
+      //checks if the account is null - asks you to sign in if it is, otherwise returns the text: "Signed in!"
       body: account != null
           ? Text("Signed in!")
           : FutureBuilder(
+              //gets the user to sign in
               future: signIn(),
+              //if user is still signing in, return loading indicator, otherwise display home page
               builder: (context, snapshot) {
                 if (snapshot.connectionState == ConnectionState.done) {
                   account = snapshot.data;
+                  //returns home page
                   return Center(
                     child: Column(
                       mainAxisAlignment: MainAxisAlignment.center,
                       children: <Widget>[
-                        Text(
-                          "Account Name:",
-                          style: TextStyle(
-                              fontSize: 20, fontWeight: FontWeight.bold),
-                        ),
+                        Text("Account Name:"),
                         SizedBox(
                           height: 5,
                         ),
                         Text(
-                          "${account.displayName}",
-                          style: TextStyle(
-                              fontSize: 38, fontWeight: FontWeight.w400),
-                        ),
+                            //gets Google Account's display name
+                            "${account.displayName}"),
                         SizedBox(
                           height: 10,
                         ),
                         ClipRRect(
                           borderRadius: BorderRadius.circular(8.0),
+                          //returns the account's profile picture in the centre
                           child: Image.network(
                             account.photoUrl,
                           ),
@@ -61,6 +62,7 @@ class HomePageState extends State<HomePage> {
                     ),
                   );
                 } else {
+                  //whilst logging in, return a circular progress indicator
                   return Center(
                     child: CircularProgressIndicator(),
                   );
