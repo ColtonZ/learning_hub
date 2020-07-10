@@ -8,11 +8,17 @@ Future<GoogleSignInAccount> signIn() async {
     scopes: [
       'profile',
       'email',
-      "https://www.googleapis.com/auth/classroom.courses",
-      "https://www.googleapis.com/auth/classroom.courses.readonly",
-      "https://www.googleapis.com/auth/classroom.courses",
       "https://www.googleapis.com/auth/classroom.announcements",
-      "https://www.googleapis.com/auth/classroom.coursework.me.readonly"
+      "https://www.googleapis.com/auth/classroom.courses",
+      "https://www.googleapis.com/auth/classroom.coursework.me",
+      "https://www.googleapis.com/auth/classroom.coursework.students",
+      "https://www.googleapis.com/auth/classroom.profile.emails",
+      "https://www.googleapis.com/auth/classroom.profile.photos",
+      "https://www.googleapis.com/auth/classroom.push-notifications",
+      "https://www.googleapis.com/auth/classroom.rosters",
+      "https://www.googleapis.com/auth/classroom.student-submissions.me.readonly",
+      "https://www.googleapis.com/auth/classroom.student-submissions.students.readonly",
+      "https://www.googleapis.com/auth/classroom.topics",
     ],
   );
   //signs the user in
@@ -20,3 +26,5 @@ Future<GoogleSignInAccount> signIn() async {
 
   return account;
 }
+
+//full scopes list: https://developers.google.com/identity/protocols/oauth2/scopes
