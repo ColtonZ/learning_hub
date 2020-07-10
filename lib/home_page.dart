@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:google_sign_in/google_sign_in.dart';
 import 'backend.dart';
+import 'custom_app_bar.dart';
 
 class HomePage extends StatefulWidget {
   final GoogleSignInAccount account;
@@ -19,6 +20,7 @@ class HomePageState extends State<HomePage> {
     account = widget.account;
 
     return Scaffold(
+      appBar: CustomAppBar.create(context, "Account Details"),
       body: account != null
           ? Text("Signed in!")
           : FutureBuilder(
