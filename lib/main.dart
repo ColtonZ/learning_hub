@@ -1,5 +1,10 @@
 import 'package:flutter/material.dart';
-import 'package:learning_hub/home_page.dart';
+import 'account_page.dart';
+import 'settings_page.dart';
+import 'tannoy_page.dart';
+import 'timetable_page.dart';
+import 'courses_page.dart';
+import 'home_page.dart';
 
 void main() => runApp(MyApp());
 
@@ -8,7 +13,15 @@ class MyApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
-      home: HomePage(),
+      initialRoute: '/',
+      routes: <String, WidgetBuilder>{
+        '/': (BuildContext context) => new HomePage(),
+        '/timetable': (BuildContext context) => new TimetablePage(),
+        '/courses': (BuildContext context) => new CoursesPage(),
+        '/tannoy': (BuildContext context) => new TannoyPage(),
+        '/settings': (BuildContext context) => new SettingsPage(),
+        '/account': (BuildContext context) => new AccountPage(),
+      },
     );
   }
 }
