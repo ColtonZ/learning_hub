@@ -5,6 +5,7 @@ class CustomAppBar {
   static AppBar create(BuildContext context, String title) {
     return new AppBar(
       title: Text(title),
+      backgroundColor: Colors.purple[600],
     );
   }
 }

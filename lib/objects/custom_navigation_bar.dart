@@ -55,7 +55,7 @@ class CustomNavigationBar {
         ),
       ],
       currentIndex: index,
-      selectedItemColor: Colors.amber[800],
+      selectedItemColor: Colors.blue[600],
       unselectedItemColor: Colors.black,
       type: BottomNavigationBarType.fixed,
       showSelectedLabels: false,

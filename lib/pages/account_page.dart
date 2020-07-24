@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:google_sign_in/google_sign_in.dart';
-import 'backend.dart';
-import 'custom_app_bar.dart';
-import 'custom_navigation_bar.dart';
+import '../backend.dart';
+import '../objects/custom_app_bar.dart';
+import '../objects/custom_navigation_bar.dart';
 
 class AccountPage extends StatefulWidget {
   final GoogleSignInAccount account;

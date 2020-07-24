@@ -1,10 +1,10 @@
 import 'package:flutter/material.dart';
-import 'account_page.dart';
-import 'settings_page.dart';
-import 'tannoy_page.dart';
-import 'timetable_page.dart';
-import 'courses_page.dart';
-import 'home_page.dart';
+import 'pages/account_page.dart';
+import 'pages/settings_page.dart';
+import 'pages/tannoy_page.dart';
+import 'pages/timetable_page.dart';
+import 'pages/courses_page.dart';
+import 'pages/home_page.dart';
 
 void main() => runApp(MyApp());
 

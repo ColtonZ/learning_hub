@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
-import 'custom_navigation_bar.dart';
-import 'custom_app_bar.dart';
+import '../objects/custom_navigation_bar.dart';
+import '../objects/custom_app_bar.dart';
 
 class TannoyPage extends StatefulWidget {
   @override
