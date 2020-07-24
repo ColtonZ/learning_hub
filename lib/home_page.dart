@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:google_sign_in/google_sign_in.dart';
 import 'backend.dart';
 import 'custom_app_bar.dart';
+import 'custom_navigation_bar.dart';
 
 class HomePage extends StatefulWidget {
   final GoogleSignInAccount account;
@@ -68,6 +69,7 @@ class HomePageState extends State<HomePage> {
                   );
                 }
               }),
+      bottomNavigationBar: CustomNavigationBar.create(context),
     );
   }
 }
