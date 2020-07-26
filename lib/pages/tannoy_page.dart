@@ -41,7 +41,7 @@ class TannoyPageState extends State<TannoyPage> {
                     );
                   }
                 }),
-        bottomNavigationBar: CustomNavigationBar.create(context, 3));
+        bottomNavigationBar: CustomNavigationBar.create(context, account, 3));
   }
 }
 

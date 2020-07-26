@@ -42,7 +42,7 @@ class CoursesPageState extends State<CoursesPage> {
                 );
               }
             }),
-        bottomNavigationBar: CustomNavigationBar.create(context, 2));
+        bottomNavigationBar: CustomNavigationBar.create(context, account, 2));
   }
 }
 

@@ -39,7 +39,7 @@ class AccountPageState extends State<AccountPage> {
                     );
                   }
                 }),
-        bottomNavigationBar: CustomNavigationBar.create(context, 5));
+        bottomNavigationBar: CustomNavigationBar.create(context, account, 5));
   }
 }
 

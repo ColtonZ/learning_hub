@@ -41,7 +41,7 @@ class TimetablePageState extends State<TimetablePage> {
                     );
                   }
                 }),
-        bottomNavigationBar: CustomNavigationBar.create(context, 1));
+        bottomNavigationBar: CustomNavigationBar.create(context, account, 1));
   }
 }
 

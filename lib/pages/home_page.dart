@@ -41,7 +41,7 @@ class HomePageState extends State<HomePage> {
                     );
                   }
                 }),
-        bottomNavigationBar: CustomNavigationBar.create(context, 0));
+        bottomNavigationBar: CustomNavigationBar.create(context, account, 0));
   }
 }
 

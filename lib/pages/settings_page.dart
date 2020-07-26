@@ -41,7 +41,7 @@ class SettingsPageState extends State<SettingsPage> {
                     );
                   }
                 }),
-        bottomNavigationBar: CustomNavigationBar.create(context, 4));
+        bottomNavigationBar: CustomNavigationBar.create(context, account, 4));
   }
 }
 
