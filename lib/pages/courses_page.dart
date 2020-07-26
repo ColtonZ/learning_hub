@@ -58,8 +58,15 @@ class CustomScaffold {
                     print(item);
                   });
                 });
-                return CustomListView.create(
-                    context, combinedList[0], combinedList[1]);
+                //checks if the user has courses. If they do, return the courses, otherwise return an error message
+                try {
+                  return CustomListView.create(
+                      context, combinedList[0], combinedList[1]);
+                } catch (Exception) {
+                  return Center(
+                    child: Text("You have no courses to display."),
+                  );
+                }
               } else {
                 //whilst getting courses, return a loading indicator
                 return Center(child: CircularProgressIndicator());
