@@ -5,6 +5,7 @@ import '../objects/custom_app_bar.dart';
 import '../objects/custom_navigation_bar.dart';
 
 class AccountPage extends StatefulWidget {
+  //takes in the widget's arguments
   final GoogleSignInAccount account;
 
   AccountPage({this.account});
@@ -16,6 +17,7 @@ class AccountPage extends StatefulWidget {
 class AccountPageState extends State<AccountPage> {
   Widget build(BuildContext context) {
     GoogleSignInAccount account = widget.account;
+    //checks if the user is signed in, if not, they are signed in
     return account == null
         ? FutureBuilder(
             future: signIn(),
@@ -24,20 +26,25 @@ class AccountPageState extends State<AccountPage> {
                 account = snapshot.data;
                 return CustomScaffold.create(context, account);
               } else {
-                return Center(child: CircularProgressIndicator());
+                //whilst signing in, return a loading indicator
+                return Scaffold(
+                    appBar: CustomAppBar.create(context, "Account Details"),
+                    body: Center(child: CircularProgressIndicator()),
+                    bottomNavigationBar:
+                        CustomNavigationBar.create(context, account, 5));
               }
             })
         : CustomScaffold.create(context, account);
   }
 }
 
+//details the looks of the page
 class CustomScaffold {
-  //creates the body of the app with the given account to provide consistency
   static Scaffold create(BuildContext context, GoogleSignInAccount account) {
     return new Scaffold(
-        //returns the custom app bar with the home page title
+        //returns the custom app bar with the account page title
         appBar: CustomAppBar.create(context, "Account Details"),
-        //checks if the account is null - asks you to sign in if it is, otherwise returns the text: "Signed in!"
+        //designs the account page
         body: Center(
           child: Column(
             mainAxisAlignment: MainAxisAlignment.center,
@@ -65,6 +72,7 @@ class CustomScaffold {
             ],
           ),
         ),
+        //creates the bottom navigation bar
         bottomNavigationBar: CustomNavigationBar.create(context, account, 5));
   }
 }

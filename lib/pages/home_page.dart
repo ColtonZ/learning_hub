@@ -5,6 +5,7 @@ import 'package:google_sign_in/google_sign_in.dart';
 import 'package:learning_hub/backend.dart';
 
 class HomePage extends StatefulWidget {
+  //takes in the widget's arguments
   final GoogleSignInAccount account;
 
   HomePage({this.account});
@@ -17,6 +18,7 @@ class HomePage extends StatefulWidget {
 class HomePageState extends State<HomePage> {
   Widget build(BuildContext context) {
     GoogleSignInAccount account = widget.account;
+    //checks if the user is signed in, if not, they are signed in
     return account == null
         ? FutureBuilder(
             future: signIn(),
@@ -25,21 +27,27 @@ class HomePageState extends State<HomePage> {
                 account = snapshot.data;
                 return CustomScaffold.create(context, account);
               } else {
-                return Center(child: CircularProgressIndicator());
+                //whilst signing in, return a loading indicator
+                return Scaffold(
+                    appBar: CustomAppBar.create(context, "Home"),
+                    body: Center(child: CircularProgressIndicator()),
+                    bottomNavigationBar:
+                        CustomNavigationBar.create(context, account, 0));
               }
             })
         : CustomScaffold.create(context, account);
   }
 }
 
+//details the looks of the page
 class CustomScaffold {
-  //creates the body of the app with the given account to provide consistency
   static Scaffold create(BuildContext context, GoogleSignInAccount account) {
     return new Scaffold(
         //returns the custom app bar with the home page title
         appBar: CustomAppBar.create(context, "Home"),
-        //checks if the account is null - asks you to sign in if it is, otherwise returns the text: "Signed in!"
+        //builds the body
         body: Center(child: Text(account.email)),
+        //builds the navigation bar for the given page
         bottomNavigationBar: CustomNavigationBar.create(context, account, 0));
   }
 }

@@ -5,6 +5,7 @@ import 'package:google_sign_in/google_sign_in.dart';
 import 'package:learning_hub/backend.dart';
 
 class TannoyPage extends StatefulWidget {
+  //takes in the widget's arguments
   final GoogleSignInAccount account;
 
   TannoyPage({this.account});
@@ -17,6 +18,7 @@ class TannoyPage extends StatefulWidget {
 class TannoyPageState extends State<TannoyPage> {
   Widget build(BuildContext context) {
     GoogleSignInAccount account = widget.account;
+    //checks if the user is signed in, if not, they are signed in
     return account == null
         ? FutureBuilder(
             future: signIn(),
@@ -25,21 +27,27 @@ class TannoyPageState extends State<TannoyPage> {
                 account = snapshot.data;
                 return CustomScaffold.create(context, account);
               } else {
-                return Center(child: CircularProgressIndicator());
+                //whilst signing in, return a loading indicator
+                return Scaffold(
+                    appBar: CustomAppBar.create(context, "Tannoy Notices"),
+                    body: Center(child: CircularProgressIndicator()),
+                    bottomNavigationBar:
+                        CustomNavigationBar.create(context, account, 3));
               }
             })
         : CustomScaffold.create(context, account);
   }
 }
 
+//details the looks of the page
 class CustomScaffold {
-  //creates the body of the app with the given account to provide consistency
   static Scaffold create(BuildContext context, GoogleSignInAccount account) {
     return new Scaffold(
-        //returns the custom app bar with the home page title
+        //returns the custom app bar with the tannoy page title
         appBar: CustomAppBar.create(context, "Tannoy Notices"),
-        //checks if the account is null - asks you to sign in if it is, otherwise returns the text: "Signed in!"
+        //builds the body
         body: Center(child: Text(account.email)),
+        //builds the navigation bar for the given page
         bottomNavigationBar: CustomNavigationBar.create(context, account, 3));
   }
 }
