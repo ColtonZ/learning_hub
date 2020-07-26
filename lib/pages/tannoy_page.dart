@@ -5,6 +5,10 @@ import 'package:google_sign_in/google_sign_in.dart';
 import 'package:learning_hub/backend.dart';
 
 class TannoyPage extends StatefulWidget {
+  final GoogleSignInAccount account;
+
+  TannoyPage({this.account});
+
   @override
   //initialises the tannoy page state
   TannoyPageState createState() => TannoyPageState();
@@ -14,6 +18,7 @@ class TannoyPageState extends State<TannoyPage> {
   GoogleSignInAccount account;
 
   Widget build(BuildContext context) {
+    GoogleSignInAccount account = widget.account;
     return Scaffold(
         //returns the custom app bar with the home page title
         appBar: CustomAppBar.create(context, "Account Details"),

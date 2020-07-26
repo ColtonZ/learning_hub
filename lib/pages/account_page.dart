@@ -5,15 +5,18 @@ import '../objects/custom_app_bar.dart';
 import '../objects/custom_navigation_bar.dart';
 
 class AccountPage extends StatefulWidget {
+  final GoogleSignInAccount account;
+
+  AccountPage({this.account});
+
   @override
   AccountPageState createState() => AccountPageState();
 }
 
 class AccountPageState extends State<AccountPage> {
-  GoogleSignInAccount account;
-
   @override
   Widget build(BuildContext context) {
+    GoogleSignInAccount account = widget.account;
     return Scaffold(
         //returns the custom app bar with the home page title
         appBar: CustomAppBar.create(context, "Account Details"),

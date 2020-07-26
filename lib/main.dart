@@ -15,23 +15,30 @@ class MyApp extends StatelessWidget {
     return MaterialApp(
       //deals with passing arguments when a new page is pushed onto the navigator
       onGenerateRoute: (route) {
-        final arguments = route.arguments;
+        final Map arguments = route.arguments;
         //if the route is to the assignment page, pass the specific assignment details, otherwise just pass the account
         switch (route.name) {
           case "/":
-            return MaterialPageRoute(builder: (_) => HomePage());
+            return MaterialPageRoute(
+                builder: (_) => HomePage(account: arguments["account"]));
           case "/timetable":
-            return MaterialPageRoute(builder: (_) => TimetablePage());
+            return MaterialPageRoute(
+                builder: (_) => TimetablePage(account: arguments["account"]));
           case "/courses":
-            return MaterialPageRoute(builder: (_) => CoursesPage());
+            return MaterialPageRoute(
+                builder: (_) => CoursesPage(account: arguments["account"]));
           case "/tannoy":
-            return MaterialPageRoute(builder: (_) => TannoyPage());
+            return MaterialPageRoute(
+                builder: (_) => TannoyPage(account: arguments["account"]));
           case "/settings":
-            return MaterialPageRoute(builder: (_) => SettingsPage());
+            return MaterialPageRoute(
+                builder: (_) => SettingsPage(account: arguments["account"]));
           case "/account":
-            return MaterialPageRoute(builder: (_) => AccountPage());
+            return MaterialPageRoute(
+                builder: (_) => AccountPage(account: arguments["account"]));
           default:
-            return MaterialPageRoute(builder: (_) => HomePage());
+            return MaterialPageRoute(
+                builder: (_) => HomePage(account: arguments["account"]));
         }
       },
       initialRoute: '/',

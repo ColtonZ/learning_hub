@@ -5,6 +5,10 @@ import 'package:google_sign_in/google_sign_in.dart';
 import 'package:learning_hub/backend.dart';
 
 class SettingsPage extends StatefulWidget {
+  final GoogleSignInAccount account;
+
+  SettingsPage({this.account});
+
   @override
   //initialises the settings page state
   SettingsPageState createState() => SettingsPageState();
@@ -14,6 +18,7 @@ class SettingsPageState extends State<SettingsPage> {
   GoogleSignInAccount account;
 
   Widget build(BuildContext context) {
+    GoogleSignInAccount account = widget.account;
     return Scaffold(
         //returns the custom app bar with the home page title
         appBar: CustomAppBar.create(context, "Account Details"),

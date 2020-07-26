@@ -7,6 +7,10 @@ import 'package:google_sign_in/google_sign_in.dart';
 import '../objects/custom_navigation_bar.dart';
 
 class CoursesPage extends StatefulWidget {
+  final GoogleSignInAccount account;
+
+  CoursesPage({this.account});
+
   @override
   //initialises the courses page state
   CoursesPageState createState() => CoursesPageState();
@@ -16,6 +20,7 @@ class CoursesPageState extends State<CoursesPage> {
   GoogleSignInAccount account;
 
   Widget build(BuildContext context) {
+    GoogleSignInAccount account = widget.account;
     return Scaffold(
         //returns the custom app bar with the home page title
         appBar: CustomAppBar.create(context, "Account Details"),

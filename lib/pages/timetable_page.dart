@@ -5,6 +5,10 @@ import 'package:google_sign_in/google_sign_in.dart';
 import 'package:learning_hub/backend.dart';
 
 class TimetablePage extends StatefulWidget {
+  final GoogleSignInAccount account;
+
+  TimetablePage({this.account});
+
   @override
   //initialises the timetable page state
   TimetablePageState createState() => TimetablePageState();
@@ -14,6 +18,7 @@ class TimetablePageState extends State<TimetablePage> {
   GoogleSignInAccount account;
 
   Widget build(BuildContext context) {
+    GoogleSignInAccount account = widget.account;
     return Scaffold(
         //returns the custom app bar with the home page title
         appBar: CustomAppBar.create(context, "Account Details"),
