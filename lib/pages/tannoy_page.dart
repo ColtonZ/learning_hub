@@ -15,8 +15,6 @@ class TannoyPage extends StatefulWidget {
 }
 
 class TannoyPageState extends State<TannoyPage> {
-  GoogleSignInAccount account;
-
   Widget build(BuildContext context) {
     GoogleSignInAccount account = widget.account;
     return Scaffold(

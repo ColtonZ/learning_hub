@@ -15,39 +15,33 @@ class TimetablePage extends StatefulWidget {
 }
 
 class TimetablePageState extends State<TimetablePage> {
-  GoogleSignInAccount account;
-
   Widget build(BuildContext context) {
     GoogleSignInAccount account = widget.account;
-    return Scaffold(
-        //returns the custom app bar with the home page title
-        appBar: CustomAppBar.create(context, "Account Details"),
-        //checks if the account is null - asks you to sign in if it is, otherwise returns the text: "Signed in!"
-        body: account != null
-            ? CustomBody.create(context, account)
-            : FutureBuilder(
-                //gets the user to sign in
-                future: signIn(),
-                //if user is still signing in, return loading indicator, otherwise display home page
-                builder: (context, snapshot) {
-                  if (snapshot.connectionState == ConnectionState.done) {
-                    account = snapshot.data;
-                    //returns home page
-                    return CustomBody.create(context, account);
-                  } else {
-                    //whilst logging in, return a circular progress indicator
-                    return Center(
-                      child: CircularProgressIndicator(),
-                    );
-                  }
-                }),
-        bottomNavigationBar: CustomNavigationBar.create(context, account, 1));
+    print("email:");
+    //print(account.email);
+    return account == null
+        ? FutureBuilder(
+            future: signIn(),
+            builder: (context, snapshot) {
+              if (snapshot.connectionState == ConnectionState.done) {
+                account = snapshot.data;
+                return CustomBody.create(context, account);
+              } else {
+                return Center(child: CircularProgressIndicator());
+              }
+            })
+        : CustomBody.create(context, account);
   }
 }
 
 class CustomBody {
   //creates the body of the app with the given account to provide consistency
-  static Center create(BuildContext context, GoogleSignInAccount account) {
-    return new Center();
+  static Scaffold create(BuildContext context, GoogleSignInAccount account) {
+    return new Scaffold(
+        //returns the custom app bar with the home page title
+        appBar: CustomAppBar.create(context, "Account Details"),
+        //checks if the account is null - asks you to sign in if it is, otherwise returns the text: "Signed in!"
+        body: Center(child: Text(account.email)),
+        bottomNavigationBar: CustomNavigationBar.create(context, account, 1));
   }
 }

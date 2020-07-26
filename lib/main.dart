@@ -19,8 +19,13 @@ class MyApp extends StatelessWidget {
         //if the route is to the assignment page, pass the specific assignment details, otherwise just pass the account
         switch (route.name) {
           case "/":
-            return MaterialPageRoute(
-                builder: (_) => HomePage(account: arguments["account"]));
+            return MaterialPageRoute(builder: (_) {
+              try {
+                return HomePage(account: arguments["account"]);
+              } catch (Exception) {
+                return HomePage(account: null);
+              }
+            });
           case "/timetable":
             return MaterialPageRoute(
                 builder: (_) => TimetablePage(account: arguments["account"]));

@@ -15,8 +15,6 @@ class SettingsPage extends StatefulWidget {
 }
 
 class SettingsPageState extends State<SettingsPage> {
-  GoogleSignInAccount account;
-
   Widget build(BuildContext context) {
     GoogleSignInAccount account = widget.account;
     return Scaffold(

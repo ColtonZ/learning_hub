@@ -15,8 +15,6 @@ class HomePage extends StatefulWidget {
 }
 
 class HomePageState extends State<HomePage> {
-  GoogleSignInAccount account;
-
   Widget build(BuildContext context) {
     GoogleSignInAccount account = widget.account;
     return Scaffold(

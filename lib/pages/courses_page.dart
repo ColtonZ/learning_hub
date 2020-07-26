@@ -17,8 +17,6 @@ class CoursesPage extends StatefulWidget {
 }
 
 class CoursesPageState extends State<CoursesPage> {
-  GoogleSignInAccount account;
-
   Widget build(BuildContext context) {
     GoogleSignInAccount account = widget.account;
     return Scaffold(
