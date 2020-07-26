@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:learning_hub/objects/custom_list_view.dart';
 //import 'package:learning_hub/objects/custom_list_view.dart';
 import '../objects/custom_app_bar.dart';
 import 'package:learning_hub/backend.dart';
@@ -19,37 +18,29 @@ class CoursesPage extends StatefulWidget {
 class CoursesPageState extends State<CoursesPage> {
   Widget build(BuildContext context) {
     GoogleSignInAccount account = widget.account;
-    return Scaffold(
-        //returns the custom app bar with the home page title
-        appBar: CustomAppBar.create(context, "Account Details"),
-        //checks if the account is null - asks you to sign in if it is, otherwise returns the text: "Signed in!"
-        body: FutureBuilder(
-            //gets the user to sign in
-            future: getCourses(account),
-            //if user is still signing in, return loading indicator, otherwise display home page
+    return account == null
+        ? FutureBuilder(
+            future: signIn(),
             builder: (context, snapshot) {
               if (snapshot.connectionState == ConnectionState.done) {
-                print(snapshot.data);
-                //print("Type: " + snapshot.data.runtimeType);
-                return CustomBody.create(
-                    context, snapshot.data[0], snapshot.data[1]);
+                account = snapshot.data;
+                return CustomScaffold.create(context, account);
               } else {
-                //whilst logging in, return a circular progress indicator
-                return Center(
-                  child: CircularProgressIndicator(),
-                );
+                return Center(child: CircularProgressIndicator());
               }
-            }),
-        bottomNavigationBar: CustomNavigationBar.create(context, account, 2));
+            })
+        : CustomScaffold.create(context, account);
   }
 }
 
-class CustomBody {
+class CustomScaffold {
   //creates the body of the app with the given account to provide consistency
-  static Center create(
-      BuildContext context, List<String> titles, List<String> subtitles) {
-    return new Center(
-      child: CustomListView.create(context, titles, subtitles),
-    );
+  static Scaffold create(BuildContext context, GoogleSignInAccount account) {
+    return new Scaffold(
+        //returns the custom app bar with the home page title
+        appBar: CustomAppBar.create(context, "Your Courses"),
+        //checks if the account is null - asks you to sign in if it is, otherwise returns the text: "Signed in!"
+        body: Center(child: Text(account.email)),
+        bottomNavigationBar: CustomNavigationBar.create(context, account, 2));
   }
 }

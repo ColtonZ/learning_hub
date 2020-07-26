@@ -17,29 +17,27 @@ class TimetablePage extends StatefulWidget {
 class TimetablePageState extends State<TimetablePage> {
   Widget build(BuildContext context) {
     GoogleSignInAccount account = widget.account;
-    print("email:");
-    //print(account.email);
     return account == null
         ? FutureBuilder(
             future: signIn(),
             builder: (context, snapshot) {
               if (snapshot.connectionState == ConnectionState.done) {
                 account = snapshot.data;
-                return CustomBody.create(context, account);
+                return CustomScaffold.create(context, account);
               } else {
                 return Center(child: CircularProgressIndicator());
               }
             })
-        : CustomBody.create(context, account);
+        : CustomScaffold.create(context, account);
   }
 }
 
-class CustomBody {
+class CustomScaffold {
   //creates the body of the app with the given account to provide consistency
   static Scaffold create(BuildContext context, GoogleSignInAccount account) {
     return new Scaffold(
         //returns the custom app bar with the home page title
-        appBar: CustomAppBar.create(context, "Account Details"),
+        appBar: CustomAppBar.create(context, "Your Timetable"),
         //checks if the account is null - asks you to sign in if it is, otherwise returns the text: "Signed in!"
         body: Center(child: Text(account.email)),
         bottomNavigationBar: CustomNavigationBar.create(context, account, 1));
