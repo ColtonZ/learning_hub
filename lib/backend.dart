@@ -62,17 +62,17 @@ Future<List<List<String>>> getCourses(GoogleSignInAccount account) async {
 
   final List<Course> courses = await sendCourseRequest(headers);
 
-  List<String> title;
-  List<String> subtitle;
-  List<List<String>> combined;
+  List<String> titles = [];
+  List<String> subtitles = [];
+  List<List<String>> combined = [];
 
   courses.forEach((element) {
-    title.add(element.name);
-    subtitle.add(element.description);
+    titles.add(element.name);
+    subtitles.add(element.description);
   });
 
-  combined.add(title);
-  combined.add(subtitle);
+  combined.add(titles);
+  combined.add(subtitles);
   return combined;
 }
 
@@ -83,11 +83,10 @@ Future<List<Course>> sendCourseRequest(Map<String, String> headers) async {
 
   final responseBody = response.body;
 
-  return compute(parseCourses, responseBody);
+  return parseCourses(responseBody);
 }
 
 List<Course> parseCourses(String responseBody) {
-  print(responseBody);
   var data = json.decode(responseBody);
   var courses = data["courses"] as List;
   var courseList = <Course>[];
@@ -122,7 +121,7 @@ Future<List<Assignment>> sendAssignmentRequest(
       headers: headers);
 
   final responseBody = response.body;
-  printWrapped(responseBody);
+  //printWrapped(responseBody);
   return compute(parseAssignments, responseBody);
 }
 

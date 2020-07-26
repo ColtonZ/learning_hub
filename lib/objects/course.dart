@@ -17,8 +17,8 @@ class Course {
     );
   }
 
-  /*void output() {
+  void output() {
     print(
         "Platform: $platform | ID: $id | Name: $name | Description: $description | Status: $status");
-  }*/
+  }
 }

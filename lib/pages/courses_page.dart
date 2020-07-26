@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:learning_hub/objects/custom_list_view.dart';
 //import 'package:learning_hub/objects/custom_list_view.dart';
 import '../objects/custom_app_bar.dart';
 import 'package:learning_hub/backend.dart';
@@ -47,7 +48,23 @@ class CustomScaffold {
         //returns the custom app bar with the courses page title
         appBar: CustomAppBar.create(context, "Your Courses"),
         //builds the body
-        body: Center(child: Text(account.email)),
+        body: FutureBuilder(
+            future: getCourses(account),
+            builder: (context, snapshot) {
+              if (snapshot.connectionState == ConnectionState.done) {
+                List<List<String>> combinedList = snapshot.data;
+                combinedList.forEach((element) {
+                  element.forEach((item) {
+                    print(item);
+                  });
+                });
+                return CustomListView.create(
+                    context, combinedList[0], combinedList[1]);
+              } else {
+                //whilst getting courses, return a loading indicator
+                return Center(child: CircularProgressIndicator());
+              }
+            }),
         //builds the navigation bar for the given page
         bottomNavigationBar: CustomNavigationBar.create(context, account, 2));
   }
