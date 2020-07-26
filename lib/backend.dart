@@ -38,6 +38,7 @@ Future<GoogleSignInAccount> signIn() async {
 //full scopes list: https://developers.google.com/identity/protocols/oauth2/scopes
 
 bool isSignedIn(GoogleSignInAccount account) {
+  //checks if a user is signed in with google
   if (account != null) {
     return true;
   } else {
@@ -46,6 +47,7 @@ bool isSignedIn(GoogleSignInAccount account) {
 }
 
 Future<Map<String, String>> getHeaders(GoogleSignInAccount account) async {
+  //maps a user's auth headers to a map for use later
   final Map<String, String> headers = await account.authHeaders;
 
   return headers;
@@ -54,18 +56,21 @@ Future<Map<String, String>> getHeaders(GoogleSignInAccount account) async {
 Future<List<List<String>>> getCourses(GoogleSignInAccount account) async {
   Map<String, String> headers;
 
+//gets the user's auth headers
   if (isSignedIn(account)) {
     headers = await getHeaders(account);
   } else {
     headers = await getHeaders(await signIn());
   }
 
+//requests a list of the user's courses
   final List<Course> courses = await sendCourseRequest(headers);
 
   List<String> titles = [];
   List<String> subtitles = [];
   List<List<String>> combined = [];
 
+//creates a list of course titles and subtitles for the list view
   courses.forEach((element) {
     titles.add(element.name);
     subtitles.add(element.description);
@@ -77,21 +82,25 @@ Future<List<List<String>>> getCourses(GoogleSignInAccount account) async {
 }
 
 Future<List<Course>> sendCourseRequest(Map<String, String> headers) async {
+  //requests the user's courses with an http request
   http.Response response = await http.get(
       Uri.encodeFull("https://classroom.googleapis.com/v1/courses"),
       headers: headers);
 
   final responseBody = response.body;
 
+//converts the json response to a list of courses
   return parseCourses(responseBody);
 }
 
 List<Course> parseCourses(String responseBody) {
   var data = json.decode(responseBody);
+  //decodes the json into a list of jsons
   var courses = data["courses"] as List;
   var courseList = <Course>[];
 
   courses.forEach((details) {
+    //parses each json request into a course, and, if they are an active course, adds them to the course list
     Course course = Course.fromJson(details);
     if (course.status == "ACTIVE") {
       courseList.add(course);
@@ -104,47 +113,57 @@ List<Course> parseCourses(String responseBody) {
 Future<List<Assignment>> getAssignments(
     String id, GoogleSignInAccount account) async {
   Map<String, String> headers;
+
+  //gets the user's auth headers
   if (isSignedIn(account)) {
     headers = await getHeaders(account);
   } else {
     headers = await getHeaders(await signIn());
   }
+
+//returns a list of the assignments for a given course
   final List<Assignment> assignments = await sendAssignmentRequest(id, headers);
+
   return assignments;
 }
 
 Future<List<Assignment>> sendAssignmentRequest(
     String id, Map<String, String> headers) async {
+  //sends an http request for the courses assignments given a course id
   http.Response response = await http.get(
       Uri.encodeFull(
           "https://classroom.googleapis.com//v1/courses/$id/courseWork"),
       headers: headers);
 
   final responseBody = response.body;
-  //printWrapped(responseBody);
-  return compute(parseAssignments, responseBody);
+
+  //converts the response into a list of assignments
+  return parseAssignments(responseBody);
 }
 
 List<Assignment> parseAssignments(String responseBody) {
   var data = json.decode(responseBody);
+  //converts the json into a list of jsons
   var assignments = data["courseWork"] as List;
   var assignmentList = <Assignment>[];
 
   assignments.forEach((details) {
+    //converts each json into an assignment and adds it to the assignment list
     Assignment assignment = Assignment.fromJson(details);
     assignmentList.add(assignment);
-    assignment.output();
   });
 
   return assignmentList;
 }
 
 Future<GoogleSignInAccount> signOut() async {
+  //signs out of the app's google account
   googleSignIn.signOut();
   return null;
 }
 
 void printWrapped(String text) {
-  final pattern = RegExp('.{1,800}'); // 800 is the size of each chunk
+  //prints out text if over 800 characters long by splitting into 800 character chunks (this is the default limit for the terminal)
+  final pattern = RegExp('.{1,800}');
   pattern.allMatches(text).forEach((match) => print(match.group(0)));
 }
