@@ -3,43 +3,86 @@ import 'package:google_sign_in/google_sign_in.dart';
 
 class CustomNavigationBar {
   static void _pushAccountPage(
-      BuildContext context, GoogleSignInAccount account) {
+      BuildContext context, String name, GoogleSignInAccount account) {
     Map args = {"account": account};
+    if (name == "/assignments") {
+      Navigator.of(context).pop();
+    }
+    if (name == "/assignment") {
+      Navigator.of(context).pop();
+      Navigator.of(context).pop();
+    }
     Navigator.of(context).pushReplacementNamed('/account', arguments: args);
   }
 
   static void _pushCoursesPage(
-      BuildContext context, GoogleSignInAccount account) {
+      BuildContext context, String name, GoogleSignInAccount account) {
     Map args = {"account": account};
+    if (name == "/assignments") {
+      Navigator.of(context).pop();
+    }
+    if (name == "/assignment") {
+      Navigator.of(context).pop();
+      Navigator.of(context).pop();
+    }
     Navigator.of(context).pushReplacementNamed('/courses', arguments: args);
   }
 
-  static void _pushHomePage(BuildContext context, GoogleSignInAccount account) {
+  static void _pushHomePage(
+      BuildContext context, String name, GoogleSignInAccount account) {
     Map args = {"account": account};
+    if (name == "/assignments") {
+      Navigator.of(context).pop();
+    }
+    if (name == "/assignment") {
+      Navigator.of(context).pop();
+      Navigator.of(context).pop();
+    }
     Navigator.of(context).pushReplacementNamed('/', arguments: args);
   }
 
   static void _pushSettingsPage(
-      BuildContext context, GoogleSignInAccount account) {
+      BuildContext context, String name, GoogleSignInAccount account) {
     Map args = {"account": account};
+    if (name == "/assignments") {
+      Navigator.of(context).pop();
+    }
+    if (name == "/assignment") {
+      Navigator.of(context).pop();
+      Navigator.of(context).pop();
+    }
     Navigator.of(context).pushReplacementNamed('/settings', arguments: args);
   }
 
   static void _pushTannoyPage(
-      BuildContext context, GoogleSignInAccount account) {
+      BuildContext context, String name, GoogleSignInAccount account) {
     Map args = {"account": account};
+    if (name == "/assignments") {
+      Navigator.of(context).pop();
+    }
+    if (name == "/assignment") {
+      Navigator.of(context).pop();
+      Navigator.of(context).pop();
+    }
     Navigator.of(context).pushReplacementNamed('/tannoy', arguments: args);
   }
 
   static void _pushTimetablePage(
-      BuildContext context, GoogleSignInAccount account) {
+      BuildContext context, String name, GoogleSignInAccount account) {
     Map args = {"account": account};
+    if (name == "/assignments") {
+      Navigator.of(context).pop();
+    }
+    if (name == "/assignment") {
+      Navigator.of(context).pop();
+      Navigator.of(context).pop();
+    }
     Navigator.of(context).pushReplacementNamed('/timetable', arguments: args);
   }
 
   //creates a new navigation bar with the given tabs to provide consistency
-  static BottomNavigationBar create(
-      BuildContext context, GoogleSignInAccount account, int index) {
+  static BottomNavigationBar create(BuildContext context, String name,
+      GoogleSignInAccount account, int index) {
     return new BottomNavigationBar(
       items: <BottomNavigationBarItem>[
         BottomNavigationBarItem(
@@ -76,22 +119,22 @@ class CustomNavigationBar {
       onTap: (value) {
         switch (value) {
           case 0:
-            _pushHomePage(context, account);
+            _pushHomePage(context, name, account);
             break;
           case 1:
-            _pushTimetablePage(context, account);
+            _pushTimetablePage(context, name, account);
             break;
           case 2:
-            _pushCoursesPage(context, account);
+            _pushCoursesPage(context, name, account);
             break;
           case 3:
-            _pushTannoyPage(context, account);
+            _pushTannoyPage(context, name, account);
             break;
           case 4:
-            _pushSettingsPage(context, account);
+            _pushSettingsPage(context, name, account);
             break;
           case 5:
-            _pushAccountPage(context, account);
+            _pushAccountPage(context, name, account);
             break;
           default:
         }

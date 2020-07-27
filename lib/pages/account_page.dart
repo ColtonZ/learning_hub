@@ -7,8 +7,9 @@ import '../objects/custom_navigation_bar.dart';
 class AccountPage extends StatefulWidget {
   //takes in the widget's arguments
   final GoogleSignInAccount account;
+  final String name;
 
-  AccountPage({this.account});
+  AccountPage({this.account, this.name});
 
   @override
   AccountPageState createState() => AccountPageState();
@@ -17,6 +18,7 @@ class AccountPage extends StatefulWidget {
 class AccountPageState extends State<AccountPage> {
   Widget build(BuildContext context) {
     GoogleSignInAccount account = widget.account;
+    String name = widget.name;
     //checks if the user is signed in, if not, they are signed in
     return account == null
         ? FutureBuilder(
@@ -24,23 +26,24 @@ class AccountPageState extends State<AccountPage> {
             builder: (context, snapshot) {
               if (snapshot.connectionState == ConnectionState.done) {
                 account = snapshot.data;
-                return CustomScaffold.create(context, account);
+                return CustomScaffold.create(context, name, account);
               } else {
                 //whilst signing in, return a loading indicator
                 return Scaffold(
                     appBar: CustomAppBar.create(context, "Account Details"),
                     body: Center(child: CircularProgressIndicator()),
                     bottomNavigationBar:
-                        CustomNavigationBar.create(context, account, 5));
+                        CustomNavigationBar.create(context, name, account, 5));
               }
             })
-        : CustomScaffold.create(context, account);
+        : CustomScaffold.create(context, name, account);
   }
 }
 
 //details the looks of the page
 class CustomScaffold {
-  static Scaffold create(BuildContext context, GoogleSignInAccount account) {
+  static Scaffold create(
+      BuildContext context, String name, GoogleSignInAccount account) {
     return new Scaffold(
         //returns the custom app bar with the account page title
         appBar: CustomAppBar.create(context, "Account Details"),
@@ -73,6 +76,7 @@ class CustomScaffold {
           ),
         ),
         //creates the bottom navigation bar
-        bottomNavigationBar: CustomNavigationBar.create(context, account, 5));
+        bottomNavigationBar:
+            CustomNavigationBar.create(context, name, account, 5));
   }
 }

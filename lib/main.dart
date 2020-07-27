@@ -17,7 +17,8 @@ class MyApp extends StatelessWidget {
       //deals with passing arguments when a new page is pushed onto the navigator
       onGenerateRoute: (route) {
         final Map arguments = route.arguments;
-        //if the route is to the assignments page, pass the specific assignment details, otherwise just pass the account
+        final String name = route.name;
+        //if the route is to the assignments page, pass the specific assignment details, otherwise just pass the account and the route name
         //if the route is / and there is no account signed in, pass null for the account
         switch (route.name) {
           case "/":
@@ -30,28 +31,35 @@ class MyApp extends StatelessWidget {
             });
           case "/timetable":
             return MaterialPageRoute(
-                builder: (_) => TimetablePage(account: arguments["account"]));
+                builder: (_) =>
+                    TimetablePage(account: arguments["account"], name: name));
           case "/courses":
             return MaterialPageRoute(
-                builder: (_) => CoursesPage(account: arguments["account"]));
+                builder: (_) =>
+                    CoursesPage(account: arguments["account"], name: name));
           case "/tannoy":
             return MaterialPageRoute(
-                builder: (_) => TannoyPage(account: arguments["account"]));
+                builder: (_) =>
+                    TannoyPage(account: arguments["account"], name: name));
           case "/settings":
             return MaterialPageRoute(
-                builder: (_) => SettingsPage(account: arguments["account"]));
+                builder: (_) =>
+                    SettingsPage(account: arguments["account"], name: name));
           case "/account":
             return MaterialPageRoute(
-                builder: (_) => AccountPage(account: arguments["account"]));
+                builder: (_) =>
+                    AccountPage(account: arguments["account"], name: name));
           case "/assignments":
             return MaterialPageRoute(
                 builder: (_) => AssignmentsPage(
                     account: arguments["account"],
+                    name: name,
                     id: arguments["id"],
                     course: arguments["course"]));
           default:
             return MaterialPageRoute(
-                builder: (_) => HomePage(account: arguments["account"]));
+                builder: (_) =>
+                    HomePage(account: arguments["account"], name: name));
         }
       },
       initialRoute: '/',

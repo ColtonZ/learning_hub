@@ -9,10 +9,11 @@ import '../objects/custom_navigation_bar.dart';
 class AssignmentsPage extends StatefulWidget {
   //takes in the widget's arguments
   final GoogleSignInAccount account;
+  final String name;
   final String id;
   final String course;
 
-  AssignmentsPage({this.account, this.id, this.course});
+  AssignmentsPage({this.account, this.name, this.id, this.course});
 
   @override
   //initialises the courses page state
@@ -21,6 +22,7 @@ class AssignmentsPage extends StatefulWidget {
 
 class AssignmentsPageState extends State<AssignmentsPage> {
   Widget build(BuildContext context) {
+    String name = widget.name;
     GoogleSignInAccount account = widget.account;
     String id = widget.id;
     String course = widget.course;
@@ -31,24 +33,25 @@ class AssignmentsPageState extends State<AssignmentsPage> {
             builder: (context, snapshot) {
               if (snapshot.connectionState == ConnectionState.done) {
                 account = snapshot.data;
-                return CustomScaffold.create(context, account, course, id);
+                return CustomScaffold.create(
+                    context, name, account, course, id);
               } else {
                 //whilst signing in, return a loading indicator
                 return Scaffold(
                     appBar: CustomAppBar.create(context, course),
                     body: Center(child: CircularProgressIndicator()),
                     bottomNavigationBar:
-                        CustomNavigationBar.create(context, account, 2));
+                        CustomNavigationBar.create(context, name, account, 2));
               }
             })
-        : CustomScaffold.create(context, account, course, id);
+        : CustomScaffold.create(context, name, account, course, id);
   }
 }
 
 //details the looks of the page
 class CustomScaffold {
-  static Scaffold create(BuildContext context, GoogleSignInAccount account,
-      String course, String id) {
+  static Scaffold create(BuildContext context, String name,
+      GoogleSignInAccount account, String course, String id) {
     return new Scaffold(
         //returns the custom app bar with the assignments page title
         appBar: CustomAppBar.create(context, course),
@@ -73,6 +76,7 @@ class CustomScaffold {
               }
             }),
         //builds the navigation bar for the given page
-        bottomNavigationBar: CustomNavigationBar.create(context, account, 2));
+        bottomNavigationBar:
+            CustomNavigationBar.create(context, name, account, 2));
   }
 }

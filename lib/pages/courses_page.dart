@@ -9,8 +9,9 @@ import '../objects/course.dart';
 class CoursesPage extends StatefulWidget {
   //takes in the widget's arguments
   final GoogleSignInAccount account;
+  final String name;
 
-  CoursesPage({this.account});
+  CoursesPage({this.account, this.name});
 
   @override
   //initialises the courses page state
@@ -19,6 +20,7 @@ class CoursesPage extends StatefulWidget {
 
 class CoursesPageState extends State<CoursesPage> {
   Widget build(BuildContext context) {
+    String name = widget.name;
     GoogleSignInAccount account = widget.account;
     //checks if the user is signed in, if not, they are signed in
     return account == null
@@ -27,23 +29,24 @@ class CoursesPageState extends State<CoursesPage> {
             builder: (context, snapshot) {
               if (snapshot.connectionState == ConnectionState.done) {
                 account = snapshot.data;
-                return CustomScaffold.create(context, account);
+                return CustomScaffold.create(context, name, account);
               } else {
                 //whilst signing in, return a loading indicator
                 return Scaffold(
                     appBar: CustomAppBar.create(context, "Your Courses"),
                     body: Center(child: CircularProgressIndicator()),
                     bottomNavigationBar:
-                        CustomNavigationBar.create(context, account, 2));
+                        CustomNavigationBar.create(context, name, account, 2));
               }
             })
-        : CustomScaffold.create(context, account);
+        : CustomScaffold.create(context, name, account);
   }
 }
 
 //details the looks of the page
 class CustomScaffold {
-  static Scaffold create(BuildContext context, GoogleSignInAccount account) {
+  static Scaffold create(
+      BuildContext context, String name, GoogleSignInAccount account) {
     return new Scaffold(
         //returns the custom app bar with the courses page title
         appBar: CustomAppBar.create(context, "Your Courses"),
@@ -67,6 +70,7 @@ class CustomScaffold {
               }
             }),
         //builds the navigation bar for the given page
-        bottomNavigationBar: CustomNavigationBar.create(context, account, 2));
+        bottomNavigationBar:
+            CustomNavigationBar.create(context, name, account, 2));
   }
 }

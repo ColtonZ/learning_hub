@@ -7,8 +7,9 @@ import 'package:learning_hub/backend.dart';
 class SettingsPage extends StatefulWidget {
   //takes in the widget's arguments
   final GoogleSignInAccount account;
+  final String name;
 
-  SettingsPage({this.account});
+  SettingsPage({this.account, this.name});
 
   @override
   //initialises the settings page state
@@ -17,6 +18,7 @@ class SettingsPage extends StatefulWidget {
 
 class SettingsPageState extends State<SettingsPage> {
   Widget build(BuildContext context) {
+    String name = widget.name;
     GoogleSignInAccount account = widget.account;
     //checks if the user is signed in, if not, they are signed in
     return account == null
@@ -25,29 +27,31 @@ class SettingsPageState extends State<SettingsPage> {
             builder: (context, snapshot) {
               if (snapshot.connectionState == ConnectionState.done) {
                 account = snapshot.data;
-                return CustomScaffold.create(context, account);
+                return CustomScaffold.create(context, name, account);
               } else {
                 //whilst signing in, return a loading indicator
                 return Scaffold(
                     appBar: CustomAppBar.create(context, "Settings"),
                     body: Center(child: CircularProgressIndicator()),
                     bottomNavigationBar:
-                        CustomNavigationBar.create(context, account, 4));
+                        CustomNavigationBar.create(context, name, account, 4));
               }
             })
-        : CustomScaffold.create(context, account);
+        : CustomScaffold.create(context, name, account);
   }
 }
 
 //details the looks of the page
 class CustomScaffold {
-  static Scaffold create(BuildContext context, GoogleSignInAccount account) {
+  static Scaffold create(
+      BuildContext context, String name, GoogleSignInAccount account) {
     return new Scaffold(
         //returns the custom app bar with the settings page title
         appBar: CustomAppBar.create(context, "Settings"),
         //builds the body
         body: Center(child: Text(account.email)),
         //builds the navigation bar for the given page
-        bottomNavigationBar: CustomNavigationBar.create(context, account, 4));
+        bottomNavigationBar:
+            CustomNavigationBar.create(context, name, account, 4));
   }
 }
