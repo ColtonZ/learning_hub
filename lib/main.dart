@@ -5,6 +5,7 @@ import 'pages/tannoy_page.dart';
 import 'pages/timetable_page.dart';
 import 'pages/courses_page.dart';
 import 'pages/home_page.dart';
+import 'pages/assignments_page.dart';
 
 void main() => runApp(MyApp());
 
@@ -16,7 +17,8 @@ class MyApp extends StatelessWidget {
       //deals with passing arguments when a new page is pushed onto the navigator
       onGenerateRoute: (route) {
         final Map arguments = route.arguments;
-        //if the route is to the assignment page, pass the specific assignment details, otherwise just pass the account
+        //if the route is to the assignments page, pass the specific assignment details, otherwise just pass the account
+        //if the route is / and there is no account signed in, pass null for the account
         switch (route.name) {
           case "/":
             return MaterialPageRoute(builder: (_) {
@@ -41,22 +43,18 @@ class MyApp extends StatelessWidget {
           case "/account":
             return MaterialPageRoute(
                 builder: (_) => AccountPage(account: arguments["account"]));
+          case "/assignments":
+            return MaterialPageRoute(
+                builder: (_) => AssignmentsPage(
+                    account: arguments["account"],
+                    id: arguments["id"],
+                    course: arguments["course"]));
           default:
             return MaterialPageRoute(
                 builder: (_) => HomePage(account: arguments["account"]));
         }
       },
       initialRoute: '/',
-      //defines the named routes
-      /*routes: <String, WidgetBuilder>{
-        '/': (BuildContext context) => new HomePage(),
-        '/timetable': (BuildContext context) => new TimetablePage(),
-        '/courses': (BuildContext context) => new CoursesPage(),
-        '/tannoy': (BuildContext context) => new TannoyPage(),
-        '/settings': (BuildContext context) => new SettingsPage(),
-        '/account': (BuildContext context) => new AccountPage(),
-        //'/assignment': (BuildContext context) => new AssignmentPage(),
-      },*/
     );
   }
 }

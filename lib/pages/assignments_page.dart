@@ -1,25 +1,29 @@
 import 'package:flutter/material.dart';
-import 'package:learning_hub/objects/courses_list_view.dart';
+import 'package:learning_hub/objects/assignment.dart';
+import 'package:learning_hub/objects/assignments_list_view.dart';
 import '../objects/custom_app_bar.dart';
 import 'package:learning_hub/backend.dart';
 import 'package:google_sign_in/google_sign_in.dart';
 import '../objects/custom_navigation_bar.dart';
-import '../objects/course.dart';
 
-class CoursesPage extends StatefulWidget {
+class AssignmentsPage extends StatefulWidget {
   //takes in the widget's arguments
   final GoogleSignInAccount account;
+  final String id;
+  final String course;
 
-  CoursesPage({this.account});
+  AssignmentsPage({this.account, this.id, this.course});
 
   @override
   //initialises the courses page state
-  CoursesPageState createState() => CoursesPageState();
+  AssignmentsPageState createState() => AssignmentsPageState();
 }
 
-class CoursesPageState extends State<CoursesPage> {
+class AssignmentsPageState extends State<AssignmentsPage> {
   Widget build(BuildContext context) {
     GoogleSignInAccount account = widget.account;
+    String id = widget.id;
+    String course = widget.course;
     //checks if the user is signed in, if not, they are signed in
     return account == null
         ? FutureBuilder(
@@ -27,38 +31,40 @@ class CoursesPageState extends State<CoursesPage> {
             builder: (context, snapshot) {
               if (snapshot.connectionState == ConnectionState.done) {
                 account = snapshot.data;
-                return CustomScaffold.create(context, account);
+                return CustomScaffold.create(context, account, course, id);
               } else {
                 //whilst signing in, return a loading indicator
                 return Scaffold(
-                    appBar: CustomAppBar.create(context, "Your Courses"),
+                    appBar: CustomAppBar.create(context, course),
                     body: Center(child: CircularProgressIndicator()),
                     bottomNavigationBar:
                         CustomNavigationBar.create(context, account, 2));
               }
             })
-        : CustomScaffold.create(context, account);
+        : CustomScaffold.create(context, account, course, id);
   }
 }
 
 //details the looks of the page
 class CustomScaffold {
-  static Scaffold create(BuildContext context, GoogleSignInAccount account) {
+  static Scaffold create(BuildContext context, GoogleSignInAccount account,
+      String course, String id) {
     return new Scaffold(
-        //returns the custom app bar with the courses page title
-        appBar: CustomAppBar.create(context, "Your Courses"),
+        //returns the custom app bar with the assignments page title
+        appBar: CustomAppBar.create(context, course),
         //builds the body
         body: FutureBuilder(
-            future: getCourses(account),
+            future: getAssignments(id, account),
             builder: (context, snapshot) {
               if (snapshot.connectionState == ConnectionState.done) {
-                List<Course> courses = snapshot.data;
-                //checks if the user has courses. If they do, return the courses, otherwise return an error message
+                List<Assignment> assignments = snapshot.data;
+                //checks if the user has assignments. If they do, return the assignments, otherwise return an error message
                 try {
-                  return CoursesListView.create(context, account, courses);
+                  return AssignmentsListView.create(
+                      context, account, assignments);
                 } catch (Exception) {
                   return Center(
-                    child: Text("You have no courses to display."),
+                    child: Text("You have no assignments to display."),
                   );
                 }
               } else {

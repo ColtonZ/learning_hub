@@ -2,7 +2,6 @@ import 'dart:async';
 import 'dart:convert';
 
 import 'package:google_sign_in/google_sign_in.dart';
-import 'package:flutter/foundation.dart';
 import 'package:http/http.dart' as http;
 
 import 'objects/course.dart';
@@ -53,7 +52,7 @@ Future<Map<String, String>> getHeaders(GoogleSignInAccount account) async {
   return headers;
 }
 
-Future<List<List<String>>> getCourses(GoogleSignInAccount account) async {
+Future<List<Course>> getCourses(GoogleSignInAccount account) async {
   Map<String, String> headers;
 
 //gets the user's auth headers
@@ -66,19 +65,7 @@ Future<List<List<String>>> getCourses(GoogleSignInAccount account) async {
 //requests a list of the user's courses
   final List<Course> courses = await sendCourseRequest(headers);
 
-  List<String> titles = [];
-  List<String> subtitles = [];
-  List<List<String>> combined = [];
-
-//creates a list of course titles and subtitles for the list view
-  courses.forEach((element) {
-    titles.add(element.name);
-    subtitles.add(element.description);
-  });
-
-  combined.add(titles);
-  combined.add(subtitles);
-  return combined;
+  return courses;
 }
 
 Future<List<Course>> sendCourseRequest(Map<String, String> headers) async {
