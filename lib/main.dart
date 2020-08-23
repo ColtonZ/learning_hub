@@ -6,6 +6,7 @@ import 'pages/timetable_page.dart';
 import 'pages/courses_page.dart';
 import 'pages/home_page.dart';
 import 'pages/assignments_page.dart';
+import 'pages/assignment_page.dart';
 
 void main() => runApp(MyApp());
 
@@ -56,6 +57,14 @@ class MyApp extends StatelessWidget {
                     name: name,
                     id: arguments["id"],
                     course: arguments["course"]));
+          case "/assignment":
+            return MaterialPageRoute(
+                builder: (_) => AssignmentPage(
+                    account: arguments["account"],
+                    name: name,
+                    course: arguments["course"],
+                    courseId: arguments["courseId"],
+                    assignmentId: arguments["assignmentId"]));
           default:
             return MaterialPageRoute(
                 builder: (_) =>

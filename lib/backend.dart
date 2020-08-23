@@ -109,12 +109,13 @@ Future<List<Assignment>> getAssignments(
   }
 
 //returns a list of the assignments for a given course
-  final List<Assignment> assignments = await sendAssignmentRequest(id, headers);
+  final List<Assignment> assignments =
+      await sendAssignmentsRequest(id, headers);
 
   return assignments;
 }
 
-Future<List<Assignment>> sendAssignmentRequest(
+Future<List<Assignment>> sendAssignmentsRequest(
     String id, Map<String, String> headers) async {
   //sends an http request for the courses assignments given a course id
   http.Response response = await http.get(
@@ -141,6 +142,51 @@ List<Assignment> parseAssignments(String responseBody) {
   });
 
   return assignmentList;
+}
+
+Future<Assignment> getAssignment(
+    String courseId, String assignmentId, GoogleSignInAccount account) async {
+  Map<String, String> headers;
+
+  print("Course ID: $courseId");
+  print("Assignment ID: $assignmentId");
+
+  //gets the user's auth headers
+  if (isSignedIn(account)) {
+    headers = await getHeaders(account);
+  } else {
+    headers = await getHeaders(await signIn());
+  }
+
+//returns a list of the assignments for a given course
+  final Assignment assignment =
+      await sendAssignmentRequest(courseId, assignmentId, headers);
+
+  return assignment;
+}
+
+Future<Assignment> sendAssignmentRequest(
+    String courseId, String assignmentId, Map<String, String> headers) async {
+  //sends an http request for the courses assignments given a course id
+  http.Response response = await http.get(
+      Uri.encodeFull(
+          "https://classroom.googleapis.com//v1/courses/$courseId/courseWork/$assignmentId"),
+      headers: headers);
+
+  final responseBody = response.body;
+
+  //converts the response into a list of assignments
+  return parseAssignment(responseBody);
+}
+
+Assignment parseAssignment(String responseBody) {
+  var data = json.decode(responseBody);
+  print("ran!");
+  //converts the json into an assignment and returns the assignment
+  printWrapped(responseBody);
+  Assignment assignment = Assignment.fromJson(data);
+
+  return assignment;
 }
 
 Future<GoogleSignInAccount> signOut() async {
