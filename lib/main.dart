@@ -72,6 +72,7 @@ class MyApp extends StatelessWidget {
         }
       },
       initialRoute: '/',
+      theme: ThemeData(fontFamily: 'Jost'),
     );
   }
 }

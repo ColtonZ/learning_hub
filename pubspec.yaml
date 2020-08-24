@@ -70,17 +70,102 @@ flutter:
   # "family" key with the font family name, and a "fonts" key with a
   # list giving the asset and other descriptors for the font. For
   # example:
-  # fonts:
-  #   - family: Schyler
-  #     fonts:
-  #       - asset: fonts/Schyler-Regular.ttf
-  #       - asset: fonts/Schyler-Italic.ttf
-  #         style: italic
-  #   - family: Trajan Pro
-  #     fonts:
-  #       - asset: fonts/TrajanPro.ttf
-  #       - asset: fonts/TrajanPro_Bold.ttf
-  #         weight: 700
+  fonts:
+    - family: Jost
+      fonts:
+        - asset: fonts/Jost/Jost-Thin.ttf
+          weight: 100
+        - asset: fonts/Jost/Jost-ExtraLight.ttf
+          weight: 200
+        - asset: fonts/Jost/Jost-Light.ttf
+          weight: 300
+        - asset: fonts/Jost/Jost-Regular.ttf
+          weight: 400
+        - asset: fonts/Jost/Jost-Medium.ttf
+          weight: 500
+        - asset: fonts/Jost/Jost-SemiBold.ttf
+          weight: 600
+        - asset: fonts/Jost/Jost-Bold.ttf
+          weight: 700
+        - asset: fonts/Jost/Jost-ExtraBold.ttf
+          weight: 800
+        - asset: fonts/Jost/Jost-Black.ttf
+          weight: 900
+        - asset: fonts/Jost/Jost-ThinItalic.ttf
+          style: italic
+          weight: 100
+        - asset: fonts/Jost/Jost-ExtraLightItalic.ttf
+          style: italic
+          weight: 200
+        - asset: fonts/Jost/Jost-LightItalic.ttf
+          style: italic
+          weight: 300
+        - asset: fonts/Jost/Jost-RegularItalic.ttf
+          style: italic
+          weight: 400
+        - asset: fonts/Jost/Jost-MediumItalic.ttf
+          style: italic
+          weight: 500
+        - asset: fonts/Jost/Jost-SemiBoldItalic.ttf
+          style: italic
+          weight: 600
+        - asset: fonts/Jost/Jost-BoldItalic.ttf
+          style: italic
+          weight: 700
+        - asset: fonts/Jost/Jost-ExtraBoldItalic.ttf
+          style: italic
+          weight: 800
+        - asset: fonts/Jost/Jost-BlackItalic.ttf
+          style: italic
+          weight: 900
+    - family: Montserrat
+      fonts:
+        - asset: fonts/Montserrat/Montserrat-Thin.ttf
+          weight: 100
+        - asset: fonts/Montserrat/Montserrat-ExtraLight.ttf
+          weight: 200
+        - asset: fonts/Montserrat/Montserrat-Light.ttf
+          weight: 300
+        - asset: fonts/Montserrat/Montserrat-Regular.ttf
+          weight: 400
+        - asset: fonts/Montserrat/Montserrat-Medium.ttf
+          weight: 500
+        - asset: fonts/Montserrat/Montserrat-SemiBold.ttf
+          weight: 600
+        - asset: fonts/Montserrat/Montserrat-Bold.ttf
+          weight: 700
+        - asset: fonts/Montserrat/Montserrat-ExtraBold.ttf
+          weight: 800
+        - asset: fonts/Montserrat/Montserrat-Black.ttf
+          weight: 900
+        - asset: fonts/Montserrat/Montserrat-ThinItalic.ttf
+          style: italic
+          weight: 100
+        - asset: fonts/Montserrat/Montserrat-ExtraLightItalic.ttf
+          style: italic
+          weight: 200
+        - asset: fonts/Montserrat/Montserrat-LightItalic.ttf
+          style: italic
+          weight: 300
+        - asset: fonts/Montserrat/Montserrat-RegularItalic.ttf
+          style: italic
+          weight: 400
+        - asset: fonts/Montserrat/Montserrat-MediumItalic.ttf
+          style: italic
+          weight: 500
+        - asset: fonts/Montserrat/Montserrat-SemiBoldItalic.ttf
+          style: italic
+          weight: 600
+        - asset: fonts/Montserrat/Montserrat-BoldItalic.ttf
+          style: italic
+          weight: 700
+        - asset: fonts/Montserrat/Montserrat-ExtraBoldItalic.ttf
+          style: italic
+          weight: 800
+        - asset: fonts/Montserrat/Montserrat-BlackItalic.ttf
+          style: italic
+          weight: 900
+
   #
   # For details regarding fonts from package dependencies,
   # see https://flutter.dev/custom-fonts/#from-packages
