@@ -65,7 +65,7 @@ class CustomScaffold {
                 try {
                   return AssignmentsListView.create(
                       context, account, course, id, assignments);
-                } catch (Exception) {
+                } catch (error) {
                   return Center(
                     child: Text("You have no assignments to display."),
                   );

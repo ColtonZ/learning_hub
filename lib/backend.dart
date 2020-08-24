@@ -181,6 +181,7 @@ Assignment parseAssignment(String responseBody) {
   var data = json.decode(responseBody);
   //converts the json into an assignment and returns the assignment
 
+  printWrapped(responseBody);
   Assignment assignment = Assignment.fromJson(data);
 
   return assignment;

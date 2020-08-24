@@ -148,17 +148,32 @@ class CustomScaffold {
                                       ConnectionState.done) {
                                     try {
                                       GoogleUser creator = snapshot.data;
-                                      return Text(
-                                          "${creator.name} • ${DateTime.parse(assignment.creationTime).toLocal().day.toString()} ${months[DateTime.parse(assignment.creationTime).toLocal().month - 1]} (Edited ${DateTime.parse(assignment.updateTime).toLocal().day.toString()} ${months[DateTime.parse(assignment.updateTime).toLocal().month - 1]})");
+                                      return Text(assignment.creationTime
+                                              .add(Duration(minutes: 5))
+                                              .isBefore(assignment.updateTime)
+                                          ? "${creator.name} • ${assignment.creationTime.day.toString()} ${months[assignment.creationTime.month - 1]} (Edited ${assignment.updateTime.day.toString()} ${months[assignment.updateTime.month - 1]})"
+                                          : "${creator.name} • ${assignment.creationTime.day.toString()} ${months[assignment.creationTime.month - 1]}");
                                     } catch (error) {
-                                      return Text(
-                                          "${DateTime.parse(assignment.creationTime).toLocal().day.toString()} ${months[DateTime.parse(assignment.creationTime).toLocal().month - 1]} (Edited ${DateTime.parse(assignment.updateTime).toLocal().day.toString()} ${months[DateTime.parse(assignment.updateTime).toLocal().month - 1]})");
+                                      return Text(assignment.creationTime
+                                              .add(Duration(minutes: 5))
+                                              .isBefore(assignment.updateTime)
+                                          ? "${assignment.creationTime.day.toString()} ${months[assignment.creationTime.month - 1]} (Edited ${assignment.updateTime.day.toString()} ${months[assignment.updateTime.month - 1]})"
+                                          : "${assignment.creationTime.day.toString()} ${months[assignment.creationTime.month - 1]}");
                                     }
                                   } else {
                                     return Text("Loading...");
                                   }
                                 },
                               ),
+                            ),
+                            Container(
+                              width: 5,
+                            ),
+                            Text(
+                              assignment.dueDate != null
+                                  ? "Due ${assignment.dueDate.day} ${months[assignment.dueDate.month - 1]}"
+                                  : "No due date",
+                              textAlign: TextAlign.right,
                             ),
                             Container(
                               width: 15,
