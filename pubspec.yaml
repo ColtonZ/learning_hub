@@ -80,7 +80,6 @@ flutter:
         - asset: fonts/Jost/Jost-Light.ttf
           weight: 300
         - asset: fonts/Jost/Jost-Regular.ttf
-          weight: 400
         - asset: fonts/Jost/Jost-Medium.ttf
           weight: 500
         - asset: fonts/Jost/Jost-SemiBold.ttf
@@ -100,9 +99,8 @@ flutter:
         - asset: fonts/Jost/Jost-LightItalic.ttf
           style: italic
           weight: 300
-        - asset: fonts/Jost/Jost-RegularItalic.ttf
+        - asset: fonts/Jost/Jost-Italic.ttf
           style: italic
-          weight: 400
         - asset: fonts/Jost/Jost-MediumItalic.ttf
           style: italic
           weight: 500
@@ -127,7 +125,6 @@ flutter:
         - asset: fonts/Montserrat/Montserrat-Light.ttf
           weight: 300
         - asset: fonts/Montserrat/Montserrat-Regular.ttf
-          weight: 400
         - asset: fonts/Montserrat/Montserrat-Medium.ttf
           weight: 500
         - asset: fonts/Montserrat/Montserrat-SemiBold.ttf
@@ -147,9 +144,8 @@ flutter:
         - asset: fonts/Montserrat/Montserrat-LightItalic.ttf
           style: italic
           weight: 300
-        - asset: fonts/Montserrat/Montserrat-RegularItalic.ttf
+        - asset: fonts/Montserrat/Montserrat-Italic.ttf
           style: italic
-          weight: 400
         - asset: fonts/Montserrat/Montserrat-MediumItalic.ttf
           style: italic
           weight: 500
