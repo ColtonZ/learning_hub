@@ -123,7 +123,6 @@ Future<List<Assignment>> sendAssignmentsRequest(
       Uri.encodeFull(
           "https://classroom.googleapis.com//v1/courses/$id/courseWork"),
       headers: headers);
-
   final responseBody = response.body;
 
   //converts the response into a list of assignments
@@ -138,7 +137,7 @@ List<Assignment> parseAssignments(String responseBody) {
 
   assignments.forEach((details) {
     //converts each json into an assignment and adds it to the assignment list
-    Assignment assignment = Assignment.fromJson(details);
+    Assignment assignment = Assignment.fromJson(details, null);
     assignmentList.add(assignment);
   });
 
@@ -166,23 +165,33 @@ Future<Assignment> getAssignment(
 Future<Assignment> sendAssignmentRequest(
     String courseId, String assignmentId, Map<String, String> headers) async {
   //sends an http request for the courses assignments given a course id
-  http.Response response = await http.get(
+  http.Response assignmentResponse = await http.get(
       Uri.encodeFull(
           "https://classroom.googleapis.com//v1/courses/$courseId/courseWork/$assignmentId"),
       headers: headers);
 
-  final responseBody = response.body;
+  http.Response submissionResponse = await http.get(
+      Uri.encodeFull(
+          "https://classroom.googleapis.com//v1/courses/$courseId/courseWork/$assignmentId/studentSubmissions"),
+      headers: headers);
+
+  final assignmentResponseBody = assignmentResponse.body;
+  final submissionResponseBody = submissionResponse.body;
 
   //converts the response into a list of assignments
-  return parseAssignment(responseBody);
+  return parseAssignment(assignmentResponseBody, submissionResponseBody);
 }
 
-Assignment parseAssignment(String responseBody) {
-  var data = json.decode(responseBody);
+Assignment parseAssignment(
+    String assignmentResponseBody, String submissionResponseBody) {
+  var assignmentData = json.decode(assignmentResponseBody);
+  var submissionData = json.decode(submissionResponseBody);
   //converts the json into an assignment and returns the assignment
+  var submissions = submissionData["studentSubmissions"] as List;
 
-  printWrapped(responseBody);
-  Assignment assignment = Assignment.fromJson(data);
+  printWrapped(assignmentResponseBody);
+  printWrapped(submissionResponseBody);
+  Assignment assignment = Assignment.fromJson(assignmentData, submissions[0]);
 
   return assignment;
 }

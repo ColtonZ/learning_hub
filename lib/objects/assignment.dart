@@ -28,28 +28,28 @@ class Assignment {
       this.updateTime,
       this.dueDate});
 
-  factory Assignment.fromJson(Map<String, dynamic> json) {
+  factory Assignment.fromJson(Map<String, dynamic> assignmentJson,
+      Map<String, dynamic> submissionJson) {
     DateTime d;
     try {
       d = DateTime(
-          json["dueDate"]["year"],
-          json["dueDate"]["month"],
-          json["dueDate"]["day"],
-          json["dueDate"]["year"],
-          json["dueTime"]["hours"],
-          json["dueTime"]["minutes"]);
+          assignmentJson["dueDate"]["year"],
+          assignmentJson["dueDate"]["month"],
+          assignmentJson["dueDate"]["day"],
+          assignmentJson["dueTime"]["hours"],
+          assignmentJson["dueTime"]["minutes"]);
     } catch (error) {
       d = null;
     }
     return Assignment(
-      id: json["id"],
-      title: json["title"],
-      description: json["description"],
-      status: json["state"],
-      type: json["workType"],
-      creationTime: DateTime.parse(json["creationTime"]).toLocal(),
-      updateTime: DateTime.parse(json["updateTime"]).toLocal(),
-      creatorId: json["creatorUserId"],
+      id: assignmentJson["id"],
+      title: assignmentJson["title"],
+      description: assignmentJson["description"],
+      status: assignmentJson["state"],
+      type: assignmentJson["workType"],
+      creationTime: DateTime.parse(assignmentJson["creationTime"]).toLocal(),
+      updateTime: DateTime.parse(assignmentJson["updateTime"]).toLocal(),
+      creatorId: assignmentJson["creatorUserId"],
       dueDate: d,
       //materials: json["materials"],
     );
