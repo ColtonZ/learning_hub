@@ -74,6 +74,7 @@ class CustomScaffold {
                 Assignment assignment = snapshot.data;
                 //checks if the assignment is valid. If it is, return the assignment page, otherwise return an error message
                 try {
+                  //defines the months for later
                   List<String> months = [
                     "Jan",
                     "Feb",
@@ -99,6 +100,7 @@ class CustomScaffold {
                             Container(
                               width: 15,
                             ),
+                            //returns an icon depending on the assignment type
                             Container(
                               child: FittedBox(
                                 fit: BoxFit.contain,
@@ -116,6 +118,7 @@ class CustomScaffold {
                             Container(
                               width: 15,
                             ),
+                            //returns the assignment title
                             Expanded(
                               child: Text(
                                 "${assignment.title}",
@@ -139,6 +142,7 @@ class CustomScaffold {
                             Container(
                               width: 15,
                             ),
+                            //tries to get the name of the user who created the task, if it cannot then it just returns the task's creation date
                             Expanded(
                               child: FutureBuilder(
                                 future: getGoogleUser(
@@ -148,18 +152,22 @@ class CustomScaffold {
                                       ConnectionState.done) {
                                     try {
                                       GoogleUser creator = snapshot.data;
+                                      //checks if the task was edited after creation
                                       return Text(assignment.creationTime
                                               .add(Duration(minutes: 5))
                                               .isBefore(assignment.updateTime)
+                                          //returns the task's creator and its due date
                                           ? "${creator.name} • ${assignment.creationTime.day.toString()} ${months[assignment.creationTime.month - 1]} (Edited ${assignment.updateTime.day.toString()} ${months[assignment.updateTime.month - 1]})"
                                           : "${creator.name} • ${assignment.creationTime.day.toString()} ${months[assignment.creationTime.month - 1]}");
                                     } catch (error) {
                                       return Text(assignment.creationTime
                                               .add(Duration(minutes: 5))
                                               .isBefore(assignment.updateTime)
+                                          //returns just the task's due date
                                           ? "${assignment.creationTime.day.toString()} ${months[assignment.creationTime.month - 1]} (Edited ${assignment.updateTime.day.toString()} ${months[assignment.updateTime.month - 1]})"
                                           : "${assignment.creationTime.day.toString()} ${months[assignment.creationTime.month - 1]}");
                                     }
+                                    //returns "loading..." whilst trying to get the task's creator
                                   } else {
                                     return Text("Loading...");
                                   }
@@ -169,6 +177,7 @@ class CustomScaffold {
                             Container(
                               width: 5,
                             ),
+                            //checks if the task has a due date. If it does, display it
                             Text(
                               assignment.dueDate != null
                                   ? "Due ${assignment.dueDate.day} ${months[assignment.dueDate.month - 1]}"
@@ -192,6 +201,7 @@ class CustomScaffold {
                         Container(
                           height: MediaQuery.of(context).size.height / 50,
                         ),
+                        //returns the assignment's description, or no description if the task does not have one
                         Container(
                           child: Text(
                             "${assignment.description != null ? assignment.description : "This task has no description."}",

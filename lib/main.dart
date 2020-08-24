@@ -19,7 +19,7 @@ class MyApp extends StatelessWidget {
       onGenerateRoute: (route) {
         final Map arguments = route.arguments;
         final String name = route.name;
-        //if the route is to the assignments page, pass the specific assignment details, otherwise just pass the account and the route name
+        //if the route is to the assignments page or a specific assignment page, pass the specific assignment details, otherwise just pass the account and the route name
         //if the route is / and there is no account signed in, pass null for the account
         switch (route.name) {
           case "/":
@@ -72,6 +72,7 @@ class MyApp extends StatelessWidget {
         }
       },
       initialRoute: '/',
+      //defines the default font family
       theme: ThemeData(fontFamily: 'Jost'),
     );
   }

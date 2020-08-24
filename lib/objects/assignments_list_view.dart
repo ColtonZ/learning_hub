@@ -35,6 +35,7 @@ class AssignmentsListView {
         title: Text(
           assignment.title != null ? assignment.title : "N/A",
         ),
+        //trims the tile's subtitle accordingly
         subtitle: Text(
           (assignment.description != null
                   ? assignment.description.split("\n").length > 1

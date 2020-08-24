@@ -137,6 +137,7 @@ List<Assignment> parseAssignments(String responseBody) {
 
   assignments.forEach((details) {
     //converts each json into an assignment and adds it to the assignment list
+    //the null is required, as we do not care about user submissions at this point
     Assignment assignment = Assignment.fromJson(details, null);
     assignmentList.add(assignment);
   });
@@ -155,7 +156,7 @@ Future<Assignment> getAssignment(
     headers = await getHeaders(await signIn());
   }
 
-//returns a list of the assignments for a given course
+//returns the specific assignment requested
   final Assignment assignment =
       await sendAssignmentRequest(courseId, assignmentId, headers);
 
@@ -164,7 +165,7 @@ Future<Assignment> getAssignment(
 
 Future<Assignment> sendAssignmentRequest(
     String courseId, String assignmentId, Map<String, String> headers) async {
-  //sends an http request for the courses assignments given a course id
+  //sends an http request for the assignment, as well as a second for the student's submissions (if any)
   http.Response assignmentResponse = await http.get(
       Uri.encodeFull(
           "https://classroom.googleapis.com//v1/courses/$courseId/courseWork/$assignmentId"),
@@ -178,7 +179,7 @@ Future<Assignment> sendAssignmentRequest(
   final assignmentResponseBody = assignmentResponse.body;
   final submissionResponseBody = submissionResponse.body;
 
-  //converts the response into a list of assignments
+  //converts the response into an assignment and an attached submission
   return parseAssignment(assignmentResponseBody, submissionResponseBody);
 }
 
@@ -186,11 +187,12 @@ Assignment parseAssignment(
     String assignmentResponseBody, String submissionResponseBody) {
   var assignmentData = json.decode(assignmentResponseBody);
   var submissionData = json.decode(submissionResponseBody);
-  //converts the json into an assignment and returns the assignment
+
   var submissions = submissionData["studentSubmissions"] as List;
 
   printWrapped(assignmentResponseBody);
   printWrapped(submissionResponseBody);
+  //converts the two json responses (the assignment details and the submission details) into an assignment object and returns it
   Assignment assignment = Assignment.fromJson(assignmentData, submissions[0]);
 
   return assignment;
@@ -207,7 +209,7 @@ Future<GoogleUser> getGoogleUser(
     headers = await getHeaders(await signIn());
   }
 
-//returns a list of the assignments for a given course
+//returns the user profile of the given user
   final GoogleUser user = await sendGoogleUserRequest(userId, headers);
 
   return user;
@@ -215,7 +217,7 @@ Future<GoogleUser> getGoogleUser(
 
 Future<GoogleUser> sendGoogleUserRequest(
     userId, Map<String, String> headers) async {
-  //sends an http request for the courses assignments given a course id
+  //sends an http request for the user, given their ID
   http.Response response = await http.get(
       Uri.encodeFull(
           "https://classroom.googleapis.com/v1/userProfiles/$userId"),
@@ -223,13 +225,13 @@ Future<GoogleUser> sendGoogleUserRequest(
 
   final responseBody = response.body;
 
-  //converts the response into a list of assignments
+  //converts the response into a user profile
   return parseGoogleUser(responseBody);
 }
 
 GoogleUser parseGoogleUser(String responseBody) {
   var data = json.decode(responseBody);
-  //converts the json into an assignment and returns the assignment
+  //converts the json into a user and returns the user
 
   GoogleUser user = GoogleUser.fromJson(data);
 
