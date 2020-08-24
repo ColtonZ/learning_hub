@@ -6,6 +6,7 @@ import 'package:http/http.dart' as http;
 
 import 'objects/course.dart';
 import 'objects/assignment.dart';
+import 'objects/google_user.dart';
 
 final GoogleSignIn googleSignIn = GoogleSignIn();
 
@@ -148,9 +149,6 @@ Future<Assignment> getAssignment(
     String courseId, String assignmentId, GoogleSignInAccount account) async {
   Map<String, String> headers;
 
-  print("Course ID: $courseId");
-  print("Assignment ID: $assignmentId");
-
   //gets the user's auth headers
   if (isSignedIn(account)) {
     headers = await getHeaders(account);
@@ -181,12 +179,51 @@ Future<Assignment> sendAssignmentRequest(
 
 Assignment parseAssignment(String responseBody) {
   var data = json.decode(responseBody);
-  print("ran!");
   //converts the json into an assignment and returns the assignment
-  printWrapped(responseBody);
+
   Assignment assignment = Assignment.fromJson(data);
 
   return assignment;
+}
+
+Future<GoogleUser> getGoogleUser(
+    String userId, GoogleSignInAccount account) async {
+  Map<String, String> headers;
+
+  //gets the user's auth headers
+  if (isSignedIn(account)) {
+    headers = await getHeaders(account);
+  } else {
+    headers = await getHeaders(await signIn());
+  }
+
+//returns a list of the assignments for a given course
+  final GoogleUser user = await sendGoogleUserRequest(userId, headers);
+
+  return user;
+}
+
+Future<GoogleUser> sendGoogleUserRequest(
+    userId, Map<String, String> headers) async {
+  //sends an http request for the courses assignments given a course id
+  http.Response response = await http.get(
+      Uri.encodeFull(
+          "https://classroom.googleapis.com/v1/userProfiles/$userId"),
+      headers: headers);
+
+  final responseBody = response.body;
+
+  //converts the response into a list of assignments
+  return parseGoogleUser(responseBody);
+}
+
+GoogleUser parseGoogleUser(String responseBody) {
+  var data = json.decode(responseBody);
+  //converts the json into an assignment and returns the assignment
+
+  GoogleUser user = GoogleUser.fromJson(data);
+
+  return user;
 }
 
 Future<GoogleSignInAccount> signOut() async {

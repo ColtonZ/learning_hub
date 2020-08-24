@@ -4,6 +4,8 @@ import '../objects/custom_app_bar.dart';
 import 'package:learning_hub/backend.dart';
 import 'package:google_sign_in/google_sign_in.dart';
 import '../objects/custom_navigation_bar.dart';
+import 'dart:core';
+import '../objects/google_user.dart';
 
 class AssignmentPage extends StatefulWidget {
   //takes in the widget's arguments
@@ -54,12 +56,13 @@ class AssignmentPageState extends State<AssignmentPage> {
 //details the looks of the page
 class CustomScaffold {
   static Scaffold create(
-      BuildContext context,
-      String name,
-      GoogleSignInAccount account,
-      String course,
-      String courseId,
-      String assignmentId) {
+    BuildContext context,
+    String name,
+    GoogleSignInAccount account,
+    String course,
+    String courseId,
+    String assignmentId,
+  ) {
     return new Scaffold(
         //returns the custom app bar with the assignments page title
         appBar: CustomAppBar.create(context, course),
@@ -71,12 +74,121 @@ class CustomScaffold {
                 Assignment assignment = snapshot.data;
                 //checks if the assignment is valid. If it is, return the assignment page, otherwise return an error message
                 try {
+                  List<String> months = [
+                    "Jan",
+                    "Feb",
+                    "Mar",
+                    "Apr",
+                    "May",
+                    "Jun",
+                    "Jul",
+                    "Aug",
+                    "Sep",
+                    "Oct",
+                    "Nov",
+                    "Dec"
+                  ];
                   return Center(
-                    child: Text("${assignment.title}"),
+                    child: Column(
+                      children: <Widget>[
+                        Container(
+                          height: MediaQuery.of(context).size.height / 100,
+                        ),
+                        Row(
+                          children: <Widget>[
+                            Container(
+                              width: 15,
+                            ),
+                            Container(
+                              child: FittedBox(
+                                fit: BoxFit.contain,
+                                child: Icon(assignment.type == "ASSIGNMENT"
+                                    ? Icons.assignment
+                                    : assignment.type == "SHORT_ANSWER_QUESTION"
+                                        ? Icons.short_text
+                                        : assignment.type ==
+                                                "MULTIPLE_CHOICE_QUESTION"
+                                            ? Icons.check_circle_outline
+                                            : Icons.warning),
+                              ),
+                              width: MediaQuery.of(context).size.width / 10,
+                            ),
+                            Container(
+                              width: 15,
+                            ),
+                            Expanded(
+                              child: Text(
+                                "${assignment.title}",
+                                style: TextStyle(
+                                  fontFamily: 'Montserrat',
+                                  fontWeight: FontWeight.w400,
+                                  fontSize: 20,
+                                ),
+                              ),
+                            ),
+                            Container(
+                              width: 15,
+                            ),
+                          ],
+                        ),
+                        Container(
+                          height: MediaQuery.of(context).size.height / 50,
+                        ),
+                        Row(
+                          children: <Widget>[
+                            Container(
+                              width: 15,
+                            ),
+                            Expanded(
+                              child: FutureBuilder(
+                                future: getGoogleUser(
+                                    assignment.creatorId, account),
+                                builder: (context, snapshot) {
+                                  if (snapshot.connectionState ==
+                                      ConnectionState.done) {
+                                    try {
+                                      GoogleUser creator = snapshot.data;
+                                      return Text(
+                                          "${creator.name} • ${DateTime.parse(assignment.creationTime).toLocal().day.toString()} ${months[DateTime.parse(assignment.creationTime).toLocal().month - 1]} (Edited ${DateTime.parse(assignment.updateTime).toLocal().day.toString()} ${months[DateTime.parse(assignment.updateTime).toLocal().month - 1]})");
+                                    } catch (error) {
+                                      return Text(
+                                          "${DateTime.parse(assignment.creationTime).toLocal().day.toString()} ${months[DateTime.parse(assignment.creationTime).toLocal().month - 1]} (Edited ${DateTime.parse(assignment.updateTime).toLocal().day.toString()} ${months[DateTime.parse(assignment.updateTime).toLocal().month - 1]})");
+                                    }
+                                  } else {
+                                    return Text("Loading...");
+                                  }
+                                },
+                              ),
+                            ),
+                            Container(
+                              width: 15,
+                            ),
+                          ],
+                        ),
+                        Container(
+                          height: MediaQuery.of(context).size.height / 50,
+                        ),
+                        Divider(
+                          color: Colors.black38,
+                          thickness: 1,
+                          indent: 15,
+                          endIndent: 15,
+                        ),
+                        Container(
+                          height: MediaQuery.of(context).size.height / 50,
+                        ),
+                        Container(
+                          child: Text(
+                            "${assignment.description != null ? assignment.description : "This task has no description."}",
+                          ),
+                          width: MediaQuery.of(context).size.width - 30,
+                        ),
+                      ],
+                    ),
                   );
                 } catch (error) {
                   return Center(
-                    child: Text("${error.toString()}"),
+                    child: Text("An error occured. Please try again."),
                   );
                 }
               } else {

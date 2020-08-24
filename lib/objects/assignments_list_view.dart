@@ -63,8 +63,6 @@ class AssignmentsListView {
         isThreeLine: true,
         leading: null,
         onTap: () {
-          print("Course ID: $id");
-          print("Assignment ID: ${assignment.id}");
           _pushAssignmentPage(context, account, course, id, assignment.id);
         });
   }
@@ -82,8 +80,6 @@ class AssignmentsListView {
       "courseId": courseId,
       "course": course,
     };
-    print("Course ID: $courseId");
-    print("Assignment ID: $assignmentId");
     Navigator.of(context).pushNamed('/assignment', arguments: args);
   }
 }

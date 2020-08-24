@@ -8,6 +8,9 @@ class Assignment {
   final String status;
   final String type;
   final List<String> links;
+  final String creationTime;
+  final String updateTime;
+  final String creatorId;
   //final String materials;
 
   Assignment(
@@ -17,7 +20,10 @@ class Assignment {
       this.links,
       //this.materials,
       this.type,
-      this.status});
+      this.status,
+      this.creationTime,
+      this.creatorId,
+      this.updateTime});
 
   factory Assignment.fromJson(Map<String, dynamic> json) {
     return Assignment(
@@ -26,6 +32,9 @@ class Assignment {
       description: json["description"],
       status: json["state"],
       type: json["workType"],
+      creationTime: json["creationTime"],
+      updateTime: json["updateTime"],
+      creatorId: json["creatorUserId"],
       //materials: json["materials"],
     );
   }
