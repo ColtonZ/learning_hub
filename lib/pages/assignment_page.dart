@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:learning_hub/objects/assignment.dart';
+import 'package:learning_hub/objects/attachments_list_view.dart';
 import '../objects/custom_app_bar.dart';
 import 'package:learning_hub/backend.dart';
 import 'package:google_sign_in/google_sign_in.dart';
@@ -208,6 +209,10 @@ class CustomScaffold {
                           ),
                           width: MediaQuery.of(context).size.width - 30,
                         ),
+                        Expanded(
+                          child: AttachmentsListView.create(
+                              context, assignment.attachments),
+                        )
                       ],
                     ),
                   );

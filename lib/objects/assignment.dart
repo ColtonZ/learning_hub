@@ -1,4 +1,6 @@
 import 'dart:core';
+import 'attachment.dart';
+import 'question.dart';
 
 class Assignment {
   final String title;
@@ -11,6 +13,8 @@ class Assignment {
   final DateTime updateTime;
   final String creatorId;
   final DateTime dueDate;
+  final List<Attachment> attachments;
+  final Question question;
 
   Assignment(
       {this.id,
@@ -22,11 +26,15 @@ class Assignment {
       this.creationTime,
       this.creatorId,
       this.updateTime,
-      this.dueDate});
+      this.dueDate,
+      this.attachments,
+      this.question});
 
   factory Assignment.fromJson(Map<String, dynamic> assignmentJson,
       Map<String, dynamic> submissionJson) {
     DateTime d;
+    List<Attachment> a = [];
+    Question q;
     //checks if the assignment has a due date. If it does, convert it into a DateTime object, otherwise return it as null
     try {
       d = DateTime(
@@ -38,6 +46,22 @@ class Assignment {
     } catch (error) {
       d = null;
     }
+
+    try {
+      var aList = assignmentJson["materials"] as List;
+      aList.forEach((attachment) {
+        a.add(Attachment.fromJson(attachment));
+      });
+    } catch (error) {
+      a = null;
+    }
+
+    try {
+      q = Question.fromJson(assignmentJson["multipleChoiceQuestion"]);
+    } catch (error) {
+      q = null;
+    }
+
     //return the assignment using the previously given parameters
     return Assignment(
       id: assignmentJson["id"],
@@ -49,6 +73,8 @@ class Assignment {
       updateTime: DateTime.parse(assignmentJson["updateTime"]).toLocal(),
       creatorId: assignmentJson["creatorUserId"],
       dueDate: d,
+      attachments: a,
+      question: q,
     );
   }
 
