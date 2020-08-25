@@ -19,12 +19,14 @@ class AccountPageState extends State<AccountPage> {
   Widget build(BuildContext context) {
     GoogleSignInAccount account = widget.account;
     String name = widget.name;
+    print("Account is: ${account == null}");
     //checks if the user is signed in, if not, they are signed in
     return account == null
         ? FutureBuilder(
             future: signIn(),
             builder: (context, snapshot) {
               if (snapshot.connectionState == ConnectionState.done) {
+                print("Data: ${snapshot.data.toString()}");
                 account = snapshot.data;
                 return CustomScaffold.create(context, name, account);
               } else {
@@ -72,11 +74,31 @@ class CustomScaffold {
               SizedBox(
                 height: 10,
               ),
+              RaisedButton(
+                  child: Container(
+                    width: 100,
+                    child: Row(
+                      children: <Widget>[
+                        Expanded(
+                          child: Text("Sign Out"),
+                        ),
+                        Icon(Icons.logout),
+                      ],
+                    ),
+                  ),
+                  onPressed: () {
+                    _pushSignOut(context, account);
+                  })
             ],
           ),
         ),
         //creates the bottom navigation bar
         bottomNavigationBar:
             CustomNavigationBar.create(context, name, account, 5));
+  }
+
+  static void _pushSignOut(BuildContext context, GoogleSignInAccount account) {
+    Map args = {"account": null};
+    Navigator.of(context).pushReplacementNamed('/account', arguments: args);
   }
 }

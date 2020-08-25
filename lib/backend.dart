@@ -29,6 +29,11 @@ Future<GoogleSignInAccount> signIn() async {
       "https://www.googleapis.com/auth/classroom.topics",
     ],
   );
+
+  try {
+    _googleSignIn.signOut();
+  } catch (error) {}
+
   //signs the user in
   final GoogleSignInAccount account = await _googleSignIn.signIn();
 
@@ -236,12 +241,6 @@ GoogleUser parseGoogleUser(String responseBody) {
   GoogleUser user = GoogleUser.fromJson(data);
 
   return user;
-}
-
-Future<GoogleSignInAccount> signOut() async {
-  //signs out of the app's google account
-  googleSignIn.signOut();
-  return null;
 }
 
 void printWrapped(String text) {
