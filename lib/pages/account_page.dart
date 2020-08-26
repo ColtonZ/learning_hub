@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:google_sign_in/google_sign_in.dart';
+import 'package:learning_hub/theming.dart';
 import '../backend.dart';
 import '../objects/custom_app_bar.dart';
 import '../objects/custom_navigation_bar.dart';
@@ -54,13 +55,17 @@ class CustomScaffold {
           child: Column(
             mainAxisAlignment: MainAxisAlignment.center,
             children: <Widget>[
-              Text("Account Name:"),
+              Text(
+                "Account Name:",
+                style: titleStyle,
+              ),
               SizedBox(
                 height: 5,
               ),
               Text(
-                  //gets Google Account's display name
-                  "${account.displayName}"),
+                //gets Google Account's display name
+                "${account.displayName}", style: subtitleStyle,
+              ),
               SizedBox(
                 height: 10,
               ),
@@ -80,7 +85,10 @@ class CustomScaffold {
                     child: Row(
                       children: <Widget>[
                         Expanded(
-                          child: Text("Sign Out"),
+                          child: Text(
+                            "Sign Out",
+                            style: header3Style,
+                          ),
                         ),
                         Icon(Icons.logout),
                       ],

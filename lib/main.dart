@@ -72,8 +72,6 @@ class MyApp extends StatelessWidget {
         }
       },
       initialRoute: '/',
-      //defines the default font family
-      theme: ThemeData(fontFamily: 'Jost'),
     );
   }
 }

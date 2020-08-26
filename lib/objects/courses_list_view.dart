@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:learning_hub/theming.dart';
 import 'course.dart';
 import 'package:google_sign_in/google_sign_in.dart';
 
@@ -29,17 +30,22 @@ class CoursesListView {
     return course.description != "null"
         ? ListTile(
             title: Text(
-                //returns the tile header as the subject
-                course.name),
+              //returns the tile header as the subject
+              course.name, style: titleStyle,
+            ),
             //returns other details as the subtitle
-            subtitle: Text(course.description),
+            subtitle: Text(
+              course.description,
+              style: subtitleStyle,
+            ),
             onTap: () {
               _pushAssignmentsPage(context, account, course.name, course.id);
             })
         : ListTile(
             title: Text(
-                //returns the tile header as the subject
-                course.name),
+              //returns the tile header as the subject
+              course.name, style: titleStyle,
+            ),
             onTap: () {
               _pushAssignmentsPage(context, account, course.name, course.id);
             });

@@ -53,7 +53,7 @@ class Assignment {
         a.add(Attachment.fromJson(attachment));
       });
     } catch (error) {
-      a = null;
+      a = [];
     }
 
     try {

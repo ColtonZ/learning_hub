@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:google_sign_in/google_sign_in.dart';
+import 'package:learning_hub/theming.dart';
 
 class CustomNavigationBar {
   static void _pushAccountPage(
@@ -87,27 +88,30 @@ class CustomNavigationBar {
       items: <BottomNavigationBarItem>[
         BottomNavigationBarItem(
           icon: Icon(Icons.home),
-          title: Text('Home Page'),
+          title: Text(
+            'Home Page',
+            style: pageTitleStyle,
+          ),
         ),
         BottomNavigationBarItem(
           icon: Icon(Icons.calendar_today),
-          title: Text('Your Timetable'),
+          title: Text('Your Timetable', style: pageTitleStyle),
         ),
         BottomNavigationBarItem(
           icon: Icon(Icons.assignment),
-          title: Text('Your Tasks'),
+          title: Text('Your Tasks', style: pageTitleStyle),
         ),
         BottomNavigationBarItem(
           icon: Icon(Icons.inbox),
-          title: Text('Tannoy Notices'),
+          title: Text('Tannoy Notices', style: pageTitleStyle),
         ),
         BottomNavigationBarItem(
           icon: Icon(Icons.settings),
-          title: Text('Settings'),
+          title: Text('Settings', style: pageTitleStyle),
         ),
         BottomNavigationBarItem(
           icon: Icon(Icons.account_box),
-          title: Text('Your Profile'),
+          title: Text('Your Profile', style: pageTitleStyle),
         ),
       ],
       currentIndex: index,

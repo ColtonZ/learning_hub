@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:learning_hub/objects/assignment.dart';
 import 'package:learning_hub/objects/attachments_list_view.dart';
+import 'package:learning_hub/theming.dart';
 import '../objects/custom_app_bar.dart';
 import 'package:learning_hub/backend.dart';
 import 'package:google_sign_in/google_sign_in.dart';
@@ -123,11 +124,7 @@ class CustomScaffold {
                             Expanded(
                               child: Text(
                                 "${assignment.title}",
-                                style: TextStyle(
-                                  fontFamily: 'Montserrat',
-                                  fontWeight: FontWeight.w400,
-                                  fontSize: 20,
-                                ),
+                                style: titleStyle,
                               ),
                             ),
                             Container(
@@ -154,23 +151,32 @@ class CustomScaffold {
                                     try {
                                       GoogleUser creator = snapshot.data;
                                       //checks if the task was edited after creation
-                                      return Text(assignment.creationTime
-                                              .add(Duration(minutes: 5))
-                                              .isBefore(assignment.updateTime)
-                                          //returns the task's creator and its due date
-                                          ? "${creator.name} • ${assignment.creationTime.day.toString()} ${months[assignment.creationTime.month - 1]} (Edited ${assignment.updateTime.day.toString()} ${months[assignment.updateTime.month - 1]})"
-                                          : "${creator.name} • ${assignment.creationTime.day.toString()} ${months[assignment.creationTime.month - 1]}");
+                                      return Text(
+                                        assignment.creationTime
+                                                .add(Duration(minutes: 5))
+                                                .isBefore(assignment.updateTime)
+                                            //returns the task's creator and its due date
+                                            ? "${creator.name} • ${assignment.creationTime.day.toString()} ${months[assignment.creationTime.month - 1]} (Edited ${assignment.updateTime.day.toString()} ${months[assignment.updateTime.month - 1]})"
+                                            : "${creator.name} • ${assignment.creationTime.day.toString()} ${months[assignment.creationTime.month - 1]}",
+                                        style: subtitleStyle,
+                                      );
                                     } catch (error) {
-                                      return Text(assignment.creationTime
-                                              .add(Duration(minutes: 5))
-                                              .isBefore(assignment.updateTime)
-                                          //returns just the task's due date
-                                          ? "${assignment.creationTime.day.toString()} ${months[assignment.creationTime.month - 1]} (Edited ${assignment.updateTime.day.toString()} ${months[assignment.updateTime.month - 1]})"
-                                          : "${assignment.creationTime.day.toString()} ${months[assignment.creationTime.month - 1]}");
+                                      return Text(
+                                        assignment.creationTime
+                                                .add(Duration(minutes: 5))
+                                                .isBefore(assignment.updateTime)
+                                            //returns just the task's due date
+                                            ? "${assignment.creationTime.day.toString()} ${months[assignment.creationTime.month - 1]} (Edited ${assignment.updateTime.day.toString()} ${months[assignment.updateTime.month - 1]})"
+                                            : "${assignment.creationTime.day.toString()} ${months[assignment.creationTime.month - 1]}",
+                                        style: subtitleStyle,
+                                      );
                                     }
                                     //returns "loading..." whilst trying to get the task's creator
                                   } else {
-                                    return Text("Loading...");
+                                    return Text(
+                                      "Loading...",
+                                      style: subtitleStyle,
+                                    );
                                   }
                                 },
                               ),
@@ -179,11 +185,16 @@ class CustomScaffold {
                               width: 5,
                             ),
                             //checks if the task has a due date. If it does, display it
-                            Text(
-                              assignment.dueDate != null
-                                  ? "Due ${assignment.dueDate.day} ${months[assignment.dueDate.month - 1]}"
-                                  : "No due date",
-                              textAlign: TextAlign.right,
+                            Expanded(
+                              child: ListTile(
+                                title: Text(
+                                  assignment.dueDate != null
+                                      ? "Due ${assignment.dueDate.day} ${months[assignment.dueDate.month - 1]}"
+                                      : "No due date",
+                                  textAlign: TextAlign.right,
+                                  style: subtitleStyle,
+                                ),
+                              ),
                             ),
                             Container(
                               width: 15,
@@ -199,26 +210,25 @@ class CustomScaffold {
                           indent: 15,
                           endIndent: 15,
                         ),
-                        Container(
-                          height: MediaQuery.of(context).size.height / 50,
-                        ),
+
                         //returns the assignment's description, or no description if the task does not have one
-                        Container(
-                          child: Text(
-                            "${assignment.description != null ? assignment.description : "This task has no description."}",
-                          ),
-                          width: MediaQuery.of(context).size.width - 30,
-                        ),
                         Expanded(
                           child: AttachmentsListView.create(
-                              context, assignment.attachments),
+                              context,
+                              assignment.description != null
+                                  ? assignment.description
+                                  : "This task has no description.",
+                              assignment.attachments),
                         )
                       ],
                     ),
                   );
                 } catch (error) {
                   return Center(
-                    child: Text("An error occured. Please try again."),
+                    child: Text(
+                      "An error occured. Please try again.",
+                      style: titleStyle,
+                    ),
                   );
                 }
               } else {

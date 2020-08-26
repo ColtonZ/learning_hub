@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:learning_hub/theming.dart';
 import 'assignment.dart';
 import 'package:google_sign_in/google_sign_in.dart';
 
@@ -34,6 +35,7 @@ class AssignmentsListView {
     return ListTile(
         title: Text(
           assignment.title != null ? assignment.title : "N/A",
+          style: titleStyle,
         ),
         //trims the tile's subtitle accordingly
         subtitle: Text(
@@ -52,6 +54,7 @@ class AssignmentsListView {
                           : assignment.description.trim()
                   : "This task has no description") +
               "\nType: ${assignment.type == "ASSIGNMENT" ? "Assignment" : assignment.type == "SHORT_ANSWER_QUESTION" ? "Short Answer Question" : assignment.type == "MULTIPLE_CHOICE_QUESTION" ? "Multiple Choice Question" : assignment.type}",
+          style: subtitleStyle,
         ),
         //applies an icon to the tile, dependent on the type of assignment
         trailing: Icon(assignment.type == "ASSIGNMENT"

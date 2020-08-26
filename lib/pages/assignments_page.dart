@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:learning_hub/objects/assignment.dart';
 import 'package:learning_hub/objects/assignments_list_view.dart';
+import 'package:learning_hub/theming.dart';
 import '../objects/custom_app_bar.dart';
 import 'package:learning_hub/backend.dart';
 import 'package:google_sign_in/google_sign_in.dart';
@@ -67,7 +68,10 @@ class CustomScaffold {
                       context, account, course, id, assignments);
                 } catch (error) {
                   return Center(
-                    child: Text("You have no assignments to display."),
+                    child: Text(
+                      "You have no assignments to display.",
+                      style: titleStyle,
+                    ),
                   );
                 }
               } else {

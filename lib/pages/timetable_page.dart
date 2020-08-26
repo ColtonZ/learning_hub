@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:learning_hub/theming.dart';
 import '../objects/custom_navigation_bar.dart';
 import '../objects/custom_app_bar.dart';
 import 'package:google_sign_in/google_sign_in.dart';
@@ -49,7 +50,11 @@ class CustomScaffold {
         //returns the custom app bar with the timetable page title
         appBar: CustomAppBar.create(context, "Your Timetable"),
         //builds the body
-        body: Center(child: Text(account.email)),
+        body: Center(
+            child: Text(
+          account.email,
+          style: titleStyle,
+        )),
         //builds the navigation bar for the given page
         bottomNavigationBar:
             CustomNavigationBar.create(context, name, account, 1));
