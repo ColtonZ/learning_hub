@@ -133,7 +133,7 @@ class CustomScaffold {
                           ],
                         ),
                         Container(
-                          height: MediaQuery.of(context).size.height / 50,
+                          height: MediaQuery.of(context).size.height / 52,
                         ),
                         Row(
                           children: <Widget>[
@@ -158,7 +158,7 @@ class CustomScaffold {
                                             //returns the task's creator and its due date
                                             ? "${creator.name} • ${assignment.creationTime.day.toString()} ${months[assignment.creationTime.month - 1]} (Edited ${assignment.updateTime.day.toString()} ${months[assignment.updateTime.month - 1]})"
                                             : "${creator.name} • ${assignment.creationTime.day.toString()} ${months[assignment.creationTime.month - 1]}",
-                                        style: subtitleStyle,
+                                        style: header3Style,
                                       );
                                     } catch (error) {
                                       return Text(
@@ -168,14 +168,14 @@ class CustomScaffold {
                                             //returns just the task's due date
                                             ? "${assignment.creationTime.day.toString()} ${months[assignment.creationTime.month - 1]} (Edited ${assignment.updateTime.day.toString()} ${months[assignment.updateTime.month - 1]})"
                                             : "${assignment.creationTime.day.toString()} ${months[assignment.creationTime.month - 1]}",
-                                        style: subtitleStyle,
+                                        style: header3Style,
                                       );
                                     }
                                     //returns "loading..." whilst trying to get the task's creator
                                   } else {
                                     return Text(
                                       "Loading...",
-                                      style: subtitleStyle,
+                                      style: header3Style,
                                     );
                                   }
                                 },
@@ -192,7 +192,7 @@ class CustomScaffold {
                                       ? "Due ${assignment.dueDate.day} ${months[assignment.dueDate.month - 1]}"
                                       : "No due date",
                                   textAlign: TextAlign.right,
-                                  style: subtitleStyle,
+                                  style: header3Style,
                                 ),
                               ),
                             ),
@@ -200,9 +200,6 @@ class CustomScaffold {
                               width: 15,
                             ),
                           ],
-                        ),
-                        Container(
-                          height: MediaQuery.of(context).size.height / 50,
                         ),
                         Divider(
                           color: Colors.black38,

@@ -31,12 +31,12 @@ class AttachmentsListView {
     return ListTile(
       title: Column(
         children: [
-          Container(
-            height: MediaQuery.of(context).size.height / 52,
-          ),
           Text(
             description,
             style: paragraph1Style,
+          ),
+          Container(
+            height: MediaQuery.of(context).size.height / 52,
           ),
           attachments == true
               ? Row(children: [
@@ -65,7 +65,7 @@ class AttachmentsListView {
                     ? Icon(Icons.insert_drive_file)
                     : attachment.type == "link"
                         ? Icon(Icons.link)
-                        : attachment.type == "youtube"
+                        : attachment.type == "YouTube video"
                             ? Icon(Icons.play_circle_outline)
                             : attachment.type == "form"
                                 ? Icon(Icons.format_list_bulleted)
@@ -78,8 +78,10 @@ class AttachmentsListView {
             ),
             Expanded(
                 child: Text(
-              attachment.title,
-              style: titleStyle,
+              attachment.title != null
+                  ? attachment.title
+                  : "This ${attachment.type} has no title",
+              style: header3Style,
             ))
           ],
         ),

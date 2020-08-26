@@ -31,7 +31,7 @@ class Attachment {
         title: json["youtubeVideo"]["title"],
         link: json["youtubeVideo"]["alternateLink"],
         thumbnail: json["youtubeVideo"]["thumbnailUrl"],
-        type: "youtube",
+        type: "YouTube",
       );
     } else if (json["form"] != null) {
       //return the assignment using the previously given parameters

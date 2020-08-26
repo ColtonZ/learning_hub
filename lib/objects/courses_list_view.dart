@@ -31,12 +31,12 @@ class CoursesListView {
         ? ListTile(
             title: Text(
               //returns the tile header as the subject
-              course.name, style: titleStyle,
+              course.name, style: subtitleStyle,
             ),
             //returns other details as the subtitle
             subtitle: Text(
               course.description,
-              style: subtitleStyle,
+              style: header3Style,
             ),
             onTap: () {
               _pushAssignmentsPage(context, account, course.name, course.id);
@@ -44,7 +44,7 @@ class CoursesListView {
         : ListTile(
             title: Text(
               //returns the tile header as the subject
-              course.name, style: titleStyle,
+              course.name, style: subtitleStyle,
             ),
             onTap: () {
               _pushAssignmentsPage(context, account, course.name, course.id);
