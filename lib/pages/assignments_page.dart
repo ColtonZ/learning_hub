@@ -69,7 +69,7 @@ class CustomScaffold {
                 } catch (error) {
                   return Center(
                     child: Text(
-                      "You have no assignments to display.",
+                      error.toString(),
                       style: titleStyle,
                     ),
                   );

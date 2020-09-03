@@ -195,8 +195,6 @@ Assignment parseAssignment(
 
   var submissions = submissionData["studentSubmissions"] as List;
 
-  printWrapped(assignmentResponseBody);
-  printWrapped(submissionResponseBody);
   //converts the two json responses (the assignment details and the submission details) into an assignment object and returns it
   Assignment assignment = Assignment.fromJson(assignmentData, submissions[0]);
 

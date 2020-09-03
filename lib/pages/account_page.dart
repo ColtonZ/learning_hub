@@ -20,14 +20,12 @@ class AccountPageState extends State<AccountPage> {
   Widget build(BuildContext context) {
     GoogleSignInAccount account = widget.account;
     String name = widget.name;
-    print("Account is: ${account == null}");
     //checks if the user is signed in, if not, they are signed in
     return account == null
         ? FutureBuilder(
             future: signIn(),
             builder: (context, snapshot) {
               if (snapshot.connectionState == ConnectionState.done) {
-                print("Data: ${snapshot.data.toString()}");
                 account = snapshot.data;
                 return CustomScaffold.create(context, name, account);
               } else {

@@ -8,33 +8,48 @@ class Assignment {
   final String id;
   final String status;
   final String type;
-  final List<String> links;
   final DateTime creationTime;
   final DateTime updateTime;
   final String creatorId;
   final DateTime dueDate;
   final List<Attachment> attachments;
+  final List<Attachment> submissionAttachments;
   final Question question;
+  final String points;
+  final String state;
+  final bool isLate;
+  final int grade;
+  final String answer;
 
-  Assignment(
-      {this.id,
-      this.title,
-      this.description,
-      this.links,
-      this.type,
-      this.status,
-      this.creationTime,
-      this.creatorId,
-      this.updateTime,
-      this.dueDate,
-      this.attachments,
-      this.question});
+  Assignment({
+    this.id,
+    this.title,
+    this.description,
+    this.type,
+    this.status,
+    this.creationTime,
+    this.creatorId,
+    this.updateTime,
+    this.dueDate,
+    this.attachments,
+    this.submissionAttachments,
+    this.question,
+    this.points,
+    this.state,
+    this.isLate,
+    this.grade,
+    this.answer,
+  });
 
   factory Assignment.fromJson(Map<String, dynamic> assignmentJson,
       Map<String, dynamic> submissionJson) {
     DateTime d;
     List<Attachment> a = [];
+    List<Attachment> s = [];
+    String p;
     Question q;
+    bool l;
+    int g;
     //checks if the assignment has a due date. If it does, convert it into a DateTime object, otherwise return it as null
     try {
       d = DateTime(
@@ -48,6 +63,12 @@ class Assignment {
     }
 
     try {
+      p = assignmentJson["maxPoints"];
+    } catch (error) {
+      p = null;
+    }
+
+    try {
       var aList = assignmentJson["materials"] as List;
       aList.forEach((attachment) {
         a.add(Attachment.fromJson(attachment));
@@ -57,25 +78,72 @@ class Assignment {
     }
 
     try {
+      var sList = submissionJson["assignmentSubmission"]["attachments"] as List;
+      sList.forEach((attachment) {
+        s.add(Attachment.fromJson(attachment));
+      });
+    } catch (error) {
+      s = [];
+    }
+
+    try {
       q = Question.fromJson(assignmentJson["multipleChoiceQuestion"]);
     } catch (error) {
       q = null;
     }
 
+    try {
+      g = submissionJson["assignedGrade"];
+    } catch (error) {
+      g = null;
+    }
+
+    try {
+      l = submissionJson["late"];
+    } catch (error) {
+      l = null;
+    }
+
     //return the assignment using the previously given parameters
-    return Assignment(
-      id: assignmentJson["id"],
-      title: assignmentJson["title"],
-      description: assignmentJson["description"],
-      status: assignmentJson["state"],
-      type: assignmentJson["workType"],
-      creationTime: DateTime.parse(assignmentJson["creationTime"]).toLocal(),
-      updateTime: DateTime.parse(assignmentJson["updateTime"]).toLocal(),
-      creatorId: assignmentJson["creatorUserId"],
-      dueDate: d,
-      attachments: a,
-      question: q,
-    );
+    if (submissionJson != null) {
+      return Assignment(
+        id: assignmentJson["id"],
+        title: assignmentJson["title"],
+        description: assignmentJson["description"],
+        status: assignmentJson["state"],
+        type: assignmentJson["workType"],
+        creationTime: DateTime.parse(assignmentJson["creationTime"]).toLocal(),
+        updateTime: DateTime.parse(assignmentJson["updateTime"]).toLocal(),
+        creatorId: assignmentJson["creatorUserId"],
+        dueDate: d,
+        attachments: a,
+        submissionAttachments: s,
+        question: q,
+        points: p,
+        state: submissionJson["state"],
+        isLate: l,
+        grade: g,
+        answer: assignmentJson["workType"] == "SHORT_ANSWER_QUESTION"
+            ? submissionJson["shortAnswerSubmission"]["answer"]
+            : assignmentJson["workType"] == "MULTIPLE_CHOICE_QUESTION"
+                ? submissionJson["multipleChoiceSubmission"]["answer"]
+                : null,
+      );
+    } else {
+      return Assignment(
+        id: assignmentJson["id"],
+        title: assignmentJson["title"],
+        description: assignmentJson["description"],
+        status: assignmentJson["state"],
+        type: assignmentJson["workType"],
+        creationTime: DateTime.parse(assignmentJson["creationTime"]).toLocal(),
+        updateTime: DateTime.parse(assignmentJson["updateTime"]).toLocal(),
+        creatorId: assignmentJson["creatorUserId"],
+        dueDate: d,
+        attachments: a,
+        question: q,
+      );
+    }
   }
 
   void output() {

@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:learning_hub/objects/assignment.dart';
 import 'package:learning_hub/objects/attachments_list_view.dart';
+import 'package:learning_hub/objects/student_submissions.dart';
 import 'package:learning_hub/theming.dart';
 import '../objects/custom_app_bar.dart';
 import 'package:learning_hub/backend.dart';
@@ -8,6 +9,7 @@ import 'package:google_sign_in/google_sign_in.dart';
 import '../objects/custom_navigation_bar.dart';
 import 'dart:core';
 import '../objects/google_user.dart';
+import 'package:sliding_up_panel/sliding_up_panel.dart';
 
 class AssignmentPage extends StatefulWidget {
   //takes in the widget's arguments
@@ -210,13 +212,50 @@ class CustomScaffold {
 
                         //returns the assignment's description, or no description if the task does not have one
                         Expanded(
-                          child: AttachmentsListView.create(
-                              context,
-                              assignment.description != null
-                                  ? assignment.description
-                                  : "This task has no description.",
-                              assignment.attachments),
-                        )
+                          child: Stack(
+                            children: [
+                              AttachmentsListView.create(
+                                  context,
+                                  assignment.description != null
+                                      ? assignment.description
+                                      : "This task has no description.",
+                                  assignment.attachments),
+                              SlidingUpPanel(
+                                collapsed: Center(
+                                  child: Column(
+                                    children: [
+                                      Container(
+                                        height:
+                                            MediaQuery.of(context).size.height /
+                                                50,
+                                      ),
+                                      Icon(Icons.keyboard_arrow_up),
+                                      Text(
+                                        "Your work",
+                                        style: header3Style,
+                                      )
+                                    ],
+                                  ),
+                                ),
+                                padding: EdgeInsets.fromLTRB(15, 0, 15, 0),
+                                minHeight:
+                                    MediaQuery.of(context).size.height / 10,
+                                maxHeight:
+                                    MediaQuery.of(context).size.height / 2,
+                                borderRadius: BorderRadius.only(
+                                    topLeft: Radius.circular(
+                                        MediaQuery.of(context).size.width / 20),
+                                    topRight: Radius.circular(
+                                        MediaQuery.of(context).size.width /
+                                            20)),
+                                panel: Center(
+                                  child: StudentSubmissions.create(
+                                      context, assignment),
+                                ),
+                              ),
+                            ],
+                          ),
+                        ),
                       ],
                     ),
                   );

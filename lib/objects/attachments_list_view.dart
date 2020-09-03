@@ -8,17 +8,20 @@ class AttachmentsListView {
   static ListView create(
       BuildContext context, String description, List<Attachment> attachments) {
     return ListView.builder(
-      itemCount: (attachments.length * 2 + 1),
+      itemCount: (attachments.length * 2 + 2),
       //half the items will be dividers, the other will be list tiles
       padding: const EdgeInsets.all(8.0),
       itemBuilder: (context, item) {
         //returns a divider if odd, or attachment details if even (i.e. returns a divider every other one)
         if (item == 0) {
           return _buildFirstTile(context, description, attachments.isNotEmpty);
-        } else if (item.isEven) {
+        }
+        if (item == attachments.length * 2 + 1) {
+          return _buildLastTile(context);
+        } else if (item.isOdd) {
           return Divider();
         }
-        final index = (item - 1) ~/ 2;
+        final index = (item - 2) ~/ 2;
         //creates a list tile for the attachment
         return _buildCustomListRow(context, attachments[index]);
       },
@@ -48,6 +51,14 @@ class AttachmentsListView {
                 ])
               : Text(""),
         ],
+      ),
+    );
+  }
+
+  static Widget _buildLastTile(BuildContext context) {
+    return ListTile(
+      title: Container(
+        height: MediaQuery.of(context).size.height / 10,
       ),
     );
   }
