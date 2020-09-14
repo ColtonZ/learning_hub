@@ -9,6 +9,7 @@ class Attachment {
 
   Attachment({this.id, this.title, this.link, this.thumbnail, this.type});
 
+//checks the type of assignment. Dependent on the type, it returns different things, but will always return a title and link (unless there is an error)
   factory Attachment.fromJson(Map<String, dynamic> json) {
     if (json["driveFile"] != null) {
       return Attachment(
@@ -34,7 +35,6 @@ class Attachment {
         type: "YouTube",
       );
     } else if (json["form"] != null) {
-      //return the assignment using the previously given parameters
       return Attachment(
         title: json["form"]["title"],
         link: json["form"]["formUrl"],
@@ -46,9 +46,5 @@ class Attachment {
         type: "other",
       );
     }
-  }
-
-  void output() {
-    print("ID: $id | Title: $title | Link: $link | Thumbnail: $thumbnail");
   }
 }

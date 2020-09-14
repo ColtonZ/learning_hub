@@ -210,7 +210,7 @@ class CustomScaffold {
                           endIndent: 15,
                         ),
 
-                        //returns the assignment's description, or no description if the task does not have one
+                        //Returns a list. The first object is is the task's description (if there is one), and the rest of the objects are any attachments that are attached to the task
                         Expanded(
                           child: Stack(
                             children: [
@@ -220,6 +220,7 @@ class CustomScaffold {
                                       ? assignment.description
                                       : "This task has no description.",
                                   assignment.attachments),
+                              //returns a panel which allows the user to slide up and view their attached work
                               SlidingUpPanel(
                                 collapsed: Center(
                                   child: Column(
@@ -248,6 +249,7 @@ class CustomScaffold {
                                     topRight: Radius.circular(
                                         MediaQuery.of(context).size.width /
                                             20)),
+                                //creates the list of the student's submissions
                                 panel: Center(
                                   child: StudentSubmissions.create(
                                       context, assignment),

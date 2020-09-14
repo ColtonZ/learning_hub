@@ -3,6 +3,8 @@ import 'package:google_sign_in/google_sign_in.dart';
 import 'package:learning_hub/theming.dart';
 
 class CustomNavigationBar {
+  //defines a series of methods, each with the route of the page to push and any additional logic, as well as arguments.
+  //each page will ensure that, if coming from the assignments or assignment page to pop back far enough, as otherwise you may end up with too many pages on top of each other
   static void _pushAccountPage(
       BuildContext context, String name, GoogleSignInAccount account) {
     Map args = {"account": account};
@@ -82,6 +84,7 @@ class CustomNavigationBar {
   }
 
   //creates a new navigation bar with the given tabs to provide consistency
+  //checks what the current page is, and gives it a name accordingly
   static BottomNavigationBar create(BuildContext context, String name,
       GoogleSignInAccount account, int index) {
     return new BottomNavigationBar(
@@ -114,12 +117,14 @@ class CustomNavigationBar {
           title: Text('Your Profile', style: pageTitleStyle),
         ),
       ],
+      //details other information about the navigation bar
       currentIndex: index,
       selectedItemColor: Colors.blue[600],
       unselectedItemColor: Colors.black,
       type: BottomNavigationBarType.fixed,
       showSelectedLabels: false,
       showUnselectedLabels: false,
+      //handles logic for what to do when an icon is selected at the bottom
       onTap: (value) {
         switch (value) {
           case 0:

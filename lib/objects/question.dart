@@ -1,3 +1,4 @@
+//this is a question class for if a question is part of an assignment
 class Question {
   final String type;
   final List<String> options;
@@ -7,6 +8,7 @@ class Question {
   factory Question.fromJson(Map<String, dynamic> json) {
     List<String> o = [];
     String choices = json["choices"].toString();
+    //converts the json of the possible question choices to a list
     List<String> choicesList =
         choices.substring(1, choices.length - 1).split(', ');
 
@@ -17,12 +19,5 @@ class Question {
       type: "Multiple Choice",
       options: o,
     );
-  }
-  void output() {
-    int n = 1;
-    options.forEach((element) {
-      print("Option $n: $element");
-      n++;
-    });
   }
 }

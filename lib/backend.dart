@@ -30,6 +30,7 @@ Future<GoogleSignInAccount> signIn() async {
     ],
   );
 
+//signs the user out if they're signed in, so as to allow for them to be re-signed in
   try {
     _googleSignIn.signOut();
   } catch (error) {}
@@ -183,6 +184,10 @@ Future<Assignment> sendAssignmentRequest(
 
   final assignmentResponseBody = assignmentResponse.body;
   final submissionResponseBody = submissionResponse.body;
+
+//prints out the responses for testing purposes
+  printWrapped(assignmentResponseBody);
+  printWrapped(submissionResponseBody);
 
   //converts the response into an assignment and an attached submission
   return parseAssignment(assignmentResponseBody, submissionResponseBody);

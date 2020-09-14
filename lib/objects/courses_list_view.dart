@@ -38,6 +38,7 @@ class CoursesListView {
               course.description,
               style: header3Style,
             ),
+            //opens the assignments of the course when you click on it
             onTap: () {
               _pushAssignmentsPage(context, account, course.name, course.id);
             })
@@ -46,6 +47,7 @@ class CoursesListView {
               //returns the tile header as the subject
               course.name, style: subtitleStyle,
             ),
+            //opens the assignments of the course when you click on it
             onTap: () {
               _pushAssignmentsPage(context, account, course.name, course.id);
             });

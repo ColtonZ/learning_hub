@@ -1,11 +1,11 @@
 import 'package:flutter/material.dart';
 import 'package:learning_hub/objects/assignment.dart';
-import 'attachment.dart';
-import 'package:url_launcher/url_launcher.dart';
+import 'package:learning_hub/objects/attachments_list_view.dart';
 import 'package:learning_hub/theming.dart';
 
 class StudentSubmissions {
-  //creates a list view
+  //creates a list view of the student's submission
+  //checks on the type of the assignment to work out if it should be looking for attached files, or for a question response
   static Widget create(BuildContext context, Assignment assignment) {
     if (assignment.type == "MULTIPLE_CHOICE_QUESTION") {
       return Center(
@@ -34,7 +34,10 @@ class StudentSubmissions {
           Text(
             "Assignment!",
             style: titleStyle,
-          )
+          ),
+          Expanded(
+              child: AttachmentsListView.create(
+                  context, "Your work", assignment.submissionAttachments))
         ],
       ));
     }

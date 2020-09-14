@@ -13,6 +13,7 @@ class AttachmentsListView {
       padding: const EdgeInsets.all(8.0),
       itemBuilder: (context, item) {
         //returns a divider if odd, or attachment details if even (i.e. returns a divider every other one)
+        //however, the first and last tiles are different (see below)
         if (item == 0) {
           return _buildFirstTile(context, description, attachments.isNotEmpty);
         }
@@ -28,7 +29,7 @@ class AttachmentsListView {
     );
   }
 
-//builds the list tile for the attachment
+//builds the first list tiles as the description of the task and then a header of the attachments section
   static Widget _buildFirstTile(
       BuildContext context, String description, bool attachments) {
     return ListTile(
@@ -41,6 +42,7 @@ class AttachmentsListView {
           Container(
             height: MediaQuery.of(context).size.height / 52,
           ),
+          //returns a header for attachments if there are any - no header otherwise
           attachments == true
               ? Row(children: [
                   Expanded(
@@ -55,6 +57,7 @@ class AttachmentsListView {
     );
   }
 
+//builds the last tile as just a blank container - to provide padding for the slide up panel
   static Widget _buildLastTile(BuildContext context) {
     return ListTile(
       title: Container(
@@ -71,6 +74,7 @@ class AttachmentsListView {
           children: <Widget>[
             Container(
               child: FittedBox(
+                //checks the type of attachment, and gives it an icon accordingly
                 fit: BoxFit.contain,
                 child: attachment.type == "file"
                     ? Icon(Icons.insert_drive_file)
@@ -88,6 +92,7 @@ class AttachmentsListView {
               width: MediaQuery.of(context).size.width / 50,
             ),
             Expanded(
+                //returns the attachment title
                 child: Text(
               attachment.title != null
                   ? attachment.title
@@ -96,6 +101,7 @@ class AttachmentsListView {
             ))
           ],
         ),
+        //opens a link to the attachment when you click on it
         onTap: () {
           launch(attachment.link);
         });

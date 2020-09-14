@@ -77,6 +77,7 @@ class CustomScaffold {
               SizedBox(
                 height: 10,
               ),
+              //creates a Sign Out button
               RaisedButton(
                   child: Container(
                     width: 100,
@@ -92,6 +93,7 @@ class CustomScaffold {
                       ],
                     ),
                   ),
+                  //when pressed, call the sign out method
                   onPressed: () {
                     _pushSignOut(context, account);
                   })
@@ -103,6 +105,7 @@ class CustomScaffold {
             CustomNavigationBar.create(context, name, account, 5));
   }
 
+  //to sign out, push the account page again, but without any user data
   static void _pushSignOut(BuildContext context, GoogleSignInAccount account) {
     Map args = {"account": null};
     Navigator.of(context).pushReplacementNamed('/account', arguments: args);

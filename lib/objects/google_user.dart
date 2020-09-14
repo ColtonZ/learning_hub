@@ -1,3 +1,4 @@
+//this is a class for a Google user account
 class GoogleUser {
   final String name;
 
@@ -7,9 +8,5 @@ class GoogleUser {
     return GoogleUser(
       name: json["name"]["fullName"],
     );
-  }
-
-  void output() {
-    print("Name: $name");
   }
 }

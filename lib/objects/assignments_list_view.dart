@@ -37,7 +37,7 @@ class AssignmentsListView {
           assignment.title != null ? assignment.title : "N/A",
           style: subtitleStyle,
         ),
-        //trims the tile's subtitle accordingly
+        //trims the tile's subtitle accordingly, and adds a name depending on the type of the assignment
         subtitle: Text(
           (assignment.description != null
                   ? assignment.description.split("\n").length > 1

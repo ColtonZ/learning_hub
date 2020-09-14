@@ -105,6 +105,7 @@ class Assignment {
     }
 
     //return the assignment using the previously given parameters
+    //if the assignment has student submissions, return that, otherwise return just the assignment
     if (submissionJson != null) {
       return Assignment(
         id: assignmentJson["id"],
@@ -144,10 +145,5 @@ class Assignment {
         question: q,
       );
     }
-  }
-
-  void output() {
-    print(
-        "ID: $id | Title: $title | Description: $description | Status: $status");
   }
 }
