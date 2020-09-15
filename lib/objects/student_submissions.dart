@@ -31,13 +31,24 @@ class StudentSubmissions {
       return Center(
           child: Column(
         children: [
-          Text(
-            "Assignment!",
-            style: titleStyle,
+          Container(
+            height: MediaQuery.of(context).size.height / 50,
+          ),
+          Container(
+            color: Colors.white,
+            child: Column(
+              children: [
+                Icon(Icons.keyboard_arrow_down_outlined),
+                Text(
+                  "Your work",
+                  style: header3Style,
+                )
+              ],
+            ),
           ),
           Expanded(
               child: AttachmentsListView.create(
-                  context, "Your work", assignment.submissionAttachments))
+                  context, "", assignment.submissionAttachments))
         ],
       ));
     }

@@ -12,13 +12,24 @@ class Attachment {
 //checks the type of assignment. Dependent on the type, it returns different things, but will always return a title and link (unless there is an error)
   factory Attachment.fromJson(Map<String, dynamic> json) {
     if (json["driveFile"] != null) {
-      return Attachment(
-        id: json["driveFile"]["driveFile"]["id"],
-        title: json["driveFile"]["driveFile"]["title"],
-        link: json["driveFile"]["driveFile"]["alternateLink"],
-        thumbnail: json["driveFile"]["driveFile"]["thumbnailUrl"],
-        type: "file",
-      );
+      //for student submissions, they do not have the second "driveFile"
+      if (json["driveFile"]["driveFile"] != null) {
+        return Attachment(
+          id: json["driveFile"]["driveFile"]["id"],
+          title: json["driveFile"]["driveFile"]["title"],
+          link: json["driveFile"]["driveFile"]["alternateLink"],
+          thumbnail: json["driveFile"]["driveFile"]["thumbnailUrl"],
+          type: "file",
+        );
+      } else {
+        return Attachment(
+          id: json["driveFile"]["id"],
+          title: json["driveFile"]["title"],
+          link: json["driveFile"]["alternateLink"],
+          thumbnail: json["driveFile"]["thumbnailUrl"],
+          type: "file",
+        );
+      }
     } else if (json["link"] != null) {
       return Attachment(
         title: json["link"]["title"],

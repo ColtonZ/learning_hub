@@ -9,7 +9,7 @@ import 'package:google_sign_in/google_sign_in.dart';
 import '../objects/custom_navigation_bar.dart';
 import 'dart:core';
 import '../objects/google_user.dart';
-import 'package:sliding_up_panel/sliding_up_panel.dart';
+import 'package:sliding_up_panel/sliding_up_panel.dart'; //https://pub.dev/packages/sliding_up_panel
 
 class AssignmentPage extends StatefulWidget {
   //takes in the widget's arguments
@@ -221,6 +221,7 @@ class CustomScaffold {
                                       : "This task has no description.",
                                   assignment.attachments),
                               //returns a panel which allows the user to slide up and view their attached work
+                              //from https://pub.dev/packages/sliding_up_panel
                               SlidingUpPanel(
                                 collapsed: Center(
                                   child: Column(
@@ -230,11 +231,18 @@ class CustomScaffold {
                                             MediaQuery.of(context).size.height /
                                                 50,
                                       ),
-                                      Icon(Icons.keyboard_arrow_up),
-                                      Text(
-                                        "Your work",
-                                        style: header3Style,
-                                      )
+                                      Container(
+                                        color: Colors.white,
+                                        child: Column(
+                                          children: [
+                                            Icon(Icons.keyboard_arrow_up),
+                                            Text(
+                                              "Your work",
+                                              style: header3Style,
+                                            )
+                                          ],
+                                        ),
+                                      ),
                                     ],
                                   ),
                                 ),

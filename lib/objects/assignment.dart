@@ -71,7 +71,11 @@ class Assignment {
     try {
       var aList = assignmentJson["materials"] as List;
       aList.forEach((attachment) {
-        a.add(Attachment.fromJson(attachment));
+        //this removes all attachments which start with [Template] as these are files made by Google for each task
+        Attachment att = Attachment.fromJson(attachment);
+        if (!att.title.startsWith("[Template]")) {
+          a.add(att);
+        }
       });
     } catch (error) {
       a = [];
