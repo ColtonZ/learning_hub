@@ -186,8 +186,8 @@ Future<Assignment> sendAssignmentRequest(
   final submissionResponseBody = submissionResponse.body;
 
 //prints out the responses for testing purposes
-  printWrapped(assignmentResponseBody);
-  printWrapped(submissionResponseBody);
+  //printWrapped(assignmentResponseBody);
+  //printWrapped(submissionResponseBody);
 
   //converts the response into an assignment and an attached submission
   return parseAssignment(assignmentResponseBody, submissionResponseBody);
@@ -204,6 +204,53 @@ Assignment parseAssignment(
   Assignment assignment = Assignment.fromJson(assignmentData, submissions[0]);
 
   return assignment;
+}
+
+Future<bool> isCourseDone(String id, GoogleSignInAccount account) async {
+  //TODO: Fix code to check if a course has undone work
+
+  Map<String, String> headers;
+  //gets the user's auth headers
+  if (isSignedIn(account)) {
+    headers = await getHeaders(account);
+  } else {
+    headers = await getHeaders(await signIn());
+  }
+
+  //sends an http request for the courses assignments given a course id
+  http.Response response = await http.get(
+      Uri.encodeFull(
+          "https://classroom.googleapis.com//v1/courses/$id/courseWork"),
+      headers: headers);
+  final responseBody = response.body;
+
+  var data = json.decode(responseBody);
+//if a course has no assignments, treat it as if all assignments are done
+
+  //converts the json into a list of jsons
+  try {
+    var assignments = data["courseWork"] as List;
+
+    bool toDo = false;
+//loops through each assignment, getting the student submission for each
+//TODO: Look into making it so that it checks if the task is due in the future first
+    for (int j = 0; j < assignments.length; j++) {
+      Assignment assignment =
+          await getAssignment(id, assignments[j]["id"], account);
+      //check each assignment, and if it has not been submitted or marked, has a due date and is not late, then mark the task as needing to be done);
+      if (assignment.state != "TURNED_IN" &&
+          assignment.state != "RETURNED" &&
+          assignment.dueDate != null &&
+          assignment.isLate != true) {
+        toDo = true;
+        break;
+      }
+    }
+    return toDo;
+    //if the course has no assignments, return false (as there are no assignments to be done!)
+  } on NoSuchMethodError {
+    return false;
+  }
 }
 
 Future<GoogleUser> getGoogleUser(

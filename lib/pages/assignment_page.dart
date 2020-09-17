@@ -235,7 +235,7 @@ class CustomScaffold {
                                         color: Colors.white,
                                         child: Column(
                                           children: [
-                                            Icon(Icons.keyboard_arrow_up),
+                                            Icon(Icons.expand_less),
                                             Text(
                                               "Your work",
                                               style: header3Style,

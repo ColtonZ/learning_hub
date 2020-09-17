@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:learning_hub/backend.dart';
 import 'package:learning_hub/theming.dart';
 import 'course.dart';
 import 'package:google_sign_in/google_sign_in.dart';
@@ -29,6 +30,21 @@ class CoursesListView {
     //checks if list tile should have subtitle
     return course.description != "null"
         ? ListTile(
+            leading: FutureBuilder(
+                future: isCourseDone(course.id, account),
+                builder: (context, snapshot) {
+                  if (snapshot.connectionState == ConnectionState.done) {
+                    try {
+                      return Icon(snapshot.data
+                          ? Icons.notification_important
+                          : Icons.check);
+                    } catch (error) {
+                      return Icon(Icons.error);
+                    }
+                  } else {
+                    return Icon(Icons.data_usage);
+                  }
+                }),
             title: Text(
               //returns the tile header as the subject
               course.name, style: subtitleStyle,

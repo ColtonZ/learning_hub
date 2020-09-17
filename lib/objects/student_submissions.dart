@@ -19,7 +19,7 @@ class StudentSubmissions {
             color: Colors.white,
             child: Column(
               children: [
-                Icon(Icons.keyboard_arrow_down_outlined),
+                Icon(Icons.expand_more),
                 Text(
                   "Your work",
                   style: header3Style,
@@ -53,7 +53,7 @@ class StudentSubmissions {
             color: Colors.white,
             child: Column(
               children: [
-                Icon(Icons.keyboard_arrow_down_outlined),
+                Icon(Icons.expand_more),
                 Text(
                   "Your work",
                   style: header3Style,
@@ -90,7 +90,7 @@ class StudentSubmissions {
             color: Colors.white,
             child: Column(
               children: [
-                Icon(Icons.keyboard_arrow_down_outlined),
+                Icon(Icons.expand_more),
                 Text(
                   "Your work",
                   style: header3Style,

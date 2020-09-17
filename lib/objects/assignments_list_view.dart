@@ -65,7 +65,12 @@ class AssignmentsListView {
                     ? Icons.check_circle_outline
                     : Icons.warning),
         isThreeLine: true,
-        leading: null,
+        leading: (assignment.state != "TURNED_IN" &&
+                assignment.state != "RETURNED" &&
+                assignment.dueDate != null &&
+                assignment.isLate != true)
+            ? Icon(Icons.notification_important)
+            : Icon(Icons.check),
         onTap: () {
           _pushAssignmentPage(context, account, course, id, assignment.id);
         });
