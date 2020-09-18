@@ -1,10 +1,11 @@
 import 'package:flutter/material.dart';
 import 'package:learning_hub/objects/courses_list_view.dart';
 import '../objects/custom_app_bar.dart';
-import 'package:learning_hub/backend.dart';
+import 'package:learning_hub/backend/courseWorkBackend.dart';
 import 'package:google_sign_in/google_sign_in.dart';
 import '../objects/custom_navigation_bar.dart';
 import '../objects/course.dart';
+import '../backend/authBackend.dart';
 
 class CoursesPage extends StatefulWidget {
   //takes in the widget's arguments

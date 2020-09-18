@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:google_sign_in/google_sign_in.dart';
 import 'package:learning_hub/theming.dart';
-import '../backend.dart';
+import '../backend/authBackend.dart';
 import '../objects/custom_app_bar.dart';
 import '../objects/custom_navigation_bar.dart';
 

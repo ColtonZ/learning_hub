@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:learning_hub/backend.dart';
+import 'package:learning_hub/backend/courseWorkBackend.dart';
 import 'package:learning_hub/theming.dart';
 import 'course.dart';
 import 'package:google_sign_in/google_sign_in.dart';
