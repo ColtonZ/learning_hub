@@ -54,7 +54,7 @@ List<Course> parseCourses(String responseBody) {
 }
 
 Future<List<Assignment>> getAssignments(
-    String id, GoogleSignInAccount account) async {
+    String courseId, GoogleSignInAccount account) async {
   Map<String, String> headers;
 
   //gets the user's auth headers
@@ -66,56 +66,36 @@ Future<List<Assignment>> getAssignments(
 
 //returns a list of the assignments for a given course
   final List<Assignment> assignments =
-      await sendAssignmentsRequest(id, headers);
+      await sendAssignmentsRequest(courseId, headers);
 
   return assignments;
 }
 
 Future<List<Assignment>> sendAssignmentsRequest(
-    String id, Map<String, String> headers) async {
+    String courseId, Map<String, String> headers) async {
   //sends an http request for the courses assignments given a course id
   http.Response response = await http.get(
       Uri.encodeFull(
-          "https://classroom.googleapis.com//v1/courses/$id/courseWork"),
+          "https://classroom.googleapis.com//v1/courses/$courseId/courseWork"),
       headers: headers);
   final responseBody = response.body;
 
   //converts the response into a list of assignments
-  return parseAssignments(responseBody);
-}
 
-List<Assignment> parseAssignments(String responseBody) {
   var data = json.decode(responseBody);
   //converts the json into a list of jsons
   var assignments = data["courseWork"] as List;
   var assignmentList = <Assignment>[];
 
-  assignments.forEach((details) {
+  for (int index = 0; index < assignments.length; index++) {
     //converts each json into an assignment and adds it to the assignment list
     //the null is required, as we do not care about user submissions at this point
-    Assignment assignment = Assignment.fromJson(details, null);
+    Assignment assignment = await sendAssignmentRequest(
+        courseId, assignments[index]["id"], headers);
     assignmentList.add(assignment);
-  });
-
-  return assignmentList;
-}
-
-Future<Assignment> getAssignment(
-    String courseId, String assignmentId, GoogleSignInAccount account) async {
-  Map<String, String> headers;
-
-  //gets the user's auth headers
-  if (isSignedIn(account)) {
-    headers = await getHeaders(account);
-  } else {
-    headers = await getHeaders(await signIn());
   }
 
-//returns the specific assignment requested
-  final Assignment assignment =
-      await sendAssignmentRequest(courseId, assignmentId, headers);
-
-  return assignment;
+  return assignmentList;
 }
 
 Future<Assignment> sendAssignmentRequest(
@@ -156,45 +136,25 @@ Assignment parseAssignment(
 }
 
 Future<bool> isCourseDone(String id, GoogleSignInAccount account) async {
-  Map<String, String> headers;
-  //gets the user's auth headers
-  if (isSignedIn(account)) {
-    headers = await getHeaders(account);
-  } else {
-    headers = await getHeaders(await signIn());
-  }
-
-  //sends an http request for the courses assignments given a course id
-  http.Response response = await http.get(
-      Uri.encodeFull(
-          "https://classroom.googleapis.com//v1/courses/$id/courseWork"),
-      headers: headers);
-  final responseBody = response.body;
-
-  var data = json.decode(responseBody);
-//if a course has no assignments, treat it as if all assignments are done
-
-  //converts the json into a list of jsons
   try {
-    var assignments = data["courseWork"] as List;
+    List<Assignment> assignments = await getAssignments(id, account);
 
     bool toDo = false;
 //loops through each assignment, getting the student submission for each
     for (int j = 0; j < assignments.length; j++) {
-      Assignment assignment =
-          await getAssignment(id, assignments[j]["id"], account);
       //check each assignment, and if it has not been submitted or marked, has a due date and is not late, then mark the task as needing to be done);
-      if (assignment.state != "TURNED_IN" &&
-          assignment.state != "RETURNED" &&
-          assignment.dueDate != null &&
-          assignment.isLate != true) {
+      if (assignments[j].state != "TURNED_IN" &&
+          assignments[j].state != "RETURNED" &&
+          assignments[j].dueDate != null &&
+          assignments[j].isLate != true) {
         toDo = true;
         break;
       }
     }
     return toDo;
-    //if the course has no assignments, return false (as there are no assignments to be done!)
   } on NoSuchMethodError {
     return false;
   }
+
+  //if the course has no assignments, return false (as there are no assignments to be done!)
 }

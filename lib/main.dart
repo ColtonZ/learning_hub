@@ -63,8 +63,7 @@ class MyApp extends StatelessWidget {
                     account: arguments["account"],
                     name: name,
                     course: arguments["course"],
-                    courseId: arguments["courseId"],
-                    assignmentId: arguments["assignmentId"]));
+                    assignment: arguments["assignment"]));
           default:
             return MaterialPageRoute(
                 builder: (_) =>

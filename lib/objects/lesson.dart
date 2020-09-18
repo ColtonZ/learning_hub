@@ -19,9 +19,4 @@ class Lesson {
       time: details[3],
     );
   }
-
-  //outputs the lesson's details
-  void output() {
-    print("subject: $subject | room: $room | teacher: $teacher | time: $time");
-  }
 }

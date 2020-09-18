@@ -32,8 +32,8 @@ class AssignmentsListView {
       String id,
       Assignment assignment) {
     //checks if list tile should have subtitle
-    print(
-        "Title: ${assignment.title}, State: ${assignment.state}, DueDate: ${assignment.dueDate}, isLate: ${assignment.isLate}");
+    //print(
+    //    "Title: ${assignment.title}, State: ${assignment.state}, DueDate: ${assignment.dueDate}, isLate: ${assignment.isLate}");
     return ListTile(
         title: Text(
           assignment.title != null ? assignment.title : "N/A",
@@ -77,21 +77,20 @@ class AssignmentsListView {
             ? Icon(Icons.notification_important)
             : Icon(Icons.check),
         onTap: () {
-          _pushAssignmentPage(context, account, course, id, assignment.id);
+          _pushAssignmentPage(context, account, course, assignment);
         });
   }
 
 //defines that when you tap on the list tile, it will push the assignment page for that assignment
   static void _pushAssignmentPage(
-      BuildContext context,
-      GoogleSignInAccount account,
-      String course,
-      String courseId,
-      String assignmentId) {
+    BuildContext context,
+    GoogleSignInAccount account,
+    String course,
+    Assignment assignment,
+  ) {
     Map args = {
       "account": account,
-      "assignmentId": assignmentId,
-      "courseId": courseId,
+      "assignment ": assignment,
       "course": course,
     };
     Navigator.of(context).pushNamed('/assignment', arguments: args);
