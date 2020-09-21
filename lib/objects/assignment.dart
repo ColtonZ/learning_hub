@@ -50,14 +50,19 @@ class Assignment {
     Question q;
     bool l;
     int g;
-    //checks if the assignment has a due date. If it does, convert it into a DateTime object, otherwise return it as null
+    //checks if the assignment has a due date. If it does, convert it into a DateTime object, otherwise return it as null7
+    //some tasks only have a due day and not a time set. If this is the case, the time is returned as midnight.
     try {
       d = DateTime(
           assignmentJson["dueDate"]["year"],
           assignmentJson["dueDate"]["month"],
           assignmentJson["dueDate"]["day"],
-          assignmentJson["dueTime"]["hours"],
-          assignmentJson["dueTime"]["minutes"]);
+          assignmentJson["dueTime"]["hours"] == null
+              ? 00
+              : assignmentJson["dueTime"]["hours"],
+          assignmentJson["dueTime"]["minutes"] == null
+              ? 00
+              : assignmentJson["dueTime"]["minutes"]);
     } catch (error) {
       d = null;
     }

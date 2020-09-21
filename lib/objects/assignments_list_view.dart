@@ -31,6 +31,8 @@ class AssignmentsListView {
       String course,
       String id,
       Assignment assignment) {
+    print(
+        "Title: ${assignment.title} DueDate: ${assignment.dueDate} Status: ${assignment.status} State: ${assignment.state}");
     //checks if list tile should have subtitle
     //print(
     //    "Title: ${assignment.title}, State: ${assignment.state}, DueDate: ${assignment.dueDate}, isLate: ${assignment.isLate}");
@@ -67,9 +69,6 @@ class AssignmentsListView {
                     ? Icons.check_circle_outline
                     : Icons.warning),
         isThreeLine: true,
-        //TODO: checks if the task needs doing (i.e. if it has not been turned in or returned, is due in the future and is not late)
-        //TODO: seems it can't get the task's state - that needs doing!
-        //TODO: rewrite getAssignments to include getting the student submissions
         leading: (assignment.state != "TURNED_IN" &&
                 assignment.state != "RETURNED" &&
                 assignment.dueDate != null &&
@@ -90,7 +89,7 @@ class AssignmentsListView {
   ) {
     Map args = {
       "account": account,
-      "assignment ": assignment,
+      "assignment": assignment,
       "course": course,
     };
     Navigator.of(context).pushNamed('/assignment', arguments: args);

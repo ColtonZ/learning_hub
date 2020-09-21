@@ -7,6 +7,7 @@ import 'package:http/http.dart' as http;
 import '../objects/course.dart';
 import '../objects/assignment.dart';
 import 'authBackend.dart';
+import 'helperBackend.dart';
 
 Future<List<Course>> getCourses(GoogleSignInAccount account) async {
   Map<String, String> headers;
@@ -115,8 +116,8 @@ Future<Assignment> sendAssignmentRequest(
   final submissionResponseBody = submissionResponse.body;
 
 //prints out the responses for testing purposes
-  //printWrapped(assignmentResponseBody);
-  //printWrapped(submissionResponseBody);
+  printWrapped(assignmentResponseBody);
+  printWrapped(submissionResponseBody);
 
   //converts the response into an assignment and an attached submission
   return parseAssignment(assignmentResponseBody, submissionResponseBody);

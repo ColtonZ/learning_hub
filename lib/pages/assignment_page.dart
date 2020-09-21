@@ -31,7 +31,7 @@ class AssignmentPageState extends State<AssignmentPage> {
     String name = widget.name;
     GoogleSignInAccount account = widget.account;
     String course = widget.course;
-    Assignment assignment;
+    Assignment assignment = widget.assignment;
     List<String> months = [
       "Jan",
       "Feb",
