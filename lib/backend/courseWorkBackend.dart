@@ -12,7 +12,7 @@ import 'helperBackend.dart';
 Future<List<Course>> getCourses(GoogleSignInAccount account) async {
   Map<String, String> headers;
 
-//gets the user's auth headers
+//gets the user's auth headers - if they aren't signed in, they are signed in before trying to fetch headers
   if (isSignedIn(account)) {
     headers = await getHeaders(account);
   } else {
@@ -33,12 +33,16 @@ Future<List<Course>> sendCourseRequest(Map<String, String> headers) async {
 
   final responseBody = response.body;
 
+  printWrapped(responseBody);
+
 //converts the json response to a list of courses
   return parseCourses(responseBody);
 }
 
 List<Course> parseCourses(String responseBody) {
+  //converts the response into JSON
   var data = json.decode(responseBody);
+
   //decodes the json into a list of jsons
   var courses = data["courses"] as List;
   var courseList = <Course>[];
@@ -81,16 +85,16 @@ Future<List<Assignment>> sendAssignmentsRequest(
       headers: headers);
   final responseBody = response.body;
 
-  //converts the response into a list of assignments
-
+  //converts the response into JSON
   var data = json.decode(responseBody);
+
   //converts the json into a list of jsons
   var assignments = data["courseWork"] as List;
   var assignmentList = <Assignment>[];
 
   for (int index = 0; index < assignments.length; index++) {
-    //converts each json into an assignment and adds it to the assignment list
-    //the null is required, as we do not care about user submissions at this point
+    //for each assignment in the list of courseWork, the method will request the full assignment for the given id.
+    //with the id, the method then gets all student submissions for that given assignment, so that it can check if all the work has been submitted
     Assignment assignment = await sendAssignmentRequest(
         courseId, assignments[index]["id"], headers);
     assignmentList.add(assignment);
@@ -125,6 +129,7 @@ Future<Assignment> sendAssignmentRequest(
 
 Assignment parseAssignment(
     String assignmentResponseBody, String submissionResponseBody) {
+  //converts the responses into JSON
   var assignmentData = json.decode(assignmentResponseBody);
   var submissionData = json.decode(submissionResponseBody);
 
@@ -154,8 +159,7 @@ Future<bool> isCourseDone(String id, GoogleSignInAccount account) async {
     }
     return toDo;
   } on NoSuchMethodError {
+    //if this error is called, it means that the course has no assignments. If this is the case, there are no assignments to be done, so return false.
     return false;
   }
-
-  //if the course has no assignments, return false (as there are no assignments to be done!)
 }

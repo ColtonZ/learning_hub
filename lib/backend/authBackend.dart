@@ -47,7 +47,7 @@ bool isSignedIn(GoogleSignInAccount account) {
 }
 
 Future<Map<String, String>> getHeaders(GoogleSignInAccount account) async {
-  //maps a user's auth headers to a map for use later
+  //returns a user's auth headers as a map for use later
   final Map<String, String> headers = await account.authHeaders;
 
   return headers;

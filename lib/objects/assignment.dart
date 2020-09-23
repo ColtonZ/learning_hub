@@ -3,6 +3,7 @@ import 'attachment.dart';
 import 'question.dart';
 
 class Assignment {
+  //each assignment can have a lot of properties!
   final String title;
   final String description;
   final String id;
@@ -50,7 +51,7 @@ class Assignment {
     Question q;
     bool l;
     int g;
-    //checks if the assignment has a due date. If it does, convert it into a DateTime object, otherwise return it as null7
+    //checks if the assignment has a due date. If it does, convert it into a DateTime object, otherwise return it as null
     //some tasks only have a due day and not a time set. If this is the case, the time is returned as midnight.
     try {
       d = DateTime(
@@ -67,17 +68,20 @@ class Assignment {
       d = null;
     }
 
+//checks if the assignment has a max grade. If not, return null
     try {
       p = assignmentJson["maxPoints"];
     } catch (error) {
       p = null;
     }
 
+//creates a list of attachments for each task. If an error is thrown, this means that the task has no attachment, and so an empty list is returned.
     try {
       var aList = assignmentJson["materials"] as List;
       aList.forEach((attachment) {
-        //this removes all attachments which start with [Template] as these are files made by Google for each task
+        //this converts each attachment JSON into an actual attachment object
         Attachment att = Attachment.fromJson(attachment);
+        //this removes all attachments which start with [Template] as these are files made by Google for each task
         if (!att.title.startsWith("[Template]")) {
           a.add(att);
         }
@@ -86,6 +90,7 @@ class Assignment {
       a = [];
     }
 
+//attempts to create a list of attachments which have been submitted by a student. If this fails, it means that the student has not submitted anything, and so the attachments list is empty.
     try {
       var sList = submissionJson["assignmentSubmission"]["attachments"] as List;
       sList.forEach((attachment) {
@@ -95,18 +100,21 @@ class Assignment {
       s = [];
     }
 
+//if the assignment is a multiple choice question, add a Question object, otherwise return a null object (an error is thrown if the assignment is not a multiple choice question, which is caught)
     try {
       q = Question.fromJson(assignmentJson["multipleChoiceQuestion"]);
     } catch (error) {
       q = null;
     }
 
+//if the assignment has a grade assigned, return the grade, otherwise return the grade as null
     try {
       g = submissionJson["assignedGrade"];
     } catch (error) {
       g = null;
     }
 
+//if the assignment is late, return that it's late (i.e. return true, as the submissionJson["late"] will be true if late), otherwise return null
     try {
       l = submissionJson["late"];
     } catch (error) {
@@ -114,7 +122,7 @@ class Assignment {
     }
 
     //return the assignment using the previously given parameters
-    //if the assignment has student submissions, return that, otherwise return just the assignment
+    //if the assignment has student submissions, return that, otherwise return just the assignment (and thus an assignment with fewer properties)
     if (submissionJson != null) {
       return Assignment(
         id: assignmentJson["id"],

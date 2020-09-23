@@ -13,7 +13,9 @@ class Course {
       platform: "Google Classroom",
       id: json["id"],
       name: json["name"],
-      description: json["descriptionHeading"],
+      description: json["descriptionHeading"] == null
+          ? "This course has no description"
+          : json["descriptionHeading"],
       status: json["courseState"],
     );
   }
