@@ -46,13 +46,14 @@ class AssignmentPageState extends State<AssignmentPage> {
       "Nov",
       "Dec"
     ];
-    //checks if the user is signed in, if not, they are signed in
+    //checks if the user is signed in, if not, they are signed in. If they are, load the page
     return account == null
         ? FutureBuilder(
             future: signIn(),
             builder: (context, snapshot) {
               if (snapshot.connectionState == ConnectionState.done) {
                 account = snapshot.data;
+                //once signed in, load the page
                 return CustomScaffold.create(
                     context, name, account, course, assignment, months);
               } else {
@@ -76,9 +77,7 @@ class CustomScaffold {
     String name,
     GoogleSignInAccount account,
     String course,
-    //fix this page so it can just have a whole assignment passed to it
     Assignment assignment,
-//defines the months for later
     List<String> months,
   ) {
     return new Scaffold(
@@ -134,7 +133,7 @@ class CustomScaffold {
                   Container(
                     width: 15,
                   ),
-                  //tries to get the name of the user who created the task, if it cannot then it just returns the task's creation date
+                  //tries to get the name of the user who created the task, if it cannot, then it just returns the task's creation date
                   Expanded(
                     child: FutureBuilder(
                       future: getGoogleUser(assignment.creatorId, account),
@@ -219,6 +218,7 @@ class CustomScaffold {
                             Container(
                               height: MediaQuery.of(context).size.height / 50,
                             ),
+                            //this container fades out when the panel is slid up, thus hiding the pull up arrow and showing the pull down arrow
                             Container(
                               color: Colors.white,
                               child: Column(

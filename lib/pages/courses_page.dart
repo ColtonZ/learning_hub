@@ -23,13 +23,14 @@ class CoursesPageState extends State<CoursesPage> {
   Widget build(BuildContext context) {
     String name = widget.name;
     GoogleSignInAccount account = widget.account;
-    //checks if the user is signed in, if not, they are signed in
+    //checks if the user is signed in, if not, they are signed in. If they are, the page is loaded
     return account == null
         ? FutureBuilder(
             future: signIn(),
             builder: (context, snapshot) {
               if (snapshot.connectionState == ConnectionState.done) {
                 account = snapshot.data;
+                //once signed in, the page is loaded
                 return CustomScaffold.create(context, name, account);
               } else {
                 //whilst signing in, return a loading indicator
@@ -59,6 +60,7 @@ class CustomScaffold {
                 List<Course> courses = snapshot.data;
                 //checks if the user has courses. If they do, return the courses, otherwise return an error message
                 try {
+                  //creates a list view of the courses
                   return CoursesListView.create(context, account, courses);
                 } catch (Exception) {
                   return Center(

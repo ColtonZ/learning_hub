@@ -66,7 +66,7 @@ class AttachmentsListView {
     );
   }
 
-//builds the list tile for the attachment
+//builds the list tile for the attachment if it's not the first or last tile
   static Widget _buildCustomListRow(
       BuildContext context, Attachment attachment) {
     return ListTile(
@@ -92,7 +92,7 @@ class AttachmentsListView {
               width: MediaQuery.of(context).size.width / 50,
             ),
             Expanded(
-                //returns the attachment title
+                //returns the attachment title if it has one, otherwise it returns a message saying the attachment has no title
                 child: Text(
               attachment.title != null
                   ? attachment.title

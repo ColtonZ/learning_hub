@@ -21,13 +21,14 @@ class TannoyPageState extends State<TannoyPage> {
   Widget build(BuildContext context) {
     String name = widget.name;
     GoogleSignInAccount account = widget.account;
-    //checks if the user is signed in, if not, they are signed in
+    //checks if the user is signed in, if not, they are signed in. If they are, the page is loaded
     return account == null
         ? FutureBuilder(
             future: signIn(),
             builder: (context, snapshot) {
               if (snapshot.connectionState == ConnectionState.done) {
                 account = snapshot.data;
+                //once signed in, the page is loaded
                 return CustomScaffold.create(context, name, account);
               } else {
                 //whilst signing in, return a loading indicator

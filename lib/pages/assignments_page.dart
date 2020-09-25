@@ -27,13 +27,14 @@ class AssignmentsPageState extends State<AssignmentsPage> {
     GoogleSignInAccount account = widget.account;
     String id = widget.id;
     String course = widget.course;
-    //checks if the user is signed in, if not, they are signed in
+    //checks if the user is signed in, if not, they are signed in. If they are, the page is loaded
     return account == null
         ? FutureBuilder(
             future: signIn(),
             builder: (context, snapshot) {
               if (snapshot.connectionState == ConnectionState.done) {
                 account = snapshot.data;
+                //once signed in, load the page
                 return CustomScaffold.create(
                     context, name, account, course, id);
               } else {
@@ -62,8 +63,9 @@ class CustomScaffold {
             builder: (context, snapshot) {
               if (snapshot.connectionState == ConnectionState.done) {
                 List<Assignment> assignments = snapshot.data;
-                //checks if the user has assignments. If they do, return the assignments, otherwise return an error message
+                //checks if the user has assignments. If they do, return the assignments as a list view, otherwise return an error message
                 try {
+                  //creates a list view of the assignments
                   return AssignmentsListView.create(
                       context, account, course, id, assignments);
                 } catch (error) {

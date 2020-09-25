@@ -33,8 +33,6 @@ Future<List<Course>> sendCourseRequest(Map<String, String> headers) async {
 
   final responseBody = response.body;
 
-  printWrapped(responseBody);
-
 //converts the json response to a list of courses
   return parseCourses(responseBody);
 }
@@ -120,8 +118,8 @@ Future<Assignment> sendAssignmentRequest(
   final submissionResponseBody = submissionResponse.body;
 
 //prints out the responses for testing purposes
-  printWrapped(assignmentResponseBody);
-  printWrapped(submissionResponseBody);
+  //printWrapped(assignmentResponseBody);
+  //printWrapped(submissionResponseBody);
 
   //converts the response into an assignment and an attached submission
   return parseAssignment(assignmentResponseBody, submissionResponseBody);

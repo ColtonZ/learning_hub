@@ -26,23 +26,21 @@ class AssignmentsListView {
 
 //builds the list tile for the assignment
   static Widget _buildCustomListRow(
-      BuildContext context,
-      GoogleSignInAccount account,
-      String course,
-      String id,
-      Assignment assignment) {
-    print(
-        "Title: ${assignment.title} DueDate: ${assignment.dueDate} Status: ${assignment.status} State: ${assignment.state}");
-    //checks if list tile should have subtitle
-    //print(
-    //    "Title: ${assignment.title}, State: ${assignment.state}, DueDate: ${assignment.dueDate}, isLate: ${assignment.isLate}");
+    BuildContext context,
+    GoogleSignInAccount account,
+    String course,
+    String id,
+    Assignment assignment,
+  ) {
     return ListTile(
+        //if the assignment has a title, return it. Otherwise, set the assignment title to "N/A"
         title: Text(
           assignment.title != null ? assignment.title : "N/A",
           style: subtitleStyle,
         ),
         //trims the tile's subtitle accordingly, and adds a name depending on the type of the assignment
         subtitle: Text(
+          //checks if the description is null. If it is, return "this task has no description". Otherwise, return the first line of the description, and if it's too long, cut it after 40 characters and add "..."
           (assignment.description != null
                   ? assignment.description.split("\n").length > 1
                       ? assignment.description.split("\n")[0].length > 40
@@ -57,6 +55,7 @@ class AssignmentsListView {
                               "..."
                           : assignment.description.trim()
                   : "This task has no description") +
+              //add the type of the assignment to the row below the description:"Assignment", "Short Answer Question" or "Multiple Choice Question"
               "\nType: ${assignment.type == "ASSIGNMENT" ? "Assignment" : assignment.type == "SHORT_ANSWER_QUESTION" ? "Short Answer Question" : assignment.type == "MULTIPLE_CHOICE_QUESTION" ? "Multiple Choice Question" : assignment.type}",
           style: header3Style,
         ),
@@ -69,6 +68,7 @@ class AssignmentsListView {
                     ? Icons.check_circle_outline
                     : Icons.warning),
         isThreeLine: true,
+        //if the assignment has been turned in or returned, set the icon to say that it has been done. Otherwise, set the icon to an exclamation mark to show it needs doing.
         leading: (assignment.state != "TURNED_IN" &&
                 assignment.state != "RETURNED" &&
                 assignment.dueDate != null &&
@@ -80,7 +80,8 @@ class AssignmentsListView {
         });
   }
 
-//defines that when you tap on the list tile, it will push the assignment page for that assignment
+//defines that when you tap on the list tile, it will push the assignment page for that assignment.#
+//the objects being passed are put into a Map to be passed between pages
   static void _pushAssignmentPage(
     BuildContext context,
     GoogleSignInAccount account,

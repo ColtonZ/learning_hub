@@ -28,48 +28,41 @@ class CoursesListView {
   static Widget _buildCustomListRow(
       BuildContext context, GoogleSignInAccount account, Course course) {
     //checks if list tile should have subtitle
-    return course.description != "null"
-        ? ListTile(
-            leading: FutureBuilder(
-                future: isCourseDone(course.id, account),
-                builder: (context, snapshot) {
-                  if (snapshot.connectionState == ConnectionState.done) {
-                    try {
-                      return Icon(snapshot.data
-                          ? Icons.notification_important
-                          : Icons.check);
-                    } catch (error) {
-                      return Icon(Icons.error);
-                    }
-                  } else {
-                    return Icon(Icons.data_usage);
-                  }
-                }),
-            title: Text(
-              //returns the tile header as the subject
-              course.name, style: subtitleStyle,
-            ),
-            //returns other details as the subtitle
-            subtitle: Text(
-              course.description,
-              style: header3Style,
-            ),
-            //opens the assignments of the course when you click on it
-            onTap: () {
-              _pushAssignmentsPage(context, account, course.name, course.id);
-            })
-        : ListTile(
-            title: Text(
-              //returns the tile header as the subject
-              course.name, style: subtitleStyle,
-            ),
-            //opens the assignments of the course when you click on it
-            onTap: () {
-              _pushAssignmentsPage(context, account, course.name, course.id);
-            });
+    return ListTile(
+        leading: FutureBuilder(
+            //sends a future to check if the course has work to be done
+            future: isCourseDone(course.id, account),
+            builder: (context, snapshot) {
+              //once the http request has been sent, show an icon saying if the course has work to be done or not. If an error is returned, return an error icon. Whilst loading, return a loading icon.
+              if (snapshot.connectionState == ConnectionState.done) {
+                try {
+                  return Icon(snapshot.data
+                      ? Icons.notification_important
+                      : Icons.check);
+                } catch (error) {
+                  return Icon(Icons.error);
+                }
+              } else {
+                return Icon(Icons.data_usage);
+              }
+            }),
+        title: Text(
+          //returns the tile header as the subject
+          course.name, style: subtitleStyle,
+        ),
+        //returns other details as the subtitle
+        subtitle: Text(
+          course.description,
+          style: header3Style,
+        ),
+        //opens the assignments of the course when you click on it
+        onTap: () {
+          _pushAssignmentsPage(context, account, course.name, course.id);
+        });
   }
 
 //defines that when you tap on the list tile, it will push the assignments page for that course
+//the objects being passed are put into a Map to be passed between pages
   static void _pushAssignmentsPage(BuildContext context,
       GoogleSignInAccount account, String course, String id) {
     Map args = {"account": account, "id": id, "course": course};

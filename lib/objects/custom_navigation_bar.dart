@@ -88,43 +88,67 @@ class CustomNavigationBar {
   static BottomNavigationBar create(BuildContext context, String name,
       GoogleSignInAccount account, int index) {
     return new BottomNavigationBar(
+      //this is just a list of BottomNavigationBarItems - for each item, it has an icon and a title
       items: <BottomNavigationBarItem>[
         BottomNavigationBarItem(
           icon: Icon(Icons.home),
           title: Text(
-            'Home Page',
-            style: pageTitleStyle,
+            'Home',
+            style: navigationBarStyle,
           ),
         ),
         BottomNavigationBarItem(
           icon: Icon(Icons.calendar_today),
-          title: Text('Your Timetable', style: pageTitleStyle),
+          title: Text(
+            'Timetable',
+            style: navigationBarStyle,
+            textAlign: TextAlign.center,
+          ),
         ),
         BottomNavigationBarItem(
           icon: Icon(Icons.assignment),
-          title: Text('Your Tasks', style: pageTitleStyle),
+          title: Text(
+            'Tasks',
+            style: navigationBarStyle,
+            textAlign: TextAlign.center,
+          ),
         ),
         BottomNavigationBarItem(
           icon: Icon(Icons.inbox),
-          title: Text('Tannoy Notices', style: pageTitleStyle),
+          title: Text(
+            'Tannoy',
+            style: navigationBarStyle,
+            textAlign: TextAlign.center,
+          ),
         ),
         BottomNavigationBarItem(
           icon: Icon(Icons.settings),
-          title: Text('Settings', style: pageTitleStyle),
+          title: Text(
+            //this has a blank line at the end so it's the same height as the other icons
+            'Settings',
+            style: navigationBarStyle,
+            textAlign: TextAlign.center,
+          ),
         ),
         BottomNavigationBarItem(
           icon: Icon(Icons.account_box),
-          title: Text('Your Profile', style: pageTitleStyle),
+          title: Text(
+            'Profile',
+            style: navigationBarStyle,
+            textAlign: TextAlign.center,
+          ),
         ),
       ],
       //details other information about the navigation bar
       currentIndex: index,
       selectedItemColor: accentColour,
       unselectedItemColor: Colors.black,
+      //the type just says that the icons should not move when selected
       type: BottomNavigationBarType.fixed,
-      showSelectedLabels: false,
-      showUnselectedLabels: false,
+      showSelectedLabels: true,
+      showUnselectedLabels: true,
       //handles logic for what to do when an icon is selected at the bottom
+      //for each case, check the index of the icon that was pressed, and push the correct page accordingly
       onTap: (value) {
         switch (value) {
           case 0:

@@ -13,6 +13,7 @@ class Course {
       platform: "Google Classroom",
       id: json["id"],
       name: json["name"],
+      //if the course has no description, set the course's description to be: "This course has no description" for future use
       description: json["descriptionHeading"] == null
           ? "This course has no description"
           : json["descriptionHeading"],

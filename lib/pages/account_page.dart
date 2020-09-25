@@ -20,13 +20,14 @@ class AccountPageState extends State<AccountPage> {
   Widget build(BuildContext context) {
     GoogleSignInAccount account = widget.account;
     String name = widget.name;
-    //checks if the user is signed in, if not, they are signed in
+    //checks if the user is signed in, if not, they are signed in, otherwise the page is loaded
     return account == null
         ? FutureBuilder(
             future: signIn(),
             builder: (context, snapshot) {
               if (snapshot.connectionState == ConnectionState.done) {
                 account = snapshot.data;
+                //once signed in, load the page
                 return CustomScaffold.create(context, name, account);
               } else {
                 //whilst signing in, return a loading indicator
@@ -60,6 +61,7 @@ class CustomScaffold {
               SizedBox(
                 height: 5,
               ),
+              //creates a widget with the account's name
               Text(
                 //gets Google Account's display name
                 "${account.displayName}", style: subtitleStyle,
@@ -67,6 +69,7 @@ class CustomScaffold {
               SizedBox(
                 height: 10,
               ),
+              //returns the account's profile picture, within a square with curved corners
               ClipRRect(
                 borderRadius: BorderRadius.circular(8.0),
                 //returns the account's profile picture in the centre

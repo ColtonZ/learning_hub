@@ -3,6 +3,11 @@ import 'package:flutter/material.dart';
 //defines various text styles and other theme data, so that it can be used later on in the project and provide consistency
 TextStyle pageTitleStyle =
     TextStyle(fontFamily: "Montserrat", fontWeight: FontWeight.w500);
+TextStyle navigationBarStyle = TextStyle(
+  fontFamily: "Montserrat",
+  fontWeight: FontWeight.w300,
+  fontSize: 10,
+);
 TextStyle titleStyle = TextStyle(
     fontFamily: "Montserrat", fontWeight: FontWeight.w700, fontSize: 20);
 TextStyle subtitleStyle = TextStyle(

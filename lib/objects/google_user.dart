@@ -6,6 +6,7 @@ class GoogleUser {
 
   factory GoogleUser.fromJson(Map<String, dynamic> json) {
     return GoogleUser(
+      //the only thing returned currently is the user's name
       name: json["name"]["fullName"],
     );
   }

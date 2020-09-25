@@ -22,6 +22,7 @@ class MyApp extends StatelessWidget {
         //if the route is to the assignments page or a specific assignment page, pass the specific assignment details, otherwise just pass the account and the route name
         //if the route is / and there is no account signed in, pass null for the account
         switch (route.name) {
+          //pushes the home page
           case "/":
             return MaterialPageRoute(builder: (_) {
               try {
@@ -30,26 +31,32 @@ class MyApp extends StatelessWidget {
                 return HomePage(account: null);
               }
             });
+          //pushes the timetable page, with arguments of the user's account and the page's name
           case "/timetable":
             return MaterialPageRoute(
                 builder: (_) =>
                     TimetablePage(account: arguments["account"], name: name));
+          //pushes the courses page, with arguments of the user's account and the page's name
           case "/courses":
             return MaterialPageRoute(
                 builder: (_) =>
                     CoursesPage(account: arguments["account"], name: name));
+          //pushes the tannoy page, with arguments of the user's account and the page's name
           case "/tannoy":
             return MaterialPageRoute(
                 builder: (_) =>
                     TannoyPage(account: arguments["account"], name: name));
+          //pushes the settings page, with arguments of the user's account and the page's name
           case "/settings":
             return MaterialPageRoute(
                 builder: (_) =>
                     SettingsPage(account: arguments["account"], name: name));
+          //pushes the account page, with arguments of the user's account and the page's name
           case "/account":
             return MaterialPageRoute(
                 builder: (_) =>
                     AccountPage(account: arguments["account"], name: name));
+          //pushes the assignments page, with arguments of the user's account and the page's name, as well as the id of the course (who's assignemnets you want to view) and the course's name
           case "/assignments":
             return MaterialPageRoute(
                 builder: (_) => AssignmentsPage(
@@ -57,6 +64,7 @@ class MyApp extends StatelessWidget {
                     name: name,
                     id: arguments["id"],
                     course: arguments["course"]));
+          //pushes the page for a specific assignment, with arguments of the user's account and the page's name, as well as the name of the course the assignment belongs to and the full assignment object
           case "/assignment":
             return MaterialPageRoute(
                 builder: (_) => AssignmentPage(
@@ -65,6 +73,7 @@ class MyApp extends StatelessWidget {
                     course: arguments["course"],
                     assignment: arguments["assignment"]));
           default:
+            //if no route is passed, push the home page, with arguments of the user's account and the page's name
             return MaterialPageRoute(
                 builder: (_) =>
                     HomePage(account: arguments["account"], name: name));

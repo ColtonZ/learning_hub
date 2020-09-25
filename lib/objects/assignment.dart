@@ -130,6 +130,7 @@ class Assignment {
         description: assignmentJson["description"],
         status: assignmentJson["state"],
         type: assignmentJson["workType"],
+        //converts the creation time and update time of the assignment to the user's local time
         creationTime: DateTime.parse(assignmentJson["creationTime"]).toLocal(),
         updateTime: DateTime.parse(assignmentJson["updateTime"]).toLocal(),
         creatorId: assignmentJson["creatorUserId"],
@@ -141,6 +142,7 @@ class Assignment {
         state: submissionJson["state"],
         isLate: l,
         grade: g,
+        //if the assignment is a short answer or multiple choice question, the answer is the answer that the student gave to the question. Otherwise, the answer is null, as the assignment is not a question.
         answer: assignmentJson["workType"] == "SHORT_ANSWER_QUESTION"
             ? submissionJson["shortAnswerSubmission"]["answer"]
             : assignmentJson["workType"] == "MULTIPLE_CHOICE_QUESTION"
@@ -154,6 +156,7 @@ class Assignment {
         description: assignmentJson["description"],
         status: assignmentJson["state"],
         type: assignmentJson["workType"],
+        //converts the creation time and update time of the assignment to the user's local time
         creationTime: DateTime.parse(assignmentJson["creationTime"]).toLocal(),
         updateTime: DateTime.parse(assignmentJson["updateTime"]).toLocal(),
         creatorId: assignmentJson["creatorUserId"],

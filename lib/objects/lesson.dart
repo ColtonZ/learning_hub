@@ -13,6 +13,7 @@ class Lesson {
   factory Lesson.fromString(String string) {
     var details = string.split(', ');
     return Lesson(
+      //return the lesson's subject, room, teacher and time, having taken in the lesson details as a comma separated list
       subject: details[0],
       room: details[1],
       teacher: details[2],

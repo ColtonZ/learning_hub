@@ -12,7 +12,7 @@ class Attachment {
 //checks the type of assignment. Dependent on the type, it returns different things, but will always return a title and link (unless there is an error)
   factory Attachment.fromJson(Map<String, dynamic> json) {
     if (json["driveFile"] != null) {
-      //for student submissions, they do not have the second "driveFile"
+      //for student submissions, they do not have the second "driveFile", so account for the fact of the different JSONs
       if (json["driveFile"]["driveFile"] != null) {
         return Attachment(
           id: json["driveFile"]["driveFile"]["id"],
@@ -30,6 +30,7 @@ class Attachment {
           type: "file",
         );
       }
+      //if the attachment is a link, return the attachment in a link format
     } else if (json["link"] != null) {
       return Attachment(
         title: json["link"]["title"],
@@ -37,6 +38,7 @@ class Attachment {
         thumbnail: json["link"]["thumbnailUrl"],
         type: "link",
       );
+      //if the attachment is a YouTube video, return the attachment in a YouTube video format
     } else if (json["youtubeVideo"] != null) {
       return Attachment(
         id: json["youtubeVideo"]["id"],
@@ -45,6 +47,7 @@ class Attachment {
         thumbnail: json["youtubeVideo"]["thumbnailUrl"],
         type: "YouTube",
       );
+      //if the attachment is a form, return the attachment in a form format
     } else if (json["form"] != null) {
       return Attachment(
         title: json["form"]["title"],
@@ -52,6 +55,7 @@ class Attachment {
         thumbnail: json["form"]["thumbnailUrl"],
         type: "form",
       );
+      //if the attachment is none of the above, just return the type as "other"
     } else {
       return Attachment(
         type: "other",
