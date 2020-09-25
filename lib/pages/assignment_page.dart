@@ -1,16 +1,20 @@
+import 'dart:core';
+
+import 'package:sliding_up_panel/sliding_up_panel.dart'; //https://pub.dev/packages/sliding_up_panel
 import 'package:flutter/material.dart';
-import 'package:learning_hub/objects/assignment.dart';
-import 'package:learning_hub/objects/attachments_list_view.dart';
-import 'package:learning_hub/objects/student_submissions.dart';
-import 'package:learning_hub/theming.dart';
-import '../objects/custom_app_bar.dart';
 import 'package:google_sign_in/google_sign_in.dart';
+
+import '../theming.dart';
+
+import '../objects/assignment.dart';
+import '../objects/attachments_list_view.dart';
+import '../objects/student_submissions.dart';
+import '../objects/custom_app_bar.dart';
+import '../objects/custom_navigation_bar.dart';
+import '../objects/google_user.dart';
+
 import '../backend/authBackend.dart';
 import '../backend/userAccountsBackend.dart';
-import '../objects/custom_navigation_bar.dart';
-import 'dart:core';
-import '../objects/google_user.dart';
-import 'package:sliding_up_panel/sliding_up_panel.dart'; //https://pub.dev/packages/sliding_up_panel
 
 class AssignmentPage extends StatefulWidget {
   //takes in the widget's arguments

@@ -1,7 +1,8 @@
 import 'package:flutter/material.dart';
-import 'package:learning_hub/theming.dart';
-import 'assignment.dart';
 import 'package:google_sign_in/google_sign_in.dart';
+
+import '../theming.dart';
+import 'assignment.dart';
 
 class AssignmentsListView {
   //creates a list view

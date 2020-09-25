@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:google_sign_in/google_sign_in.dart';
-import 'package:learning_hub/theming.dart';
+
+import '../theming.dart';
 
 class CustomNavigationBar {
   //defines a series of methods, each with the route of the page to push and any additional logic, as well as arguments.

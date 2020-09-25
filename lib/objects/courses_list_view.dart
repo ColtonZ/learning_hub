@@ -1,8 +1,9 @@
 import 'package:flutter/material.dart';
-import 'package:learning_hub/backend/courseWorkBackend.dart';
-import 'package:learning_hub/theming.dart';
-import 'course.dart';
 import 'package:google_sign_in/google_sign_in.dart';
+
+import '../backend/courseWorkBackend.dart';
+import '../theming.dart';
+import 'course.dart';
 
 class CoursesListView {
   //creates a list view

@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
-import 'package:learning_hub/theming.dart';
+
+import '../theming.dart';
 
 class CustomAppBar {
   //TODO: add a refresh button

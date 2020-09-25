@@ -1,7 +1,8 @@
 import 'package:flutter/material.dart';
-import 'package:learning_hub/objects/assignment.dart';
-import 'package:learning_hub/objects/attachments_list_view.dart';
-import 'package:learning_hub/theming.dart';
+
+import '../theming.dart';
+import 'assignment.dart';
+import 'attachments_list_view.dart';
 
 class StudentSubmissions {
   //creates a list view of the student's submission

@@ -7,7 +7,6 @@ import 'package:http/http.dart' as http;
 import '../objects/course.dart';
 import '../objects/assignment.dart';
 import 'authBackend.dart';
-import 'helperBackend.dart';
 
 Future<List<Course>> getCourses(GoogleSignInAccount account) async {
   Map<String, String> headers;

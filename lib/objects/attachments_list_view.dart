@@ -1,7 +1,8 @@
 import 'package:flutter/material.dart';
-import 'attachment.dart';
 import 'package:url_launcher/url_launcher.dart';
-import 'package:learning_hub/theming.dart';
+
+import '../theming.dart';
+import 'attachment.dart';
 
 class AttachmentsListView {
   //creates a list view
