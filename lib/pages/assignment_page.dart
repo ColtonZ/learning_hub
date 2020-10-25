@@ -11,7 +11,7 @@ import '../objects/attachments_list_view.dart';
 import '../objects/student_submissions.dart';
 import '../objects/custom_app_bar.dart';
 import '../objects/custom_navigation_bar.dart';
-import '../objects/google_user.dart';
+import '../objects/user.dart';
 
 import '../backend/authBackend.dart';
 import '../backend/userAccountsBackend.dart';
@@ -144,7 +144,7 @@ class CustomScaffold {
                       builder: (context, snapshot) {
                         if (snapshot.connectionState == ConnectionState.done) {
                           try {
-                            GoogleUser creator = snapshot.data;
+                            User creator = snapshot.data;
                             //checks if the task was edited after creation
                             return Text(
                               assignment.creationTime

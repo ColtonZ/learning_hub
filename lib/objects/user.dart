@@ -1,11 +1,11 @@
 //this is a class for a Google user account
-class GoogleUser {
+class User {
   final String name;
 
-  GoogleUser({this.name});
+  User({this.name});
 
-  factory GoogleUser.fromJson(Map<String, dynamic> json) {
-    return GoogleUser(
+  factory User.fromJson(Map<String, dynamic> json) {
+    return User(
       //the only thing returned currently is the user's name
       name: json["name"]["fullName"],
     );
