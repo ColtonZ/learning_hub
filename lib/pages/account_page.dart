@@ -3,15 +3,18 @@ import 'package:google_sign_in/google_sign_in.dart';
 
 import '../theming.dart';
 import '../backend/authBackend.dart';
+
 import '../objects/custom_app_bar.dart';
 import '../objects/custom_navigation_bar.dart';
+import '../objects/user.dart';
 
 class AccountPage extends StatefulWidget {
   //takes in the widget's arguments
   final GoogleSignInAccount account;
   final String name;
+  final User user;
 
-  AccountPage({this.account, this.name});
+  AccountPage({this.account, this.user, this.name});
 
   @override
   AccountPageState createState() => AccountPageState();
@@ -19,34 +22,35 @@ class AccountPage extends StatefulWidget {
 
 class AccountPageState extends State<AccountPage> {
   Widget build(BuildContext context) {
-    GoogleSignInAccount account = widget.account;
     String name = widget.name;
+    User user = widget.user;
+
+    //syncData();
     //checks if the user is signed in, if not, they are signed in, otherwise the page is loaded
-    return account == null
+    return user == null
         ? FutureBuilder(
             future: signIn(),
             builder: (context, snapshot) {
               if (snapshot.connectionState == ConnectionState.done) {
-                account = snapshot.data;
+                user = snapshot.data;
                 //once signed in, load the page
-                return CustomScaffold.create(context, name, account);
+                return CustomScaffold.create(context, name, user);
               } else {
                 //whilst signing in, return a loading indicator
                 return Scaffold(
                     appBar: CustomAppBar.create(context, "Account Details"),
                     body: Center(child: CircularProgressIndicator()),
                     bottomNavigationBar:
-                        CustomNavigationBar.create(context, name, account, 5));
+                        CustomNavigationBar.create(context, name, user, 5));
               }
             })
-        : CustomScaffold.create(context, name, account);
+        : CustomScaffold.create(context, name, user);
   }
 }
 
 //details the looks of the page
 class CustomScaffold {
-  static Scaffold create(
-      BuildContext context, String name, GoogleSignInAccount account) {
+  static Scaffold create(BuildContext context, String name, User user) {
     return new Scaffold(
         //returns the custom app bar with the account page title
         appBar: CustomAppBar.create(context, "Account Details"),
@@ -65,7 +69,7 @@ class CustomScaffold {
               //creates a widget with the account's name
               Text(
                 //gets Google Account's display name
-                "${account.displayName}", style: subtitleStyle,
+                "${user.name}", style: subtitleStyle,
               ),
               SizedBox(
                 height: 10,
@@ -75,7 +79,7 @@ class CustomScaffold {
                 borderRadius: BorderRadius.circular(8.0),
                 //returns the account's profile picture in the centre
                 child: Image.network(
-                  account.photoUrl,
+                  user.googlePhotoUrl,
                 ),
               ),
               SizedBox(
@@ -99,19 +103,19 @@ class CustomScaffold {
                   ),
                   //when pressed, call the sign out method
                   onPressed: () {
-                    _pushSignOut(context, account);
+                    _pushSignOut(context, user);
                   })
             ],
           ),
         ),
         //creates the bottom navigation bar
         bottomNavigationBar:
-            CustomNavigationBar.create(context, name, account, 5));
+            CustomNavigationBar.create(context, name, user, 5));
   }
 
   //to sign out, push the account page again, but without any user data
-  static void _pushSignOut(BuildContext context, GoogleSignInAccount account) {
-    Map args = {"account": null};
+  static void _pushSignOut(BuildContext context, User user) {
+    Map args = {"user": null};
     Navigator.of(context).pushReplacementNamed('/account', arguments: args);
   }
 }

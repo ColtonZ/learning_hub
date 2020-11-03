@@ -5,6 +5,7 @@ import '../objects/custom_app_bar.dart';
 import '../objects/custom_navigation_bar.dart';
 import '../objects/course.dart';
 import '../objects/courses_list_view.dart';
+import '../objects/user.dart';
 
 import '../backend/courseWorkBackend.dart';
 import '../backend/authBackend.dart';
@@ -13,8 +14,9 @@ class CoursesPage extends StatefulWidget {
   //takes in the widget's arguments
   final GoogleSignInAccount account;
   final String name;
+  final User user;
 
-  CoursesPage({this.account, this.name});
+  CoursesPage({this.account, this.user, this.name});
 
   @override
   //initialises the courses page state
@@ -24,46 +26,45 @@ class CoursesPage extends StatefulWidget {
 class CoursesPageState extends State<CoursesPage> {
   Widget build(BuildContext context) {
     String name = widget.name;
-    GoogleSignInAccount account = widget.account;
+    User user = widget.user;
     //checks if the user is signed in, if not, they are signed in. If they are, the page is loaded
-    return account == null
+    return user == null
         ? FutureBuilder(
             future: signIn(),
             builder: (context, snapshot) {
               if (snapshot.connectionState == ConnectionState.done) {
-                account = snapshot.data;
+                user = snapshot.data;
                 //once signed in, the page is loaded
-                return CustomScaffold.create(context, name, account);
+                return CustomScaffold.create(context, name, user);
               } else {
                 //whilst signing in, return a loading indicator
                 return Scaffold(
                     appBar: CustomAppBar.create(context, "Your Courses"),
                     body: Center(child: CircularProgressIndicator()),
                     bottomNavigationBar:
-                        CustomNavigationBar.create(context, name, account, 2));
+                        CustomNavigationBar.create(context, name, user, 2));
               }
             })
-        : CustomScaffold.create(context, name, account);
+        : CustomScaffold.create(context, name, user);
   }
 }
 
 //details the looks of the page
 class CustomScaffold {
-  static Scaffold create(
-      BuildContext context, String name, GoogleSignInAccount account) {
+  static Scaffold create(BuildContext context, String name, User user) {
     return new Scaffold(
         //returns the custom app bar with the courses page title
         appBar: CustomAppBar.create(context, "Your Courses"),
         //builds the body
         body: FutureBuilder(
-            future: getCourses(account),
+            future: getCourses(user),
             builder: (context, snapshot) {
               if (snapshot.connectionState == ConnectionState.done) {
                 List<Course> courses = snapshot.data;
                 //checks if the user has courses. If they do, return the courses, otherwise return an error message
                 try {
                   //creates a list view of the courses
-                  return CoursesListView.create(context, account, courses);
+                  return CoursesListView.create(context, user, courses);
                 } catch (Exception) {
                   return Center(
                     child: Text("You have no courses to display."),
@@ -76,6 +77,6 @@ class CustomScaffold {
             }),
         //builds the navigation bar for the given page
         bottomNavigationBar:
-            CustomNavigationBar.create(context, name, account, 2));
+            CustomNavigationBar.create(context, name, user, 2));
   }
 }

@@ -1,13 +1,13 @@
 import 'package:flutter/material.dart';
-import 'package:google_sign_in/google_sign_in.dart';
 
 import '../theming.dart';
 import 'assignment.dart';
+import 'user.dart';
 
 class AssignmentsListView {
   //creates a list view
-  static ListView create(BuildContext context, GoogleSignInAccount account,
-      String course, String id, List<Assignment> assignments) {
+  static ListView create(BuildContext context, User user, String course,
+      String id, List<Assignment> assignments) {
     return ListView.builder(
       itemCount: (assignments.length * 2),
       //half the items will be dividers, the other will be list tiles
@@ -20,7 +20,7 @@ class AssignmentsListView {
         final index = item ~/ 2;
         //creates a list tile for the assignment
         return _buildCustomListRow(
-            context, account, course, id, assignments[index]);
+            context, user, course, id, assignments[index]);
       },
     );
   }
@@ -28,7 +28,7 @@ class AssignmentsListView {
 //builds the list tile for the assignment
   static Widget _buildCustomListRow(
     BuildContext context,
-    GoogleSignInAccount account,
+    User user,
     String course,
     String id,
     Assignment assignment,
@@ -77,7 +77,7 @@ class AssignmentsListView {
             ? Icon(Icons.notification_important)
             : Icon(Icons.check),
         onTap: () {
-          _pushAssignmentPage(context, account, course, assignment);
+          _pushAssignmentPage(context, user, course, assignment);
         });
   }
 
@@ -85,12 +85,12 @@ class AssignmentsListView {
 //the objects being passed are put into a Map to be passed between pages
   static void _pushAssignmentPage(
     BuildContext context,
-    GoogleSignInAccount account,
+    User user,
     String course,
     Assignment assignment,
   ) {
     Map args = {
-      "account": account,
+      "user": user,
       "assignment": assignment,
       "course": course,
     };

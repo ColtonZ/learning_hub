@@ -5,6 +5,7 @@ import '../objects/assignment.dart';
 import '../objects/assignments_list_view.dart';
 import '../objects/custom_app_bar.dart';
 import '../objects/custom_navigation_bar.dart';
+import '../objects/user.dart';
 
 import '../backend/courseWorkBackend.dart';
 import '../backend/authBackend.dart';
@@ -15,8 +16,9 @@ class AssignmentsPage extends StatefulWidget {
   final String name;
   final String id;
   final String course;
+  final User user;
 
-  AssignmentsPage({this.account, this.name, this.id, this.course});
+  AssignmentsPage({this.account, this.user, this.name, this.id, this.course});
 
   @override
   //initialises the courses page state
@@ -26,42 +28,41 @@ class AssignmentsPage extends StatefulWidget {
 class AssignmentsPageState extends State<AssignmentsPage> {
   Widget build(BuildContext context) {
     String name = widget.name;
-    GoogleSignInAccount account = widget.account;
+    User user = widget.user;
     String id = widget.id;
     String course = widget.course;
     //checks if the user is signed in, if not, they are signed in. If they are, the page is loaded
-    return account == null
+    return user == null
         ? FutureBuilder(
             future: signIn(),
             builder: (context, snapshot) {
               if (snapshot.connectionState == ConnectionState.done) {
-                account = snapshot.data;
+                user = snapshot.data;
                 //once signed in, load the page
-                return CustomScaffold.create(
-                    context, name, account, course, id);
+                return CustomScaffold.create(context, name, user, course, id);
               } else {
                 //whilst signing in, return a loading indicator
                 return Scaffold(
                     appBar: CustomAppBar.create(context, course),
                     body: Center(child: CircularProgressIndicator()),
                     bottomNavigationBar:
-                        CustomNavigationBar.create(context, name, account, 2));
+                        CustomNavigationBar.create(context, name, user, 2));
               }
             })
-        : CustomScaffold.create(context, name, account, course, id);
+        : CustomScaffold.create(context, name, user, course, id);
   }
 }
 
 //details the looks of the page
 class CustomScaffold {
-  static Scaffold create(BuildContext context, String name,
-      GoogleSignInAccount account, String course, String id) {
+  static Scaffold create(
+      BuildContext context, String name, User user, String course, String id) {
     return new Scaffold(
         //returns the custom app bar with the assignments page title
         appBar: CustomAppBar.create(context, course),
         //builds the body
         body: FutureBuilder(
-            future: getAssignments(id, account),
+            future: getAssignments(id, user),
             builder: (context, snapshot) {
               if (snapshot.connectionState == ConnectionState.done) {
                 List<Assignment> assignments = snapshot.data;
@@ -69,7 +70,7 @@ class CustomScaffold {
                 try {
                   //creates a list view of the assignments
                   return AssignmentsListView.create(
-                      context, account, course, id, assignments);
+                      context, user, course, id, assignments);
                 } catch (error) {
                   return Center(
                     child: Text("You have no assignments to display."),
@@ -82,6 +83,6 @@ class CustomScaffold {
             }),
         //builds the navigation bar for the given page
         bottomNavigationBar:
-            CustomNavigationBar.create(context, name, account, 2));
+            CustomNavigationBar.create(context, name, user, 2));
   }
 }

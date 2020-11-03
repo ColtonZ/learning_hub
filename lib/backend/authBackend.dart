@@ -1,15 +1,17 @@
 import 'dart:async';
+import 'dart:convert';
+
+import '../objects/user.dart';
 
 import 'package:google_sign_in/google_sign_in.dart';
+import 'package:http/http.dart' as http;
 
 final GoogleSignIn googleSignIn = GoogleSignIn();
 
-Future<GoogleSignInAccount> signIn() async {
+Future<User> signIn() async {
   //signs user in, requesting required scopes from the google account
   GoogleSignIn _googleSignIn = GoogleSignIn(
     scopes: [
-      'profile',
-      'email',
       "https://www.googleapis.com/auth/classroom.announcements",
       "https://www.googleapis.com/auth/classroom.courses",
       "https://www.googleapis.com/auth/classroom.coursework.me",
@@ -32,14 +34,24 @@ Future<GoogleSignInAccount> signIn() async {
   //signs the user in
   final GoogleSignInAccount account = await _googleSignIn.signIn();
 
-  return account;
+  final Map<String, String> headers = await account.authHeaders;
+
+  //sends an http request for the user's details, given their ID
+  http.Response response = await http.get(
+      Uri.encodeFull(
+          "https://classroom.googleapis.com/v1/userProfiles/${account.id}"),
+      headers: headers);
+
+  var details = json.decode(response.body);
+
+  return User.create(account, details);
 }
 
 //full scopes list: https://developers.google.com/identity/protocols/oauth2/scopes
 
-bool isSignedIn(GoogleSignInAccount account) {
+bool isSignedIn(User user) {
   //checks if a user is signed in with google
-  if (account != null) {
+  if (user != null && user.googleAccount != null) {
     return true;
   } else {
     return false;

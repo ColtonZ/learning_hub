@@ -22,8 +22,10 @@ class AssignmentPage extends StatefulWidget {
   final String name;
   final String course;
   final Assignment assignment;
+  final User user;
 
-  AssignmentPage({this.account, this.name, this.course, this.assignment});
+  AssignmentPage(
+      {this.account, this.user, this.name, this.course, this.assignment});
 
   @override
   //initialises the courses page state
@@ -33,7 +35,7 @@ class AssignmentPage extends StatefulWidget {
 class AssignmentPageState extends State<AssignmentPage> {
   Widget build(BuildContext context) {
     String name = widget.name;
-    GoogleSignInAccount account = widget.account;
+    User user = widget.user;
     String course = widget.course;
     Assignment assignment = widget.assignment;
     List<String> months = [
@@ -51,26 +53,26 @@ class AssignmentPageState extends State<AssignmentPage> {
       "Dec"
     ];
     //checks if the user is signed in, if not, they are signed in. If they are, load the page
-    return account == null
+    return user == null
         ? FutureBuilder(
             future: signIn(),
             builder: (context, snapshot) {
               if (snapshot.connectionState == ConnectionState.done) {
-                account = snapshot.data;
+                user = snapshot.data;
                 //once signed in, load the page
                 return CustomScaffold.create(
-                    context, name, account, course, assignment, months);
+                    context, name, user, course, assignment, months);
               } else {
                 //whilst signing in, return a loading indicator
                 return Scaffold(
                     appBar: CustomAppBar.create(context, course),
                     body: Center(child: CircularProgressIndicator()),
                     bottomNavigationBar:
-                        CustomNavigationBar.create(context, name, account, 2));
+                        CustomNavigationBar.create(context, name, user, 2));
               }
             })
         : CustomScaffold.create(
-            context, name, account, course, assignment, months);
+            context, name, user, course, assignment, months);
   }
 }
 
@@ -79,7 +81,7 @@ class CustomScaffold {
   static Scaffold create(
     BuildContext context,
     String name,
-    GoogleSignInAccount account,
+    User user,
     String course,
     Assignment assignment,
     List<String> months,
@@ -140,7 +142,7 @@ class CustomScaffold {
                   //tries to get the name of the user who created the task, if it cannot, then it just returns the task's creation date
                   Expanded(
                     child: FutureBuilder(
-                      future: getGoogleUser(assignment.creatorId, account),
+                      future: getGoogleUser(assignment.creatorId, user),
                       builder: (context, snapshot) {
                         if (snapshot.connectionState == ConnectionState.done) {
                           try {
@@ -156,6 +158,7 @@ class CustomScaffold {
                               style: header3Style,
                             );
                           } catch (error) {
+                            print(error.toString());
                             return Text(
                               assignment.creationTime
                                       .add(Duration(minutes: 5))
@@ -258,6 +261,6 @@ class CustomScaffold {
           ),
         ), //builds the navigation bar for the given page
         bottomNavigationBar:
-            CustomNavigationBar.create(context, name, account, 2));
+            CustomNavigationBar.create(context, name, user, 2));
   }
 }

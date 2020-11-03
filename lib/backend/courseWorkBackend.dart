@@ -1,44 +1,23 @@
 import 'dart:async';
 import 'dart:convert';
 
-import 'package:google_sign_in/google_sign_in.dart';
 import 'package:http/http.dart' as http;
 
 import '../objects/course.dart';
 import '../objects/assignment.dart';
-import 'authBackend.dart';
+import '../objects/user.dart';
 
-Future<List<Course>> getCourses(GoogleSignInAccount account) async {
-  Map<String, String> headers;
+Future<List<Course>> getCourses(User user) async {
+  //gets the user's auth headers - if they aren't signed in, they are signed in before trying to fetch headers
+  Map<String, String> headers = await user.googleAccount.authHeaders;
 
-//gets the user's auth headers - if they aren't signed in, they are signed in before trying to fetch headers
-  if (isSignedIn(account)) {
-    headers = await getHeaders(account);
-  } else {
-    headers = await getHeaders(await signIn());
-  }
-
-//requests a list of the user's courses
-  final List<Course> courses = await sendCourseRequest(headers);
-
-  return courses;
-}
-
-Future<List<Course>> sendCourseRequest(Map<String, String> headers) async {
   //requests the user's courses with an http request
   http.Response response = await http.get(
       Uri.encodeFull("https://classroom.googleapis.com/v1/courses"),
       headers: headers);
 
-  final responseBody = response.body;
-
-//converts the json response to a list of courses
-  return parseCourses(responseBody);
-}
-
-List<Course> parseCourses(String responseBody) {
   //converts the response into JSON
-  var data = json.decode(responseBody);
+  var data = json.decode(response.body);
 
   //decodes the json into a list of jsons
   var courses = data["courses"] as List;
@@ -55,35 +34,17 @@ List<Course> parseCourses(String responseBody) {
   return courseList;
 }
 
-Future<List<Assignment>> getAssignments(
-    String courseId, GoogleSignInAccount account) async {
-  Map<String, String> headers;
+Future<List<Assignment>> getAssignments(String courseId, User user) async {
+  //gets the user's auth headers - if they aren't signed in, they are signed in before trying to fetch headers
+  Map<String, String> headers = await user.googleAccount.authHeaders;
 
-  //gets the user's auth headers
-  if (isSignedIn(account)) {
-    headers = await getHeaders(account);
-  } else {
-    headers = await getHeaders(await signIn());
-  }
-
-//returns a list of the assignments for a given course
-  final List<Assignment> assignments =
-      await sendAssignmentsRequest(courseId, headers);
-
-  return assignments;
-}
-
-Future<List<Assignment>> sendAssignmentsRequest(
-    String courseId, Map<String, String> headers) async {
-  //sends an http request for the courses assignments given a course id
+  //requests the user's courses with an http request
   http.Response response = await http.get(
-      Uri.encodeFull(
-          "https://classroom.googleapis.com//v1/courses/$courseId/courseWork"),
+      Uri.encodeFull("https://classroom.googleapis.com/v1/courses"),
       headers: headers);
-  final responseBody = response.body;
 
   //converts the response into JSON
-  var data = json.decode(responseBody);
+  var data = json.decode(response.body);
 
   //converts the json into a list of jsons
   var assignments = data["courseWork"] as List;
@@ -120,12 +81,6 @@ Future<Assignment> sendAssignmentRequest(
   //printWrapped(assignmentResponseBody);
   //printWrapped(submissionResponseBody);
 
-  //converts the response into an assignment and an attached submission
-  return parseAssignment(assignmentResponseBody, submissionResponseBody);
-}
-
-Assignment parseAssignment(
-    String assignmentResponseBody, String submissionResponseBody) {
   //converts the responses into JSON
   var assignmentData = json.decode(assignmentResponseBody);
   var submissionData = json.decode(submissionResponseBody);
@@ -138,9 +93,10 @@ Assignment parseAssignment(
   return assignment;
 }
 
-Future<bool> isCourseDone(String id, GoogleSignInAccount account) async {
+Future<bool> isCourseDone(String id, User user) async {
+  //TODO: Make this faster so it doesn't load the entire course first!
   try {
-    List<Assignment> assignments = await getAssignments(id, account);
+    List<Assignment> assignments = await getAssignments(id, user);
 
     bool toDo = false;
 //loops through each assignment, getting the student submission for each
