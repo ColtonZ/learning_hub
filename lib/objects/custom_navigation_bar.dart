@@ -83,55 +83,33 @@ class CustomNavigationBar {
   static BottomNavigationBar create(
       BuildContext context, String name, User user, int index) {
     return new BottomNavigationBar(
+      selectedLabelStyle: navigationBarStyle,
+      unselectedLabelStyle: navigationBarStyle,
       //this is just a list of BottomNavigationBarItems - for each item, it has an icon and a title
       items: <BottomNavigationBarItem>[
         BottomNavigationBarItem(
           icon: Icon(Icons.home),
-          title: Text(
-            'Home',
-            style: navigationBarStyle,
-          ),
+          label: "Home",
         ),
         BottomNavigationBarItem(
           icon: Icon(Icons.calendar_today),
-          title: Text(
-            'Timetable',
-            style: navigationBarStyle,
-            textAlign: TextAlign.center,
-          ),
+          label: "Timetable",
         ),
         BottomNavigationBarItem(
           icon: Icon(Icons.assignment),
-          title: Text(
-            'Tasks',
-            style: navigationBarStyle,
-            textAlign: TextAlign.center,
-          ),
+          label: "Tasks",
         ),
         BottomNavigationBarItem(
           icon: Icon(Icons.inbox),
-          title: Text(
-            'Tannoy',
-            style: navigationBarStyle,
-            textAlign: TextAlign.center,
-          ),
+          label: "Tannoy",
         ),
         BottomNavigationBarItem(
           icon: Icon(Icons.settings),
-          title: Text(
-            //this has a blank line at the end so it's the same height as the other icons
-            'Settings',
-            style: navigationBarStyle,
-            textAlign: TextAlign.center,
-          ),
+          label: "Settings",
         ),
         BottomNavigationBarItem(
           icon: Icon(Icons.account_box),
-          title: Text(
-            'Profile',
-            style: navigationBarStyle,
-            textAlign: TextAlign.center,
-          ),
+          label: "Profile",
         ),
       ],
       //details other information about the navigation bar

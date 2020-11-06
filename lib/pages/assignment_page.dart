@@ -158,7 +158,6 @@ class CustomScaffold {
                               style: header3Style,
                             );
                           } catch (error) {
-                            print(error.toString());
                             return Text(
                               assignment.creationTime
                                       .add(Duration(minutes: 5))

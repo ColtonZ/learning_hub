@@ -28,7 +28,7 @@ class MyApp extends StatelessWidget {
           case "/":
             return MaterialPageRoute(builder: (_) {
               try {
-                return HomePage(account: arguments["account"]);
+                return HomePage(account: arguments["user"]);
               } catch (Exception) {
                 return HomePage(account: null);
               }

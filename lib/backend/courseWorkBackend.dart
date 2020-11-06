@@ -6,10 +6,11 @@ import 'package:http/http.dart' as http;
 import '../objects/course.dart';
 import '../objects/assignment.dart';
 import '../objects/user.dart';
+import 'helperBackend.dart';
 
 Future<List<Course>> getCourses(User user) async {
   //gets the user's auth headers - if they aren't signed in, they are signed in before trying to fetch headers
-  Map<String, String> headers = await user.googleAccount.authHeaders;
+  Map<String, String> headers = user.authHeaders;
 
   //requests the user's courses with an http request
   http.Response response = await http.get(
@@ -36,11 +37,12 @@ Future<List<Course>> getCourses(User user) async {
 
 Future<List<Assignment>> getAssignments(String courseId, User user) async {
   //gets the user's auth headers - if they aren't signed in, they are signed in before trying to fetch headers
-  Map<String, String> headers = await user.googleAccount.authHeaders;
+  Map<String, String> headers = user.authHeaders;
 
   //requests the user's courses with an http request
   http.Response response = await http.get(
-      Uri.encodeFull("https://classroom.googleapis.com/v1/courses"),
+      Uri.encodeFull(
+          "https://classroom.googleapis.com/v1/courses/$courseId/courseWork"),
       headers: headers);
 
   //converts the response into JSON
@@ -64,6 +66,7 @@ Future<List<Assignment>> getAssignments(String courseId, User user) async {
 Future<Assignment> sendAssignmentRequest(
     String courseId, String assignmentId, Map<String, String> headers) async {
   //sends an http request for the assignment, as well as a second for the student's submissions (if any)
+
   http.Response assignmentResponse = await http.get(
       Uri.encodeFull(
           "https://classroom.googleapis.com//v1/courses/$courseId/courseWork/$assignmentId"),
@@ -77,7 +80,7 @@ Future<Assignment> sendAssignmentRequest(
   final assignmentResponseBody = assignmentResponse.body;
   final submissionResponseBody = submissionResponse.body;
 
-//prints out the responses for testing purposes
+  //prints out the responses for testing purposes
   //printWrapped(assignmentResponseBody);
   //printWrapped(submissionResponseBody);
 
@@ -97,7 +100,6 @@ Future<bool> isCourseDone(String id, User user) async {
   //TODO: Make this faster so it doesn't load the entire course first!
   try {
     List<Assignment> assignments = await getAssignments(id, user);
-
     bool toDo = false;
 //loops through each assignment, getting the student submission for each
     for (int j = 0; j < assignments.length; j++) {
@@ -111,7 +113,8 @@ Future<bool> isCourseDone(String id, User user) async {
       }
     }
     return toDo;
-  } on NoSuchMethodError {
+  } catch (error) {
+    print(error.toString());
     //if this error is called, it means that the course has no assignments. If this is the case, there are no assignments to be done, so return false.
     return false;
   }

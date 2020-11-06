@@ -12,6 +12,9 @@ Future<User> signIn() async {
   //signs user in, requesting required scopes from the google account
   GoogleSignIn _googleSignIn = GoogleSignIn(
     scopes: [
+      "profile",
+      "email",
+      "openid",
       "https://www.googleapis.com/auth/classroom.announcements",
       "https://www.googleapis.com/auth/classroom.courses",
       "https://www.googleapis.com/auth/classroom.coursework.me",
@@ -44,7 +47,7 @@ Future<User> signIn() async {
 
   var details = json.decode(response.body);
 
-  return User.create(account, details);
+  return User.create(account, headers, details);
 }
 
 //full scopes list: https://developers.google.com/identity/protocols/oauth2/scopes
@@ -56,11 +59,4 @@ bool isSignedIn(User user) {
   } else {
     return false;
   }
-}
-
-Future<Map<String, String>> getHeaders(GoogleSignInAccount account) async {
-  //returns a user's auth headers as a map for use later
-  final Map<String, String> headers = await account.authHeaders;
-
-  return headers;
 }

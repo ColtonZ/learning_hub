@@ -8,7 +8,7 @@ import '../objects/user.dart';
 Future<User> getGoogleUser(userId, User user) async {
   //sends an http request for the user, given their ID
 
-  Map<String, String> headers = await user.googleAccount.authHeaders;
+  Map<String, String> headers = user.authHeaders;
 
   http.Response response = await http.get(
       Uri.encodeFull(
@@ -18,5 +18,5 @@ Future<User> getGoogleUser(userId, User user) async {
   var data = json.decode(response.body);
   //converts the json into a user and returns the user
 
-  return User.create(null, data);
+  return User.create(null, null, data);
 }
