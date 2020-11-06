@@ -97,25 +97,54 @@ Future<Assignment> sendAssignmentRequest(
 }
 
 Future<bool> isCourseDone(String id, User user) async {
+  bool toDo = false;
+
   //TODO: Make this faster so it doesn't load the entire course first!
   try {
-    List<Assignment> assignments = await getAssignments(id, user);
-    bool toDo = false;
-//loops through each assignment, getting the student submission for each
-    for (int j = 0; j < assignments.length; j++) {
+    //gets the user's auth headers - if they aren't signed in, they are signed in before trying to fetch headers
+    Map<String, String> headers = user.authHeaders;
+
+    //requests the course assignments with an http request
+    http.Response response = await http.get(
+        Uri.encodeFull(
+            "https://classroom.googleapis.com/v1/courses/$id/courseWork"),
+        headers: headers);
+
+    var data = json.decode(response.body);
+
+    var assignments = data["courseWork"] as List;
+
+    for (int index = 0; index < assignments.length; index++) {
+      //for each assignment in the list of courseWork, the method will request the full assignment for the given id.
+      //with the id, the method then gets all student submissions for that given assignment, so that it can check if all the work has been submitted
+
+      http.Response submissionResponse = await http.get(
+          Uri.encodeFull(
+              "https://classroom.googleapis.com//v1/courses/$id/courseWork/${assignments[index]["id"]}/studentSubmissions"),
+          headers: headers);
+
+      var submissionData = json.decode(submissionResponse.body);
+
+      var submissions = submissionData["studentSubmissions"] as List;
+
+      http.Response assignmentResponse = await http.get(
+          Uri.encodeFull(
+              "https://classroom.googleapis.com//v1/courses/$id/courseWork/${assignments[index]["id"]}"),
+          headers: headers);
+
+      var assignmentData = json.decode(assignmentResponse.body);
+
       //check each assignment, and if it has not been submitted or marked, has a due date and is not late, then mark the task as needing to be done);
-      if (assignments[j].state != "TURNED_IN" &&
-          assignments[j].state != "RETURNED" &&
-          assignments[j].dueDate != null &&
-          assignments[j].isLate != true) {
+      if (submissions[0]["state"] != "TURNED_IN" &&
+          submissions[0]["state"] != "RETURNED" &&
+          assignmentData["dueDate"] != null &&
+          submissions[0]["late"] != "true") {
         toDo = true;
         break;
       }
     }
-    return toDo;
   } catch (error) {
-    print(error.toString());
     //if this error is called, it means that the course has no assignments. If this is the case, there are no assignments to be done, so return false.
-    return false;
   }
+  return toDo;
 }
