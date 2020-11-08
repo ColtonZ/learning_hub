@@ -6,7 +6,6 @@ import 'package:http/http.dart' as http;
 import '../objects/course.dart';
 import '../objects/assignment.dart';
 import '../objects/user.dart';
-import 'helperBackend.dart';
 
 Future<List<Course>> getCourses(User user) async {
   //gets the user's auth headers - if they aren't signed in, they are signed in before trying to fetch headers
