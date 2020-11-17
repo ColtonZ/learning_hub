@@ -20,7 +20,6 @@ class User {
   factory User.create(GoogleSignInAccount account, Map<String, dynamic> headers,
       Map<String, dynamic> json) {
     return User(
-        //the only thing returned currently is the user's name
         googleAccount: account,
         authHeaders: headers,
         name: account.displayName,

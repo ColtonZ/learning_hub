@@ -7,26 +7,25 @@ import '../objects/custom_app_bar.dart';
 import '../objects/user.dart';
 
 import '../backend/authBackend.dart';
-import '../backend/firestoreBackend.dart';
-import '../backend/webScraperBackend.dart';
 
-class TimetablePage extends StatefulWidget {
+class WebViewPage extends StatefulWidget {
   //takes in the widget's arguments
   final String name;
   final User user;
+  final String url;
 
-  TimetablePage({this.user, this.name});
+  WebViewPage({this.user, this.name, this.url});
 
   @override
-  //initialises the timetable page state
-  TimetablePageState createState() => TimetablePageState();
+  //initialises the tannoy page state
+  WebViewPageState createState() => WebViewPageState();
 }
 
-class TimetablePageState extends State<TimetablePage> {
+class WebViewPageState extends State<WebViewPage> {
   Widget build(BuildContext context) {
     String name = widget.name;
     User user = widget.user;
-    //TODO: Check if events list is empty. If it is, load the webscraping page to fetch events from firefly & then build page. Else, build page.
+    String url = widget.url;
     //checks if the user is signed in, if not, they are signed in. If they are, the page is loaded
     return user == null
         ? FutureBuilder(
@@ -34,12 +33,13 @@ class TimetablePageState extends State<TimetablePage> {
             builder: (context, snapshot) {
               if (snapshot.connectionState == ConnectionState.done) {
                 user = snapshot.data;
-                //once the user has been signed in, load the page
+                //once signed in, the page is loaded
                 return CustomScaffold.create(context, name, user);
               } else {
                 //whilst signing in, return a loading indicator
                 return Scaffold(
-                    appBar: CustomAppBar.create(context, "Your Timetable"),
+                    appBar:
+                        CustomAppBar.create(context, "Check Your Timetable"),
                     body: Center(child: CircularProgressIndicator()),
                     bottomNavigationBar:
                         CustomNavigationBar.create(context, name, user, 1));
@@ -53,27 +53,14 @@ class TimetablePageState extends State<TimetablePage> {
 class CustomScaffold {
   static Scaffold create(BuildContext context, String name, User user) {
     return new Scaffold(
-        //returns the custom app bar with the timetable page title
-        appBar: CustomAppBar.create(context, "Your Timetable"),
+        //returns the custom app bar with the tannoy page title
+        appBar: CustomAppBar.create(context, "Login to Firefly"),
         //builds the body
-        body: FutureBuilder(
-            future: eventCount("yIhSfLiSfzb1Qd1weyR2"),
-            builder: (context, snapshot) {
-              if (snapshot.connectionState == ConnectionState.done) {
-                if (snapshot.data == 0) {
-                  return Center(
-                    child: Text("No events"),
-                  );
-                } else {
-                  return Center(
-                    child: Text("${snapshot.data} events"),
-                  );
-                }
-              } else {
-                //whilst getting courses, return a loading indicator
-                return Center(child: CircularProgressIndicator());
-              }
-            }),
+        body: Center(
+            child: Text(
+          user.name,
+          style: titleStyle,
+        )),
         //builds the navigation bar for the given page
         bottomNavigationBar:
             CustomNavigationBar.create(context, name, user, 1));

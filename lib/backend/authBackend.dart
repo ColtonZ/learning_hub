@@ -1,6 +1,8 @@
 import 'dart:async';
 import 'dart:convert';
 
+import 'package:learning_hub/backend/helperBackend.dart';
+
 import '../objects/user.dart';
 
 import 'package:google_sign_in/google_sign_in.dart';
@@ -14,7 +16,6 @@ Future<User> signIn() async {
     scopes: [
       "profile",
       "email",
-      "openid",
       "https://www.googleapis.com/auth/classroom.announcements",
       "https://www.googleapis.com/auth/classroom.courses",
       "https://www.googleapis.com/auth/classroom.coursework.me",
@@ -33,9 +34,9 @@ Future<User> signIn() async {
   try {
     _googleSignIn.signOut();
   } catch (error) {}
-
-  //signs the user in
-  final GoogleSignInAccount account = await _googleSignIn.signIn();
+  
+  final GoogleSignInAccount account =
+      await _googleSignIn.signIn(); //signs the user in
 
   final Map<String, String> headers = await account.authHeaders;
 

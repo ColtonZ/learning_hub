@@ -24,7 +24,6 @@ class MyApp extends StatelessWidget {
         //if the route is / and there is no account signed in, pass null for the account
         switch (route.name) {
           //pushes the home page
-          //TODO: Fix passing User objects between pages
           case "/":
             return MaterialPageRoute(builder: (_) {
               try {
@@ -38,6 +37,13 @@ class MyApp extends StatelessWidget {
             return MaterialPageRoute(
                 builder: (_) =>
                     TimetablePage(user: arguments["user"], name: name));
+          //pushes the webpage viewer, so the user can get events or tannoy notices from Firefly
+          case "/web":
+            return MaterialPageRoute(
+                builder: (_) => TimetablePage(
+                    user: arguments["user"],
+                    name: name,
+                    url: arguments["url"]));
           //pushes the courses page, with arguments of the user's account and the page's name
           case "/courses":
             return MaterialPageRoute(
