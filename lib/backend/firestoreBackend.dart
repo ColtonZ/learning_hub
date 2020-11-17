@@ -19,3 +19,5 @@ Future<int> eventCount(String userId) async {
   print(events.length);
   return events.length;
 }
+
+void addFirestoreEvents(String eventsText) async {}

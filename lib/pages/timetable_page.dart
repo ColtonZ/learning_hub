@@ -61,10 +61,10 @@ class CustomScaffold {
               if (snapshot.connectionState == ConnectionState.done) {
                 if (snapshot.data == 1) {
                   _pushWebViewPage(context, user, "/dashboard");
-                  return Center(
-                    child: Text("Fetching events..."),
-                  );
                 }
+                return Center(
+                  child: Text("Fetching events..."),
+                );
               } else {
                 //whilst getting courses, return a loading indicator
                 return Center(child: CircularProgressIndicator());
