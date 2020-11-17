@@ -1,7 +1,4 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:learning_hub/backend/webScraperBackend.dart';
-
-import 'helperBackend.dart';
 
 void addUserDetails() async {
 //https://medium.com/@atul.sharma_94062/how-to-use-cloud-firestore-with-flutter-e6f9e8821b27

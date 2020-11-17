@@ -8,7 +8,6 @@ import '../objects/user.dart';
 
 import '../backend/authBackend.dart';
 import '../backend/firestoreBackend.dart';
-import '../backend/webScraperBackend.dart';
 
 class TimetablePage extends StatefulWidget {
   //takes in the widget's arguments
@@ -61,14 +60,9 @@ class CustomScaffold {
             builder: (context, snapshot) {
               if (snapshot.connectionState == ConnectionState.done) {
                 if (snapshot.data == 0) {
-                  return Center(
-                    child: Text("No events"),
-                  );
-                } else {
-                  return Center(
-                    child: Text("${snapshot.data} events"),
-                  );
+                  _pushWebViewPage(context, user, "/dashboard");
                 }
+                return Center(child: Text("${snapshot.data} events"));
               } else {
                 //whilst getting courses, return a loading indicator
                 return Center(child: CircularProgressIndicator());
@@ -77,5 +71,10 @@ class CustomScaffold {
         //builds the navigation bar for the given page
         bottomNavigationBar:
             CustomNavigationBar.create(context, name, user, 1));
+  }
+
+  static void _pushWebViewPage(BuildContext context, User user, String url) {
+    Map args = {"user": user, "url": url};
+    Navigator.of(context).pushReplacementNamed('/web', arguments: args);
   }
 }

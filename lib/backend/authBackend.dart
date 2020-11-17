@@ -1,8 +1,6 @@
 import 'dart:async';
 import 'dart:convert';
 
-import 'package:learning_hub/backend/helperBackend.dart';
-
 import '../objects/user.dart';
 
 import 'package:google_sign_in/google_sign_in.dart';
@@ -34,7 +32,7 @@ Future<User> signIn() async {
   try {
     _googleSignIn.signOut();
   } catch (error) {}
-  
+
   final GoogleSignInAccount account =
       await _googleSignIn.signIn(); //signs the user in
 

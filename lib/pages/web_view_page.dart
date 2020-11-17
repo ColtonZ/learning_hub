@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_inappwebview/flutter_inappwebview.dart';
 
 import '../theming.dart';
 
@@ -52,15 +53,25 @@ class WebViewPageState extends State<WebViewPage> {
 //details the looks of the page
 class CustomScaffold {
   static Scaffold create(BuildContext context, String name, User user) {
+    InAppWebViewController _webViewController;
     return new Scaffold(
         //returns the custom app bar with the tannoy page title
         appBar: CustomAppBar.create(context, "Login to Firefly"),
         //builds the body
-        body: Center(
-            child: Text(
-          user.name,
-          style: titleStyle,
-        )),
+        body: InAppWebView(
+            initialUrl: "https://flutter.dev/",
+            initialOptions: InAppWebViewGroupOptions(
+                crossPlatform: InAppWebViewOptions(
+              debuggingEnabled: true,
+            )),
+            onWebViewCreated: (InAppWebViewController controller) {
+              _webViewController = controller;
+            },
+            onLoadStart: (InAppWebViewController controller, String url) {},
+            onLoadStop:
+                (InAppWebViewController controller, String url) async {},
+            onProgressChanged:
+                (InAppWebViewController controller, int progress) {}),
         //builds the navigation bar for the given page
         bottomNavigationBar:
             CustomNavigationBar.create(context, name, user, 1));

@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 
+import 'pages/web_view_page.dart';
 import 'pages/account_page.dart';
 import 'pages/settings_page.dart';
 import 'pages/tannoy_page.dart';
@@ -40,7 +41,7 @@ class MyApp extends StatelessWidget {
           //pushes the webpage viewer, so the user can get events or tannoy notices from Firefly
           case "/web":
             return MaterialPageRoute(
-                builder: (_) => TimetablePage(
+                builder: (_) => WebViewPage(
                     user: arguments["user"],
                     name: name,
                     url: arguments["url"]));
