@@ -59,10 +59,12 @@ class CustomScaffold {
             future: eventCount("yIhSfLiSfzb1Qd1weyR2"),
             builder: (context, snapshot) {
               if (snapshot.connectionState == ConnectionState.done) {
-                if (snapshot.data == 0) {
+                if (snapshot.data == 1) {
                   _pushWebViewPage(context, user, "/dashboard");
+                  return Center(
+                    child: Text("Fetching events..."),
+                  );
                 }
-                return Center(child: Text("${snapshot.data} events"));
               } else {
                 //whilst getting courses, return a loading indicator
                 return Center(child: CircularProgressIndicator());
@@ -75,6 +77,6 @@ class CustomScaffold {
 
   static void _pushWebViewPage(BuildContext context, User user, String url) {
     Map args = {"user": user, "url": url};
-    Navigator.of(context).pushReplacementNamed('/web', arguments: args);
+    Navigator.of(context).pushNamed('/web', arguments: args);
   }
 }

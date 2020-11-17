@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_inappwebview/flutter_inappwebview.dart';
+import 'package:learning_hub/backend/helperBackend.dart';
 
 import '../theming.dart';
 
@@ -35,7 +36,7 @@ class WebViewPageState extends State<WebViewPage> {
               if (snapshot.connectionState == ConnectionState.done) {
                 user = snapshot.data;
                 //once signed in, the page is loaded
-                return CustomScaffold.create(context, name, user);
+                return CustomScaffold.create(context, name, user, url);
               } else {
                 //whilst signing in, return a loading indicator
                 return Scaffold(
@@ -46,32 +47,35 @@ class WebViewPageState extends State<WebViewPage> {
                         CustomNavigationBar.create(context, name, user, 1));
               }
             })
-        : CustomScaffold.create(context, name, user);
+        : CustomScaffold.create(context, name, user, url);
   }
 }
 
 //details the looks of the page
 class CustomScaffold {
-  static Scaffold create(BuildContext context, String name, User user) {
+  static Scaffold create(
+      BuildContext context, String name, User user, String url) {
     InAppWebViewController _webViewController;
     return new Scaffold(
         //returns the custom app bar with the tannoy page title
         appBar: CustomAppBar.create(context, "Login to Firefly"),
         //builds the body
         body: InAppWebView(
-            initialUrl: "https://flutter.dev/",
-            initialOptions: InAppWebViewGroupOptions(
-                crossPlatform: InAppWebViewOptions(
-              debuggingEnabled: true,
-            )),
-            onWebViewCreated: (InAppWebViewController controller) {
-              _webViewController = controller;
-            },
-            onLoadStart: (InAppWebViewController controller, String url) {},
-            onLoadStop:
-                (InAppWebViewController controller, String url) async {},
-            onProgressChanged:
-                (InAppWebViewController controller, int progress) {}),
+          initialUrl: "https://intranet.stpaulsschool.org.uk$url",
+          onWebViewCreated: (InAppWebViewController controller) {
+            _webViewController = controller;
+          },
+          onLoadStop: (InAppWebViewController controller, String url) async {
+            String currentPage = await controller.getUrl();
+            if (currentPage.endsWith(url)) {
+              String eventsText = await controller.evaluateJavascript(
+                  source:
+                      "output = \"\";var list = document.getElementsByClassName(\"ff-timetable-block ff-timetable-lesson\");for(var i =0; i<list.length;i++){output+=`\${list[i].childNodes[1].childNodes[0].lastChild.textContent}, \${list[i].childNodes[1].childNodes[2].lastChild.textContent}, \${list[i].firstElementChild.attributes[1].textContent}; `;}output.substring(0, output.length-2);");
+              printWrapped(eventsText);
+            }
+          },
+        ),
+
         //builds the navigation bar for the given page
         bottomNavigationBar:
             CustomNavigationBar.create(context, name, user, 1));
