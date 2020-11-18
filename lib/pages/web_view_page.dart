@@ -48,7 +48,10 @@ class CustomBody {
           String eventsText = await controller.evaluateJavascript(
               source:
                   "output = \"\";var list = document.getElementsByClassName(\"ff-timetable-block ff-timetable-lesson\");for(var i =0; i<list.length;i++){output+=`\${list[i].childNodes[1].childNodes[0].lastChild.textContent}, \${list[i].childNodes[1].childNodes[2].lastChild.textContent}, \${list[i].firstElementChild.attributes[1].textContent}; `;}output.substring(0, output.length-2);");
-          addFirestoreEvents(eventsText, user.firestoreId);
+          String week = await controller.evaluateJavascript(
+              source:
+                  "output=\"\";var list = document.getElementsByClassName(\"ff-calendar-item\");for(var i =0; i<list.length;i++){if(list[i].textContent.includes(\"Monday\")){output=list[i].textContent[list[i].textContent.indexOf(\"WEEK \")+5];}};output;");
+          addFirestoreEvents(eventsText, week, user.firestoreId);
           _pushTimetablePage(context, user);
         }
       },

@@ -61,7 +61,7 @@ class CustomScaffold {
             future: fireflyEventCount(user.firestoreId),
             builder: (context, snapshot) {
               if (snapshot.connectionState == ConnectionState.done) {
-                if (snapshot.data == 1) {
+                if (snapshot.data == 0) {
                   //https://stackoverflow.com/questions/54691767/navigation-inside-nested-future
                   return WebViewPage(
                     user: user,

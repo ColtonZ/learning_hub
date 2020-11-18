@@ -1,5 +1,6 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_core/firebase_core.dart';
+import 'package:learning_hub/backend/helperBackend.dart';
 
 Future<int> fireflyEventCount(String id) async {
   await Firebase.initializeApp();
@@ -38,7 +39,7 @@ Future<String> getUserId(String email) async {
   return id;
 }
 
-void addFirestoreEvents(String eventsText, String id) async {
+void addFirestoreEvents(String eventsText, String week, String id) async {
   await Firebase.initializeApp();
   final databaseReference = FirebaseFirestore.instance;
 
@@ -59,4 +60,10 @@ void addFirestoreEvents(String eventsText, String id) async {
         .doc(event.id)
         .delete();
   });
+
+  printWrapped(eventsText);
+
+  List<String> eventsTextList = eventsText.split("; ");
+
+  //check if lesson added (same room, teacher, subject), then check if time already there, then check repitions
 }
