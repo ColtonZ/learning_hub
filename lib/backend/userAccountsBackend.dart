@@ -18,5 +18,5 @@ Future<User> getGoogleUser(userId, User user) async {
   var data = json.decode(response.body);
   //converts the json into a user and returns the user
 
-  return User.create(null, null, data);
+  return User.create(null, null, data, null);
 }

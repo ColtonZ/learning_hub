@@ -58,7 +58,7 @@ class CustomScaffold {
         appBar: CustomAppBar.create(context, "Your Timetable"),
         //builds the body
         body: FutureBuilder(
-            future: eventCount("yIhSfLiSfzb1Qd1weyR2"),
+            future: fireflyEventCount(user.firestoreId),
             builder: (context, snapshot) {
               if (snapshot.connectionState == ConnectionState.done) {
                 if (snapshot.data == 1) {

@@ -3,6 +3,8 @@ import 'dart:convert';
 
 import '../objects/user.dart';
 
+import '../backend/firestoreBackend.dart';
+
 import 'package:google_sign_in/google_sign_in.dart';
 import 'package:http/http.dart' as http;
 
@@ -46,7 +48,9 @@ Future<User> signIn() async {
 
   var details = json.decode(response.body);
 
-  return User.create(account, headers, details);
+  String firestoreId = await getUserId(account.email);
+
+  return User.create(account, headers, details, firestoreId);
 }
 
 //full scopes list: https://developers.google.com/identity/protocols/oauth2/scopes
