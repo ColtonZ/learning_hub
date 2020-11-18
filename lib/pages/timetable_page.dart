@@ -9,6 +9,8 @@ import '../objects/user.dart';
 import '../backend/authBackend.dart';
 import '../backend/firestoreBackend.dart';
 
+import '../pages/web_view_page.dart';
+
 class TimetablePage extends StatefulWidget {
   //takes in the widget's arguments
   final String name;
@@ -60,11 +62,11 @@ class CustomScaffold {
             builder: (context, snapshot) {
               if (snapshot.connectionState == ConnectionState.done) {
                 if (snapshot.data == 1) {
-                  _pushWebViewPage(context, user, "/dashboard");
-                }
-                return Center(
-                  child: Text("Fetching events..."),
-                );
+                  //https://stackoverflow.com/questions/54691767/navigation-inside-nested-future
+                  return WebViewPage(
+                    url: "/dashboard",
+                  );
+                } else {}
               } else {
                 //whilst getting courses, return a loading indicator
                 return Center(child: CircularProgressIndicator());
@@ -73,10 +75,5 @@ class CustomScaffold {
         //builds the navigation bar for the given page
         bottomNavigationBar:
             CustomNavigationBar.create(context, name, user, 1));
-  }
-
-  static void _pushWebViewPage(BuildContext context, User user, String url) {
-    Map args = {"user": user, "url": url};
-    Navigator.of(context).pushNamed('/web', arguments: args);
   }
 }

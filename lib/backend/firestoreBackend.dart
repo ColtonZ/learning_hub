@@ -16,7 +16,6 @@ Future<int> eventCount(String userId) async {
       .get();
 
   List<DocumentSnapshot> events = eventsSnapshot.docs;
-  print(events.length);
   return events.length;
 }
 
