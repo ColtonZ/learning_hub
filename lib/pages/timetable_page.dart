@@ -1,7 +1,5 @@
 import 'package:flutter/material.dart';
 
-import '../theming.dart';
-
 import '../objects/custom_navigation_bar.dart';
 import '../objects/custom_app_bar.dart';
 import '../objects/user.dart';
@@ -27,7 +25,6 @@ class TimetablePageState extends State<TimetablePage> {
   Widget build(BuildContext context) {
     String name = widget.name;
     User user = widget.user;
-    //TODO: Check if events list is empty. If it is, load the webscraping page to fetch events from firefly & then build page. Else, build page.
     //checks if the user is signed in, if not, they are signed in. If they are, the page is loaded
     return user == null
         ? FutureBuilder(

@@ -1,6 +1,6 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_core/firebase_core.dart';
-import 'package:learning_hub/backend/helperBackend.dart';
+
 import 'dart:core';
 
 Future<int> fireflyEventCount(String id) async {
@@ -188,9 +188,7 @@ Future<String> addFirestoreEvents(
         ]
       });
     }
-
-    return "done";
-
     //check if lesson added (same location, teacher, subject), then check if time already there, then check repitions
   }
+  return "done";
 }
