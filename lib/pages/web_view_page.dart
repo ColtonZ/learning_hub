@@ -51,8 +51,9 @@ class CustomBody {
           String week = await controller.evaluateJavascript(
               source:
                   "output=\"\";var list = document.getElementsByClassName(\"ff-calendar-item\");for(var i =0; i<list.length;i++){if(list[i].textContent.includes(\"Monday\")){output=list[i].textContent[list[i].textContent.indexOf(\"WEEK \")+5];}};output;");
-          addFirestoreEvents(eventsText, week, user.firestoreId);
-          _pushTimetablePage(context, user);
+          addFirestoreEvents(eventsText, week, user.firestoreId).then((_) {
+            _pushTimetablePage(context, user);
+          });
         }
       },
     );

@@ -40,7 +40,8 @@ Future<String> getUserId(String email) async {
   return id;
 }
 
-void addFirestoreEvents(String eventsText, String week, String id) async {
+Future<String> addFirestoreEvents(
+    String eventsText, String week, String id) async {
   await Firebase.initializeApp();
   final databaseReference = FirebaseFirestore.instance;
 
@@ -75,23 +76,24 @@ void addFirestoreEvents(String eventsText, String week, String id) async {
   int day = 0;
   int prevStartTime = 0;
 
-  eventsTextList.forEach((eventString) {
+  for (String eventString in eventsTextList) {
     List<String> eventDetails = eventString.split(", ");
     List<int> timings = [];
     List<String> compoundDetails;
     String classSet;
-    String room;
+    String location;
 
     if (eventDetails[2].contains(" in ")) {
       compoundDetails = eventDetails[2].split(" in ");
 
-      List<String> roomAndSet = compoundDetails[1].split(" (");
-      room = roomAndSet[0];
+      List<String> locationAndSet = compoundDetails[1].split(" (");
+      location = locationAndSet[0];
 
-      if (roomAndSet[1].contains("-/")) {
-        classSet = roomAndSet[1].substring(0, roomAndSet[1].indexOf("-/"));
+      if (locationAndSet[1].contains("-/")) {
+        classSet =
+            locationAndSet[1].substring(0, locationAndSet[1].indexOf("-/"));
       } else {
-        classSet = roomAndSet[1].replaceAll(")", "");
+        classSet = locationAndSet[1].replaceAll(")", "");
       }
     } else {
       compoundDetails = eventDetails[2].split(" (");
@@ -110,9 +112,85 @@ void addFirestoreEvents(String eventsText, String week, String id) async {
       timings.add(int.parse(time.replaceAll(":", "")));
     });
 
-    print(
-        "Class: ${eventDetails[0]} | Teacher: ${eventDetails[1]} | Start Time: ${timings[0]} | End Time: ${timings[1]} | Room: $room | Set: $classSet");
-  });
+    if (timings[0] < prevStartTime) {
+      day++;
+    }
+    prevStartTime = timings[0];
+    int eventDay = day % 5;
+    String eventWeek = weeks[day ~/ 5];
 
-  //check if lesson added (same room, teacher, subject), then check if time already there, then check repitions
+    //print("Class: ${eventDetails[0]} | Teacher: ${eventDetails[1]} | Start Time: ${timings[0]} | End Time: ${timings[1]} | location: $location | Set: $classSet | Day: $eventDay | Week: $eventWeek");
+
+    QuerySnapshot matchingEvent = await databaseReference
+        .collection("users")
+        .doc(id)
+        .collection("events")
+        .where("name", isEqualTo: eventDetails[0])
+        .where("platform", isEqualTo: "Firefly")
+        .where("classSet", isEqualTo: classSet)
+        .where("location", isEqualTo: location)
+        .where("teacher", isEqualTo: eventDetails[1])
+        .get();
+
+    if (matchingEvent.docs.isNotEmpty) {
+      DocumentSnapshot firestoreEvent = matchingEvent.docs.first;
+      String docId = firestoreEvent.id;
+      List<dynamic> times = firestoreEvent.get("times");
+      bool exists = false;
+
+      var docToUpdate = databaseReference
+          .collection("users")
+          .doc(id)
+          .collection("events")
+          .doc(docId);
+
+      for (int i = 0; i < times.length; i++) {
+        if (times[i].startsWith(
+            "$eventDay, ${timings[0].toString().padLeft(4, '0')}, ${timings[1].toString().padLeft(4, '0')}")) {
+          exists = true;
+          if ((times[i].split(", ")[3] == "B" && eventWeek == "A") ||
+              (times[i].split(", ")[3] == "A" && eventWeek == "B")) {
+            String toAdd =
+                "$eventDay, ${timings[0].toString().padLeft(4, '0')}, ${timings[1].toString().padLeft(4, '0')}, AB";
+
+            await docToUpdate.update(<String, dynamic>{
+              "times": FieldValue.arrayRemove([
+                "$eventDay, ${timings[0].toString().padLeft(4, '0')}, ${timings[1].toString().padLeft(4, '0')}, ${times[i].split(", ")[3]}"
+              ])
+            });
+
+            await docToUpdate.update(<String, dynamic>{
+              "times": FieldValue.arrayUnion([toAdd])
+            });
+          }
+        }
+      }
+      if (!exists) {
+        await docToUpdate.update(<String, dynamic>{
+          "times": FieldValue.arrayUnion([
+            "$eventDay, ${timings[0].toString().padLeft(4, '0')}, ${timings[1].toString().padLeft(4, '0')}, $eventWeek"
+          ])
+        });
+      }
+    } else {
+      await databaseReference
+          .collection("users")
+          .doc(id)
+          .collection("events")
+          .add({
+        "classSet": classSet,
+        "location": location,
+        "name": eventDetails[0],
+        "platform": "Firefly",
+        "teacher": eventDetails[1],
+        "times": [
+          "$eventDay, ${timings[0].toString().padLeft(4, '0')}, ${timings[1].toString().padLeft(4, '0')}, $eventWeek"
+        ]
+      });
+    }
+
+    return "done";
+
+    //check if lesson added (same location, teacher, subject), then check if time already there, then check repitions
+  }
 }
