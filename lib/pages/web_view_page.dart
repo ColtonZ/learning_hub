@@ -12,9 +12,10 @@ import '../backend/firestoreBackend.dart';
 
 class WebViewPage extends StatefulWidget {
   //takes in the widget's arguments
+  final User user;
   final String url;
 
-  WebViewPage({this.url});
+  WebViewPage({this.user, this.url});
 
   @override
   //initialises the tannoy page state
@@ -23,15 +24,16 @@ class WebViewPage extends StatefulWidget {
 
 class WebViewPageState extends State<WebViewPage> {
   Widget build(BuildContext context) {
+    User user = widget.user;
     String url = widget.url;
     //checks if the user is signed in, if not, they are signed in. If they are, the page is loaded
-    return CustomBody.create(context, url);
+    return CustomBody.create(context, user, url);
   }
 }
 
 //details the looks of the page
 class CustomBody {
-  static Widget create(BuildContext context, String url) {
+  static Widget create(BuildContext context, User user, String url) {
     InAppWebViewController _webViewController;
     return new InAppWebView(
       initialUrl: "https://intranet.stpaulsschool.org.uk$url",
@@ -47,8 +49,14 @@ class CustomBody {
               source:
                   "output = \"\";var list = document.getElementsByClassName(\"ff-timetable-block ff-timetable-lesson\");for(var i =0; i<list.length;i++){output+=`\${list[i].childNodes[1].childNodes[0].lastChild.textContent}, \${list[i].childNodes[1].childNodes[2].lastChild.textContent}, \${list[i].firstElementChild.attributes[1].textContent}; `;}output.substring(0, output.length-2);");
           addFirestoreEvents(eventsText);
+          _pushTimetablePage(context, user);
         }
       },
     );
+  }
+
+  static void _pushTimetablePage(BuildContext context, User user) {
+    Map args = {"user": user};
+    Navigator.of(context).pushReplacementNamed('/timetable', arguments: args);
   }
 }

@@ -64,9 +64,14 @@ class CustomScaffold {
                 if (snapshot.data == 1) {
                   //https://stackoverflow.com/questions/54691767/navigation-inside-nested-future
                   return WebViewPage(
+                    user: user,
                     url: "/dashboard",
                   );
-                } else {}
+                } else {
+                  return Center(
+                    child: Text("You have ${snapshot.data} events."),
+                  );
+                }
               } else {
                 //whilst getting courses, return a loading indicator
                 return Center(child: CircularProgressIndicator());
