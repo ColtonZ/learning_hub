@@ -38,6 +38,7 @@ Future<User> signIn() async {
   final GoogleSignInAccount account =
       await _googleSignIn.signIn(); //signs the user in
 
+//gets the account's auth headers
   final Map<String, String> headers = await account.authHeaders;
 
   //sends an http request for the user's details, given their ID
@@ -48,6 +49,7 @@ Future<User> signIn() async {
 
   var details = json.decode(response.body);
 
+//gets the account's Firestore id for later use
   String firestoreId = await getUserId(account.email);
 
   return User.create(account, headers, details, firestoreId);

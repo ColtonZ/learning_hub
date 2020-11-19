@@ -54,17 +54,23 @@ class CustomScaffold {
         //returns the custom app bar with the timetable page title
         appBar: CustomAppBar.create(context, "Your Timetable"),
         //builds the body
+        //checks if the user has at least one event in the Firestore database added automatically from Firefly. If they do, load the timetable page.
+        //Otherwise, display a web view, which will allow the user to login to Firefly and then will scrape the dashboard for the user's timetable data.
         body: FutureBuilder(
+            //counts how many Firefly events the user has
             future: fireflyEventCount(user.firestoreId),
             builder: (context, snapshot) {
               if (snapshot.connectionState == ConnectionState.done) {
                 if (snapshot.data == 0) {
+                  //if they have no events, return a web view body so the user can login to Firefly
                   //https://stackoverflow.com/questions/54691767/navigation-inside-nested-future
                   return WebViewPage(
                     user: user,
+                    //this url is the page on the site https://intranet.stpaulsschool.org.uk to access
                     url: "/dashboard",
                   );
                 } else {
+                  //otherwise build the page
                   return Center(
                     child: Text("You have ${snapshot.data} events."),
                   );
