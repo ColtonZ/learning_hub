@@ -115,6 +115,7 @@ class CustomScaffold {
 
   //to sign out, push the account page again, but without any user data
   static void _pushSignOut(BuildContext context, CustomUser user) {
+    googleSignIn.signOut();
     Map args = {"user": null};
     Navigator.of(context).pushReplacementNamed('/account', arguments: args);
   }
