@@ -29,7 +29,7 @@ class SettingsPageState extends State<SettingsPage> {
     //checks if the user is signed in, if not, they are signed in. If they are, the page is loaded
     return user == null
         ? FutureBuilder(
-            future: signIn(),
+            future: signIn(false),
             builder: (context, snapshot) {
               if (snapshot.connectionState == ConnectionState.done) {
                 user = snapshot.data;

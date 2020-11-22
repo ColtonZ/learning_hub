@@ -11,10 +11,14 @@ import 'package:firebase_core/firebase_core.dart';
 final googleSignIn = GoogleSignIn();
 
 //checks if a user is already signed in. If they are, then the current user is signed out before the next one is signed in.
-Future<CustomUser> signIn() async {
+Future<CustomUser> signIn(bool toSignOut) async {
   //initialzes an instance of the Firestore database and gets the signin state
   await Firebase.initializeApp();
   final _authReference = FirebaseAuth.instance;
+
+  if (toSignOut) {
+    await googleSignIn.signOut();
+  }
 
   // Sign the user in with Google, requesting their data from Google Classroom
   final GoogleSignInAccount googleUser = await GoogleSignIn(scopes: [

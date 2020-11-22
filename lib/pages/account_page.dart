@@ -13,8 +13,9 @@ class AccountPage extends StatefulWidget {
   final GoogleSignInAccount account;
   final String name;
   final CustomUser user;
+  final bool toSignOut;
 
-  AccountPage({this.account, this.user, this.name});
+  AccountPage({this.account, this.user, this.name, this.toSignOut});
 
   @override
   AccountPageState createState() => AccountPageState();
@@ -24,12 +25,12 @@ class AccountPageState extends State<AccountPage> {
   Widget build(BuildContext context) {
     String name = widget.name;
     CustomUser user = widget.user;
+    bool toSignOut = widget.toSignOut;
 
-    //syncData();
     //checks if the user is signed in, if not, they are signed in, otherwise the page is loaded
     return user == null
         ? FutureBuilder(
-            future: signIn(),
+            future: signIn(toSignOut),
             builder: (context, snapshot) {
               if (snapshot.connectionState == ConnectionState.done) {
                 user = snapshot.data;
@@ -113,11 +114,9 @@ class CustomScaffold {
             CustomNavigationBar.create(context, name, user, 4));
   }
 
-  //to sign out, push the account page again, but without any user data
+  //to sign out, push the account page again, but without any user data, and with an argument telling the page to sign out first
   static void _pushSignOut(BuildContext context, CustomUser user) {
-    googleSignIn.signOut();
-
-    Map args = {"user": null};
+    Map args = {"user": null, "toSignOut": true};
     Navigator.of(context).pushReplacementNamed('/account', arguments: args);
   }
 }

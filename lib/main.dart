@@ -37,7 +37,7 @@ class MyApp extends StatelessWidget {
             return MaterialPageRoute(
                 builder: (_) =>
                     TimetablePage(user: arguments["user"], name: name));
-                    //pushes the courses page, with arguments of the user's account and the page's name
+          //pushes the courses page, with arguments of the user's account and the page's name
           case "/courses":
             return MaterialPageRoute(
                 builder: (_) =>
@@ -52,11 +52,13 @@ class MyApp extends StatelessWidget {
             return MaterialPageRoute(
                 builder: (_) =>
                     SettingsPage(user: arguments["user"], name: name));
-          //pushes the account page, with arguments of the user's account and the page's name
+          //pushes the account page, with arguments of the user's account and the page's name, as well as a boolean value dictating whether or not the user should be signed out before the page is loaded
           case "/account":
             return MaterialPageRoute(
-                builder: (_) =>
-                    AccountPage(user: arguments["user"], name: name));
+                builder: (_) => AccountPage(
+                    user: arguments["user"],
+                    toSignOut: arguments["toSignOut"],
+                    name: name));
           //pushes the assignments page, with arguments of the user's account and the page's name, as well as the id of the course (who's assignemnets you want to view) and the course's name
           case "/assignments":
             return MaterialPageRoute(
