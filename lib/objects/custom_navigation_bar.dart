@@ -32,19 +32,6 @@ class CustomNavigationBar {
     Navigator.of(context).pushReplacementNamed('/courses', arguments: args);
   }
 
-  static void _pushHomePage(
-      BuildContext context, String name, CustomUser user) {
-    Map args = {"user": user};
-    if (name == "/assignments") {
-      Navigator.of(context).pop();
-    }
-    if (name == "/assignment") {
-      Navigator.of(context).pop();
-      Navigator.of(context).pop();
-    }
-    Navigator.of(context).pushReplacementNamed('/', arguments: args);
-  }
-
   static void _pushSettingsPage(
       BuildContext context, String name, CustomUser user) {
     Map args = {"user": user};
@@ -94,10 +81,6 @@ class CustomNavigationBar {
       //this is just a list of BottomNavigationBarItems - for each item, it has an icon and a title
       items: <BottomNavigationBarItem>[
         BottomNavigationBarItem(
-          icon: Icon(Icons.home),
-          label: "Home",
-        ),
-        BottomNavigationBarItem(
           icon: Icon(Icons.calendar_today),
           label: "Timetable",
         ),
@@ -131,21 +114,18 @@ class CustomNavigationBar {
       onTap: (value) {
         switch (value) {
           case 0:
-            _pushHomePage(context, name, user);
-            break;
-          case 1:
             _pushTimetablePage(context, name, user);
             break;
-          case 2:
+          case 1:
             _pushCoursesPage(context, name, user);
             break;
-          case 3:
+          case 2:
             _pushTannoyPage(context, name, user);
             break;
-          case 4:
+          case 3:
             _pushSettingsPage(context, name, user);
             break;
-          case 5:
+          case 4:
             _pushAccountPage(context, name, user);
             break;
           default:

@@ -40,7 +40,7 @@ class TimetablePageState extends State<TimetablePage> {
                     appBar: CustomAppBar.create(context, "Your Timetable"),
                     body: Center(child: CircularProgressIndicator()),
                     bottomNavigationBar:
-                        CustomNavigationBar.create(context, name, user, 1));
+                        CustomNavigationBar.create(context, name, user, 0));
               }
             })
         : CustomScaffold.create(context, name, user);
@@ -82,6 +82,6 @@ class CustomScaffold {
             }),
         //builds the navigation bar for the given page
         bottomNavigationBar:
-            CustomNavigationBar.create(context, name, user, 1));
+            CustomNavigationBar.create(context, name, user, 0));
   }
 }

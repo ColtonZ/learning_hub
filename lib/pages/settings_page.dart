@@ -41,7 +41,7 @@ class SettingsPageState extends State<SettingsPage> {
                     appBar: CustomAppBar.create(context, "Settings"),
                     body: Center(child: CircularProgressIndicator()),
                     bottomNavigationBar:
-                        CustomNavigationBar.create(context, name, user, 4));
+                        CustomNavigationBar.create(context, name, user, 3));
               }
             })
         : CustomScaffold.create(context, name, user);
@@ -59,6 +59,6 @@ class CustomScaffold {
             child: Text(user.firebaseUser.displayName, style: titleStyle)),
         //builds the navigation bar for the given page
         bottomNavigationBar:
-            CustomNavigationBar.create(context, name, user, 4));
+            CustomNavigationBar.create(context, name, user, 3));
   }
 }

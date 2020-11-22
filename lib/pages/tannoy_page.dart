@@ -39,7 +39,7 @@ class TannoyPageState extends State<TannoyPage> {
                     appBar: CustomAppBar.create(context, "Tannoy Notices"),
                     body: Center(child: CircularProgressIndicator()),
                     bottomNavigationBar:
-                        CustomNavigationBar.create(context, name, user, 3));
+                        CustomNavigationBar.create(context, name, user, 2));
               }
             })
         : CustomScaffold.create(context, name, user);
@@ -60,6 +60,6 @@ class CustomScaffold {
         )),
         //builds the navigation bar for the given page
         bottomNavigationBar:
-            CustomNavigationBar.create(context, name, user, 3));
+            CustomNavigationBar.create(context, name, user, 2));
   }
 }

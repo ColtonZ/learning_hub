@@ -41,7 +41,7 @@ class AccountPageState extends State<AccountPage> {
                     appBar: CustomAppBar.create(context, "Account Details"),
                     body: Center(child: CircularProgressIndicator()),
                     bottomNavigationBar:
-                        CustomNavigationBar.create(context, name, user, 5));
+                        CustomNavigationBar.create(context, name, user, 4));
               }
             })
         : CustomScaffold.create(context, name, user);
@@ -110,7 +110,7 @@ class CustomScaffold {
         ),
         //creates the bottom navigation bar
         bottomNavigationBar:
-            CustomNavigationBar.create(context, name, user, 5));
+            CustomNavigationBar.create(context, name, user, 4));
   }
 
   //to sign out, push the account page again, but without any user data

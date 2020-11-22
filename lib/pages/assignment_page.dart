@@ -68,7 +68,7 @@ class AssignmentPageState extends State<AssignmentPage> {
                     appBar: CustomAppBar.create(context, course),
                     body: Center(child: CircularProgressIndicator()),
                     bottomNavigationBar:
-                        CustomNavigationBar.create(context, name, user, 2));
+                        CustomNavigationBar.create(context, name, user, 1));
               }
             })
         : CustomScaffold.create(
@@ -260,6 +260,6 @@ class CustomScaffold {
           ),
         ), //builds the navigation bar for the given page
         bottomNavigationBar:
-            CustomNavigationBar.create(context, name, user, 2));
+            CustomNavigationBar.create(context, name, user, 1));
   }
 }

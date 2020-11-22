@@ -42,7 +42,7 @@ class CoursesPageState extends State<CoursesPage> {
                     appBar: CustomAppBar.create(context, "Your Courses"),
                     body: Center(child: CircularProgressIndicator()),
                     bottomNavigationBar:
-                        CustomNavigationBar.create(context, name, user, 2));
+                        CustomNavigationBar.create(context, name, user, 1));
               }
             })
         : CustomScaffold.create(context, name, user);
@@ -77,6 +77,6 @@ class CustomScaffold {
             }),
         //builds the navigation bar for the given page
         bottomNavigationBar:
-            CustomNavigationBar.create(context, name, user, 2));
+            CustomNavigationBar.create(context, name, user, 1));
   }
 }
