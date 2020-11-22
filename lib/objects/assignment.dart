@@ -134,7 +134,7 @@ class Assignment {
         //converts the creation time and update time of the assignment to the user's local time
         creationTime: DateTime.parse(assignmentJson["creationTime"]).toLocal(),
         updateTime: DateTime.parse(assignmentJson["updateTime"]).toLocal(),
-        creatorId: assignmentJson["creatorCustomUserId"],
+        creatorId: assignmentJson["creatorUserId"],
         dueDate: d,
         attachments: a,
         submissionAttachments: s,
@@ -160,7 +160,7 @@ class Assignment {
         //converts the creation time and update time of the assignment to the user's local time
         creationTime: DateTime.parse(assignmentJson["creationTime"]).toLocal(),
         updateTime: DateTime.parse(assignmentJson["updateTime"]).toLocal(),
-        creatorId: assignmentJson["creatorCustomUserId"],
+        creatorId: assignmentJson["creatorUserId"],
         dueDate: d,
         attachments: a,
         question: q,

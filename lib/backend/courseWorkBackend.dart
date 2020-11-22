@@ -8,7 +8,7 @@ import '../objects/assignment.dart';
 import '../objects/customUser.dart';
 
 Future<List<Course>> getCourses(CustomUser user) async {
-  //gets the user's auth headers - if they aren't signed in, they are signed in before trying to fetch headers
+  //gets the user's auth headers
   Map<String, String> headers = user.authHeaders;
 
   //requests the user's courses with an http request
@@ -36,7 +36,7 @@ Future<List<Course>> getCourses(CustomUser user) async {
 
 Future<List<Assignment>> getAssignments(
     String courseId, CustomUser user) async {
-  //gets the user's auth headers - if they aren't signed in, they are signed in before trying to fetch headers
+  //gets the user's auth headers
   Map<String, String> headers = user.authHeaders;
 
   //requests the user's courses with an http request
@@ -101,7 +101,7 @@ Future<bool> isCourseDone(String id, CustomUser user) async {
 
   //TODO: Make this faster so it doesn't load the entire course first!
   try {
-    //gets the user's auth headers - if they aren't signed in, they are signed in before trying to fetch headers
+    //gets the user's auth headers
     Map<String, String> headers = user.authHeaders;
 
     //requests the course assignments with an http request
@@ -122,6 +122,8 @@ Future<bool> isCourseDone(String id, CustomUser user) async {
           Uri.encodeFull(
               "https://classroom.googleapis.com//v1/courses/$id/courseWork/${assignments[index]["id"]}/studentSubmissions"),
           headers: headers);
+
+      print("Title: ${assignments[index]["title"]}");
 
       var submissionData = json.decode(submissionResponse.body);
 
