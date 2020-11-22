@@ -1,63 +1,65 @@
 import 'dart:async';
 import 'dart:convert';
 
-import '../objects/user.dart';
+import '../objects/customUser.dart';
 
 import '../backend/firestoreBackend.dart';
 
 import 'package:google_sign_in/google_sign_in.dart';
 import 'package:http/http.dart' as http;
+import 'package:firebase_auth/firebase_auth.dart';
 
 final GoogleSignIn googleSignIn = GoogleSignIn();
 
-Future<User> signIn() async {
-  //signs user in, requesting required scopes from the google account
-  GoogleSignIn _googleSignIn = GoogleSignIn(
-    scopes: [
-      "profile",
-      "email",
-      "https://www.googleapis.com/auth/classroom.announcements",
-      "https://www.googleapis.com/auth/classroom.courses",
-      "https://www.googleapis.com/auth/classroom.coursework.me",
-      "https://www.googleapis.com/auth/classroom.coursework.students",
-      "https://www.googleapis.com/auth/classroom.profile.emails",
-      "https://www.googleapis.com/auth/classroom.profile.photos",
-      "https://www.googleapis.com/auth/classroom.push-notifications",
-      "https://www.googleapis.com/auth/classroom.rosters",
-      "https://www.googleapis.com/auth/classroom.student-submissions.me.readonly",
-      "https://www.googleapis.com/auth/classroom.student-submissions.students.readonly",
-      "https://www.googleapis.com/auth/classroom.topics",
-    ],
+Future<CustomUser> signIn() async {
+  // Sign the user in with Google, requesting their data from Google Classroom
+  final GoogleSignInAccount googleUser = await GoogleSignIn(scopes: [
+    "profile",
+    "email",
+    "https://www.googleapis.com/auth/classroom.announcements",
+    "https://www.googleapis.com/auth/classroom.courses",
+    "https://www.googleapis.com/auth/classroom.coursework.me",
+    "https://www.googleapis.com/auth/classroom.coursework.students",
+    "https://www.googleapis.com/auth/classroom.profile.emails",
+    "https://www.googleapis.com/auth/classroom.profile.photos",
+    "https://www.googleapis.com/auth/classroom.push-notifications",
+    "https://www.googleapis.com/auth/classroom.rosters",
+    "https://www.googleapis.com/auth/classroom.student-submissions.me.readonly",
+    "https://www.googleapis.com/auth/classroom.student-submissions.students.readonly",
+    "https://www.googleapis.com/auth/classroom.topics",
+  ]).signIn();
+  final GoogleSignInAuthentication googleAuth = await googleUser.authentication;
+
+  // Sign the user into Firebase, passing in the tokens from the Google sign in method
+  final GoogleAuthCredential credential = GoogleAuthProvider.credential(
+    accessToken: googleAuth.accessToken,
+    idToken: googleAuth.idToken,
   );
 
-//signs the user out if they're signed in, so as to allow for them to be re-signed in
-  try {
-    _googleSignIn.signOut();
-  } catch (error) {}
+//fetches the Google User's auth headers for requests later
+  final Map<String, String> googleAuthHeaders = await googleUser.authHeaders;
 
-  final GoogleSignInAccount account =
-      await _googleSignIn.signIn(); //signs the user in
-
-//gets the account's auth headers
-  final Map<String, String> headers = await account.authHeaders;
+  //https://firebase.flutter.dev/docs/auth/social#google
+  //https://firebase.google.com/docs/auth/android/google-signin
+  //https://www.youtube.com/watch?v=cHFV6JPp-6A
+  //https://medium.com/codechai/flutter-auth-with-google-f3c3aa0d0ccc
 
   //sends an http request for the user's details, given their ID
   http.Response response = await http.get(
       Uri.encodeFull(
-          "https://classroom.googleapis.com/v1/userProfiles/${account.id}"),
-      headers: headers);
+          "https://classroom.googleapis.com/v1/userProfiles/${googleUser.id}"),
+      headers: googleAuthHeaders);
 
   var details = json.decode(response.body);
 
-//gets the account's Firestore id for later use
-  String firestoreId = await getUserId(account.email);
+  checkFirestoreUser(credential, googleUser.email);
 
-  return User.create(account, headers, details, firestoreId);
+  return CustomUser.create(googleUser, googleAuthHeaders, details, credential);
 }
 
 //full scopes list: https://developers.google.com/identity/protocols/oauth2/scopes
 
-bool isSignedIn(User user) {
+bool isSignedIn(CustomUser user) {
   //checks if a user is signed in with google
   if (user != null && user.googleAccount != null) {
     return true;

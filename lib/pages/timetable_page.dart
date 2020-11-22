@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 
 import '../objects/custom_navigation_bar.dart';
 import '../objects/custom_app_bar.dart';
-import '../objects/user.dart';
+import '../objects/customUser.dart';
 
 import '../backend/authBackend.dart';
 import '../backend/firestoreBackend.dart';
@@ -12,7 +12,7 @@ import '../pages/web_view_page.dart';
 class TimetablePage extends StatefulWidget {
   //takes in the widget's arguments
   final String name;
-  final User user;
+  final CustomUser user;
 
   TimetablePage({this.user, this.name});
 
@@ -24,7 +24,7 @@ class TimetablePage extends StatefulWidget {
 class TimetablePageState extends State<TimetablePage> {
   Widget build(BuildContext context) {
     String name = widget.name;
-    User user = widget.user;
+    CustomUser user = widget.user;
     //checks if the user is signed in, if not, they are signed in. If they are, the page is loaded
     return user == null
         ? FutureBuilder(
@@ -49,7 +49,7 @@ class TimetablePageState extends State<TimetablePage> {
 
 //details the looks of the page
 class CustomScaffold {
-  static Scaffold create(BuildContext context, String name, User user) {
+  static Scaffold create(BuildContext context, String name, CustomUser user) {
     return new Scaffold(
         //returns the custom app bar with the timetable page title
         appBar: CustomAppBar.create(context, "Your Timetable"),
@@ -58,7 +58,7 @@ class CustomScaffold {
         //Otherwise, display a web view, which will allow the user to login to Firefly and then will scrape the dashboard for the user's timetable data.
         body: FutureBuilder(
             //counts how many Firefly events the user has
-            future: fireflyEventCount(user.firestoreId),
+            future: fireflyEventCount(user.credential.idToken),
             builder: (context, snapshot) {
               if (snapshot.connectionState == ConnectionState.done) {
                 if (snapshot.data == 0) {

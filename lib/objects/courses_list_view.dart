@@ -2,13 +2,13 @@ import 'package:flutter/material.dart';
 
 import '../backend/courseWorkBackend.dart';
 import '../theming.dart';
-import 'user.dart';
+import 'customUser.dart';
 import 'course.dart';
 
 class CoursesListView {
   //creates a list view
   static ListView create(
-      BuildContext context, User user, List<Course> courses) {
+      BuildContext context, CustomUser user, List<Course> courses) {
     return ListView.builder(
       itemCount: (courses.length * 2),
       //half the items will be dividers, the other will be list tiles
@@ -27,7 +27,7 @@ class CoursesListView {
 
   //builds the list tile for the course
   static Widget _buildCustomListRow(
-      BuildContext context, User user, Course course) {
+      BuildContext context, CustomUser user, Course course) {
     //checks if list tile should have subtitle
     return ListTile(
         leading: FutureBuilder(
@@ -65,7 +65,7 @@ class CoursesListView {
 //defines that when you tap on the list tile, it will push the assignments page for that course
 //the objects being passed are put into a Map to be passed between pages
   static void _pushAssignmentsPage(
-      BuildContext context, User user, String course, String id) {
+      BuildContext context, CustomUser user, String course, String id) {
     Map args = {"user": user, "id": id, "course": course};
     Navigator.of(context).pushNamed('/assignments', arguments: args);
   }

@@ -1,13 +1,13 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_inappwebview/flutter_inappwebview.dart';
 
-import '../objects/user.dart';
+import '../objects/customUser.dart';
 
 import '../backend/firestoreBackend.dart';
 
 class WebViewPage extends StatefulWidget {
   //takes in the widget's arguments
-  final User user;
+  final CustomUser user;
   final String url;
 
   WebViewPage({this.user, this.url});
@@ -19,7 +19,7 @@ class WebViewPage extends StatefulWidget {
 
 class WebViewPageState extends State<WebViewPage> {
   Widget build(BuildContext context) {
-    User user = widget.user;
+    CustomUser user = widget.user;
     String url = widget.url;
     //checks if the user is signed in, if not, they are signed in. If they are, the page is loaded
     return CustomBody.create(context, user, url);
@@ -28,7 +28,7 @@ class WebViewPageState extends State<WebViewPage> {
 
 //details the looks of the page
 class CustomBody {
-  static Widget create(BuildContext context, User user, String url) {
+  static Widget create(BuildContext context, CustomUser user, String url) {
     InAppWebViewController _webViewController;
     return new InAppWebView(
       //load the webview according to the specific page which was passed
@@ -52,7 +52,8 @@ class CustomBody {
               source:
                   "output=\"\";var list = document.getElementsByClassName(\"ff-calendar-item\");for(var i =0; i<list.length;i++){if(list[i].textContent.includes(\"Monday\")){output=list[i].textContent[list[i].textContent.indexOf(\"WEEK \")+5];}};output;");
           //this adds the events to the Firestore database, before pushing the timetable page again
-          addFirestoreEvents(eventsText, week, user.firestoreId).then((_) {
+          addFirestoreEvents(eventsText, week, user.credential.idToken)
+              .then((_) {
             _pushTimetablePage(context, user);
           });
         }
@@ -61,7 +62,7 @@ class CustomBody {
   }
 
 //defines the method for pushing the timetable page
-  static void _pushTimetablePage(BuildContext context, User user) {
+  static void _pushTimetablePage(BuildContext context, CustomUser user) {
     Map args = {"user": user};
     Navigator.of(context).pushReplacementNamed('/timetable', arguments: args);
   }

@@ -1,4 +1,5 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_core/firebase_core.dart';
 
 import 'dart:core';
@@ -23,31 +24,26 @@ Future<int> fireflyEventCount(String id) async {
   return events.length;
 }
 
-//gets the id of the Firestore doc within the users collection where the email address matches the given email
-Future<String> getUserId(String email) async {
+//given a user id, this checks that the user has a Firestore collection. If not, one is created for them.
+Future<String> checkFirestoreUser(
+    GoogleAuthCredential credential, String email) async {
   //initialzes an instance of the Firestore database
   await Firebase.initializeApp();
   final databaseReference = FirebaseFirestore.instance;
 
-  String id = "";
+//gets the user's Google auth token
+  String id = credential.idToken;
 
-//tries to get a user whose email address is equal to that of the signed-in user.
-  QuerySnapshot usersSnapshot = await databaseReference
-      .collection("users")
-      .where("email", isEqualTo: email)
-      .get();
+//tries to get a user whose GoogleAuthId is equal to that of the signed-in user.
+  DocumentSnapshot usersSnapshot =
+      await databaseReference.collection("users").doc(id).get();
 
   //https://atul-sharma-94062.medium.com/how-to-use-cloud-firestore-with-flutter-e6f9e8821b27
-  //if no user with the signed-in email is found, a new Firestore document is created with the user's email.
-  //the ID of that document is then returned, so that it can be passed into the user object and used later on for dynamic querying.
-  if (usersSnapshot.docs.isEmpty) {
+
+  //if no user with the signed-in account is found, a new Firestore document is created with the user's email & id.
+  if (!usersSnapshot.exists) {
     //adds the user to the database
-    DocumentReference newUser =
-        await databaseReference.collection("users").add({"email": email});
-    id = newUser.id;
-  } else {
-    //if the user exists, then there will only be one matching doc with the correct email, so the id of that doc is returned.
-    id = usersSnapshot.docs.first.id;
+    await databaseReference.collection("users").doc(id).set({"email": email});
   }
 
   return id;

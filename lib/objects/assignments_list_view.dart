@@ -2,11 +2,11 @@ import 'package:flutter/material.dart';
 
 import '../theming.dart';
 import 'assignment.dart';
-import 'user.dart';
+import 'customUser.dart';
 
 class AssignmentsListView {
   //creates a list view
-  static ListView create(BuildContext context, User user, String course,
+  static ListView create(BuildContext context, CustomUser user, String course,
       String id, List<Assignment> assignments) {
     return ListView.builder(
       itemCount: (assignments.length * 2),
@@ -28,7 +28,7 @@ class AssignmentsListView {
 //builds the list tile for the assignment
   static Widget _buildCustomListRow(
     BuildContext context,
-    User user,
+    CustomUser user,
     String course,
     String id,
     Assignment assignment,
@@ -85,7 +85,7 @@ class AssignmentsListView {
 //the objects being passed are put into a Map to be passed between pages
   static void _pushAssignmentPage(
     BuildContext context,
-    User user,
+    CustomUser user,
     String course,
     Assignment assignment,
   ) {

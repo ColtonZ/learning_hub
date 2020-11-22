@@ -5,7 +5,7 @@ import '../objects/custom_app_bar.dart';
 import '../objects/custom_navigation_bar.dart';
 import '../objects/course.dart';
 import '../objects/courses_list_view.dart';
-import '../objects/user.dart';
+import '../objects/customUser.dart';
 
 import '../backend/courseWorkBackend.dart';
 import '../backend/authBackend.dart';
@@ -14,7 +14,7 @@ class CoursesPage extends StatefulWidget {
   //takes in the widget's arguments
   final GoogleSignInAccount account;
   final String name;
-  final User user;
+  final CustomUser user;
 
   CoursesPage({this.account, this.user, this.name});
 
@@ -26,7 +26,7 @@ class CoursesPage extends StatefulWidget {
 class CoursesPageState extends State<CoursesPage> {
   Widget build(BuildContext context) {
     String name = widget.name;
-    User user = widget.user;
+    CustomUser user = widget.user;
     //checks if the user is signed in, if not, they are signed in. If they are, the page is loaded
     return user == null
         ? FutureBuilder(
@@ -51,7 +51,7 @@ class CoursesPageState extends State<CoursesPage> {
 
 //details the looks of the page
 class CustomScaffold {
-  static Scaffold create(BuildContext context, String name, User user) {
+  static Scaffold create(BuildContext context, String name, CustomUser user) {
     return new Scaffold(
         //returns the custom app bar with the courses page title
         appBar: CustomAppBar.create(context, "Your Courses"),

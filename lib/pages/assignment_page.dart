@@ -11,7 +11,7 @@ import '../objects/attachments_list_view.dart';
 import '../objects/student_submissions.dart';
 import '../objects/custom_app_bar.dart';
 import '../objects/custom_navigation_bar.dart';
-import '../objects/user.dart';
+import '../objects/customUser.dart';
 
 import '../backend/authBackend.dart';
 import '../backend/userAccountsBackend.dart';
@@ -22,7 +22,7 @@ class AssignmentPage extends StatefulWidget {
   final String name;
   final String course;
   final Assignment assignment;
-  final User user;
+  final CustomUser user;
 
   AssignmentPage(
       {this.account, this.user, this.name, this.course, this.assignment});
@@ -35,7 +35,7 @@ class AssignmentPage extends StatefulWidget {
 class AssignmentPageState extends State<AssignmentPage> {
   Widget build(BuildContext context) {
     String name = widget.name;
-    User user = widget.user;
+    CustomUser user = widget.user;
     String course = widget.course;
     Assignment assignment = widget.assignment;
     List<String> months = [
@@ -81,7 +81,7 @@ class CustomScaffold {
   static Scaffold create(
     BuildContext context,
     String name,
-    User user,
+    CustomUser user,
     String course,
     Assignment assignment,
     List<String> months,
@@ -142,11 +142,11 @@ class CustomScaffold {
                   //tries to get the name of the user who created the task, if it cannot, then it just returns the task's creation date
                   Expanded(
                     child: FutureBuilder(
-                      future: getGoogleUser(assignment.creatorId, user),
+                      future: getGoogleCustomUser(assignment.creatorId, user),
                       builder: (context, snapshot) {
                         if (snapshot.connectionState == ConnectionState.done) {
                           try {
-                            User creator = snapshot.data;
+                            CustomUser creator = snapshot.data;
                             //checks if the task was edited after creation
                             return Text(
                               assignment.creationTime

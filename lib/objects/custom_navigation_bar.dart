@@ -1,12 +1,13 @@
 import 'package:flutter/material.dart';
 
-import 'user.dart';
+import 'customUser.dart';
 import '../theming.dart';
 
 class CustomNavigationBar {
   //defines a series of methods, each with the route of the page to push and any additional logic, as well as arguments.
   //each page will ensure that, if coming from the assignments or assignment page to pop back far enough, as otherwise you may end up with too many pages on top of each other
-  static void _pushAccountPage(BuildContext context, String name, User user) {
+  static void _pushAccountPage(
+      BuildContext context, String name, CustomUser user) {
     Map args = {"user": user};
     if (name == "/assignments") {
       Navigator.of(context).pop();
@@ -18,7 +19,8 @@ class CustomNavigationBar {
     Navigator.of(context).pushReplacementNamed('/account', arguments: args);
   }
 
-  static void _pushCoursesPage(BuildContext context, String name, User user) {
+  static void _pushCoursesPage(
+      BuildContext context, String name, CustomUser user) {
     Map args = {"user": user};
     if (name == "/assignments") {
       Navigator.of(context).pop();
@@ -30,7 +32,8 @@ class CustomNavigationBar {
     Navigator.of(context).pushReplacementNamed('/courses', arguments: args);
   }
 
-  static void _pushHomePage(BuildContext context, String name, User user) {
+  static void _pushHomePage(
+      BuildContext context, String name, CustomUser user) {
     Map args = {"user": user};
     if (name == "/assignments") {
       Navigator.of(context).pop();
@@ -42,7 +45,8 @@ class CustomNavigationBar {
     Navigator.of(context).pushReplacementNamed('/', arguments: args);
   }
 
-  static void _pushSettingsPage(BuildContext context, String name, User user) {
+  static void _pushSettingsPage(
+      BuildContext context, String name, CustomUser user) {
     Map args = {"user": user};
     if (name == "/assignments") {
       Navigator.of(context).pop();
@@ -54,7 +58,8 @@ class CustomNavigationBar {
     Navigator.of(context).pushReplacementNamed('/settings', arguments: args);
   }
 
-  static void _pushTannoyPage(BuildContext context, String name, User user) {
+  static void _pushTannoyPage(
+      BuildContext context, String name, CustomUser user) {
     Map args = {"user": user};
     if (name == "/assignments") {
       Navigator.of(context).pop();
@@ -66,7 +71,8 @@ class CustomNavigationBar {
     Navigator.of(context).pushReplacementNamed('/tannoy', arguments: args);
   }
 
-  static void _pushTimetablePage(BuildContext context, String name, User user) {
+  static void _pushTimetablePage(
+      BuildContext context, String name, CustomUser user) {
     Map args = {"user": user};
     if (name == "/assignments") {
       Navigator.of(context).pop();
@@ -81,7 +87,7 @@ class CustomNavigationBar {
   //creates a new navigation bar with the given tabs to provide consistency
   //checks what the current page is, and gives it a name accordingly
   static BottomNavigationBar create(
-      BuildContext context, String name, User user, int index) {
+      BuildContext context, String name, CustomUser user, int index) {
     return new BottomNavigationBar(
       selectedLabelStyle: navigationBarStyle,
       unselectedLabelStyle: navigationBarStyle,

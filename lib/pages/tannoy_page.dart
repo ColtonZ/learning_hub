@@ -4,14 +4,14 @@ import '../theming.dart';
 
 import '../objects/custom_navigation_bar.dart';
 import '../objects/custom_app_bar.dart';
-import '../objects/user.dart';
+import '../objects/customUser.dart';
 
 import '../backend/authBackend.dart';
 
 class TannoyPage extends StatefulWidget {
   //takes in the widget's arguments
   final String name;
-  final User user;
+  final CustomUser user;
 
   TannoyPage({this.user, this.name});
 
@@ -23,7 +23,7 @@ class TannoyPage extends StatefulWidget {
 class TannoyPageState extends State<TannoyPage> {
   Widget build(BuildContext context) {
     String name = widget.name;
-    User user = widget.user;
+    CustomUser user = widget.user;
     //checks if the user is signed in, if not, they are signed in. If they are, the page is loaded
     return user == null
         ? FutureBuilder(
@@ -48,7 +48,7 @@ class TannoyPageState extends State<TannoyPage> {
 
 //details the looks of the page
 class CustomScaffold {
-  static Scaffold create(BuildContext context, String name, User user) {
+  static Scaffold create(BuildContext context, String name, CustomUser user) {
     return new Scaffold(
         //returns the custom app bar with the tannoy page title
         appBar: CustomAppBar.create(context, "Tannoy Notices"),

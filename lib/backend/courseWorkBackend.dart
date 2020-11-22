@@ -5,9 +5,9 @@ import 'package:http/http.dart' as http;
 
 import '../objects/course.dart';
 import '../objects/assignment.dart';
-import '../objects/user.dart';
+import '../objects/customUser.dart';
 
-Future<List<Course>> getCourses(User user) async {
+Future<List<Course>> getCourses(CustomUser user) async {
   //gets the user's auth headers - if they aren't signed in, they are signed in before trying to fetch headers
   Map<String, String> headers = user.authHeaders;
 
@@ -34,7 +34,8 @@ Future<List<Course>> getCourses(User user) async {
   return courseList;
 }
 
-Future<List<Assignment>> getAssignments(String courseId, User user) async {
+Future<List<Assignment>> getAssignments(
+    String courseId, CustomUser user) async {
   //gets the user's auth headers - if they aren't signed in, they are signed in before trying to fetch headers
   Map<String, String> headers = user.authHeaders;
 
@@ -95,7 +96,7 @@ Future<Assignment> sendAssignmentRequest(
   return assignment;
 }
 
-Future<bool> isCourseDone(String id, User user) async {
+Future<bool> isCourseDone(String id, CustomUser user) async {
   bool toDo = false;
 
   //TODO: Make this faster so it doesn't load the entire course first!

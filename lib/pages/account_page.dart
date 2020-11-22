@@ -6,13 +6,13 @@ import '../backend/authBackend.dart';
 
 import '../objects/custom_app_bar.dart';
 import '../objects/custom_navigation_bar.dart';
-import '../objects/user.dart';
+import '../objects/customUser.dart';
 
 class AccountPage extends StatefulWidget {
   //takes in the widget's arguments
   final GoogleSignInAccount account;
   final String name;
-  final User user;
+  final CustomUser user;
 
   AccountPage({this.account, this.user, this.name});
 
@@ -23,7 +23,7 @@ class AccountPage extends StatefulWidget {
 class AccountPageState extends State<AccountPage> {
   Widget build(BuildContext context) {
     String name = widget.name;
-    User user = widget.user;
+    CustomUser user = widget.user;
 
     //syncData();
     //checks if the user is signed in, if not, they are signed in, otherwise the page is loaded
@@ -50,7 +50,7 @@ class AccountPageState extends State<AccountPage> {
 
 //details the looks of the page
 class CustomScaffold {
-  static Scaffold create(BuildContext context, String name, User user) {
+  static Scaffold create(BuildContext context, String name, CustomUser user) {
     return new Scaffold(
         //returns the custom app bar with the account page title
         appBar: CustomAppBar.create(context, "Account Details"),
@@ -114,7 +114,7 @@ class CustomScaffold {
   }
 
   //to sign out, push the account page again, but without any user data
-  static void _pushSignOut(BuildContext context, User user) {
+  static void _pushSignOut(BuildContext context, CustomUser user) {
     Map args = {"user": null};
     Navigator.of(context).pushReplacementNamed('/account', arguments: args);
   }
