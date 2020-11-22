@@ -142,19 +142,19 @@ class CustomScaffold {
                   //tries to get the name of the user who created the task, if it cannot, then it just returns the task's creation date
                   Expanded(
                     child: FutureBuilder(
-                      future: getGoogleCustomUser(assignment.creatorId, user),
+                      future: getGoogleUserName(assignment.creatorId, user),
                       builder: (context, snapshot) {
                         if (snapshot.connectionState == ConnectionState.done) {
                           try {
-                            CustomUser creator = snapshot.data;
+                            String name = snapshot.data;
                             //checks if the task was edited after creation
                             return Text(
                               assignment.creationTime
                                       .add(Duration(minutes: 5))
                                       .isBefore(assignment.updateTime)
                                   //returns the task's creator and its due date
-                                  ? "${creator.name} • ${assignment.creationTime.day.toString()} ${months[assignment.creationTime.month - 1]} (Edited ${assignment.updateTime.day.toString()} ${months[assignment.updateTime.month - 1]})"
-                                  : "${creator.name} • ${assignment.creationTime.day.toString()} ${months[assignment.creationTime.month - 1]}",
+                                  ? "$name • ${assignment.creationTime.day.toString()} ${months[assignment.creationTime.month - 1]} (Edited ${assignment.updateTime.day.toString()} ${months[assignment.updateTime.month - 1]})"
+                                  : "$name • ${assignment.creationTime.day.toString()} ${months[assignment.creationTime.month - 1]}",
                               style: header3Style,
                             );
                           } catch (error) {

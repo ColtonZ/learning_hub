@@ -55,7 +55,7 @@ class CustomScaffold {
         //builds the body
         body: Center(
             child: Text(
-          user.name,
+          user.firebaseUser.displayName,
           style: titleStyle,
         )),
         //builds the navigation bar for the given page

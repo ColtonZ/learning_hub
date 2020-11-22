@@ -5,7 +5,8 @@ import 'package:http/http.dart' as http;
 
 import '../objects/customUser.dart';
 
-Future<CustomUser> getGoogleCustomUser(userId, CustomUser user) async {
+//TODO: Fix this
+Future<String> getGoogleUserName(String userId, CustomUser user) async {
   //sends an http request for the user, given their ID
 
   Map<String, String> headers = user.authHeaders;
@@ -18,5 +19,5 @@ Future<CustomUser> getGoogleCustomUser(userId, CustomUser user) async {
   var data = json.decode(response.body);
   //converts the json into a user and returns the user
 
-  return CustomUser.create(null, null, data, null);
+  return data["name"]["fullName"];
 }

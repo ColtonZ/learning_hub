@@ -69,7 +69,7 @@ class CustomScaffold {
               //creates a widget with the account's name
               Text(
                 //gets Google Account's display name
-                "${user.name}", style: subtitleStyle,
+                "${user.firebaseUser.displayName}", style: subtitleStyle,
               ),
               SizedBox(
                 height: 10,
@@ -79,7 +79,7 @@ class CustomScaffold {
                 borderRadius: BorderRadius.circular(8.0),
                 //returns the account's profile picture in the centre
                 child: Image.network(
-                  user.googlePhotoUrl,
+                  user.firebaseUser.photoURL,
                 ),
               ),
               SizedBox(
@@ -116,6 +116,7 @@ class CustomScaffold {
   //to sign out, push the account page again, but without any user data
   static void _pushSignOut(BuildContext context, CustomUser user) {
     googleSignIn.signOut();
+
     Map args = {"user": null};
     Navigator.of(context).pushReplacementNamed('/account', arguments: args);
   }

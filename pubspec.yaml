@@ -31,7 +31,6 @@ dependencies:
   firebase_auth:
   google_sign_in:
 
-  rxdart:
   http:
   flutter_inappwebview:
 

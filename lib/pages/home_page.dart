@@ -55,7 +55,8 @@ class CustomScaffold {
         //returns the custom app bar with the home page title
         appBar: CustomAppBar.create(context, "Home"),
         //builds the body
-        body: Center(child: Text(user.name, style: titleStyle)),
+        body: Center(
+            child: Text(user.firebaseUser.displayName, style: titleStyle)),
         //builds the navigation bar for the given page
         bottomNavigationBar:
             CustomNavigationBar.create(context, name, user, 0));

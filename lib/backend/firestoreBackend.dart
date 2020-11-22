@@ -1,5 +1,4 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_core/firebase_core.dart';
 
 import 'dart:core';
@@ -25,14 +24,10 @@ Future<int> fireflyEventCount(String id) async {
 }
 
 //given a user id, this checks that the user has a Firestore collection. If not, one is created for them.
-Future<String> checkFirestoreUser(
-    GoogleAuthCredential credential, String email) async {
+Future<String> checkFirestoreUser(String id, String email) async {
   //initialzes an instance of the Firestore database
   await Firebase.initializeApp();
   final databaseReference = FirebaseFirestore.instance;
-
-//gets the user's Google auth token
-  String id = credential.idToken;
 
 //tries to get a user whose GoogleAuthId is equal to that of the signed-in user.
   DocumentSnapshot usersSnapshot =
