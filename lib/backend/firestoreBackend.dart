@@ -3,24 +3,33 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'dart:core';
 
 import 'package:firebase_auth/firebase_auth.dart';
+import 'package:learning_hub/objects/event.dart';
 
 //initialzes an instance of the Firestore database
 final databaseReference = FirebaseFirestore.instance;
 
 //counts the number of events in the database added automatically from Firefly
-Future<int> fireflyEventCount(User firebaseUser) async {
+Future<List<Event>> getEventsList(User firebaseUser) async {
   //https://stackoverflow.com/questions/54456665/how-to-count-the-number-of-documents-firestore-on-flutter
   //gets all events from the database which were added automatically from the pupil dashboard
   QuerySnapshot eventsSnapshot = await databaseReference
       .collection("users")
       .doc(firebaseUser.uid)
       .collection("events")
-      .where("platform", isEqualTo: "Firefly")
       .get();
 
 //returns the number of events that were added automatically
   List<DocumentSnapshot> events = eventsSnapshot.docs;
-  return events.length;
+
+  List<Event> eventsList = new List<Event>();
+
+  events.forEach((event) {
+    Event current = new Event.fromFirestore(event);
+    current.output();
+    eventsList.add(current);
+  });
+
+  return eventsList;
 }
 
 //given a user id, this checks that the user has a Firestore collection. If not, one is created for them.

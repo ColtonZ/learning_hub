@@ -58,10 +58,10 @@ class CustomScaffold {
         //Otherwise, display a web view, which will allow the user to login to Firefly and then will scrape the dashboard for the user's timetable data.
         body: FutureBuilder(
             //counts how many Firefly events the user has
-            future: fireflyEventCount(user.firebaseUser),
+            future: getEventsList(user.firebaseUser),
             builder: (context, snapshot) {
               if (snapshot.connectionState == ConnectionState.done) {
-                if (snapshot.data == 0) {
+                if (snapshot.data == null) {
                   //if they have no events, return a web view body so the user can login to Firefly
                   //https://stackoverflow.com/questions/54691767/navigation-inside-nested-future
                   return WebViewPage(
