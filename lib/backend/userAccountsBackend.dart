@@ -5,7 +5,6 @@ import 'package:http/http.dart' as http;
 
 import '../objects/customUser.dart';
 
-//TODO: Fix this
 Future<String> getGoogleUserName(String userId, CustomUser user) async {
   //sends an http request for the user, given their ID
 

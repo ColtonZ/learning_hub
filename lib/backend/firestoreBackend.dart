@@ -1,19 +1,19 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:firebase_core/firebase_core.dart';
 
 import 'dart:core';
 
-//counts the number of events in the database added automatically from Firefly
-Future<int> fireflyEventCount(String id) async {
-  //initialzes an instance of the Firestore database
-  await Firebase.initializeApp();
-  final databaseReference = FirebaseFirestore.instance;
+import 'package:firebase_auth/firebase_auth.dart';
 
+//initialzes an instance of the Firestore database
+final databaseReference = FirebaseFirestore.instance;
+
+//counts the number of events in the database added automatically from Firefly
+Future<int> fireflyEventCount(User firebaseUser) async {
   //https://stackoverflow.com/questions/54456665/how-to-count-the-number-of-documents-firestore-on-flutter
   //gets all events from the database which were added automatically from the pupil dashboard
   QuerySnapshot eventsSnapshot = await databaseReference
       .collection("users")
-      .doc(id)
+      .doc(firebaseUser.uid)
       .collection("events")
       .where("platform", isEqualTo: "Firefly")
       .get();
@@ -24,34 +24,30 @@ Future<int> fireflyEventCount(String id) async {
 }
 
 //given a user id, this checks that the user has a Firestore collection. If not, one is created for them.
-Future<String> checkFirestoreUser(String id, String email) async {
-  //initialzes an instance of the Firestore database
-  await Firebase.initializeApp();
-  final databaseReference = FirebaseFirestore.instance;
-
+void checkFirestoreUser(User firebaseUser) async {
 //tries to get a user whose GoogleAuthId is equal to that of the signed-in user.
   DocumentSnapshot usersSnapshot =
-      await databaseReference.collection("users").doc(id).get();
+      await databaseReference.collection("users").doc(firebaseUser.uid).get();
 
+//https://firebase.google.com/docs/firestore/security/rules-query
+//https://firebase.google.com/docs/firestore/query-data/queries
+  //https://stackoverflow.com/questions/47876754/query-firestore-database-for-document-id
   //https://atul-sharma-94062.medium.com/how-to-use-cloud-firestore-with-flutter-e6f9e8821b27
 
   //if no user with the signed-in account is found, a new Firestore document is created with the user's email & id.
   if (!usersSnapshot.exists) {
     //adds the user to the database
-    await databaseReference.collection("users").doc(id).set({"email": email});
+    await databaseReference
+        .collection("users")
+        .doc(firebaseUser.uid)
+        .set({"email": firebaseUser.email});
   }
-
-  return id;
 }
 
 //adds Firefly events to a user's Firestore database, given the user's ID, and a correctly formatted string of the events.
 //the current week (A or B) is also passed, as the order of the events string is dependent on the current week.
 Future<String> addFirestoreEvents(
-    String eventsText, String week, String id) async {
-  //initializes an instance of the Firestore database
-  await Firebase.initializeApp();
-  final databaseReference = FirebaseFirestore.instance;
-
+    User firebaseUser, String eventsText, String week) async {
 /*
 First, existing events (added from Firefly) must be deleted, so as to stop duplicates.
 Next, the new events are added, with any repetitions accounted for, and with only one event document for each class (provided they have the same teacher and room as well)
@@ -61,7 +57,7 @@ This is to try and limit the amount of duplicate data, as well as to make queryi
 //fetch all existing Firestore events added from Firefly
   QuerySnapshot fireflyEvents = await databaseReference
       .collection("users")
-      .doc(id)
+      .doc(firebaseUser.uid)
       .collection("events")
       .where("platform", isEqualTo: "Firefly")
       .get();
@@ -73,7 +69,7 @@ This is to try and limit the amount of duplicate data, as well as to make queryi
   fireflyEventsList.forEach((event) {
     databaseReference
         .collection("users")
-        .doc(id)
+        .doc(firebaseUser.uid)
         .collection("events")
         .doc(event.id)
         .delete();
@@ -172,7 +168,7 @@ This is to try and limit the amount of duplicate data, as well as to make queryi
     //this tries to get all events in the user's events collection where the class, teacher, set, location are the same (and the event was added by Firefly)
     QuerySnapshot matchingEvent = await databaseReference
         .collection("users")
-        .doc(id)
+        .doc(firebaseUser.uid)
         .collection("events")
         .where("name", isEqualTo: eventDetails[0])
         .where("platform", isEqualTo: "Firefly")
@@ -198,7 +194,7 @@ This is to try and limit the amount of duplicate data, as well as to make queryi
       //set the document for the event in the database to the event with the afformentioned ID
       var docToUpdate = databaseReference
           .collection("users")
-          .doc(id)
+          .doc(firebaseUser.uid)
           .collection("events")
           .doc(docId);
 
@@ -253,7 +249,7 @@ This is to try and limit the amount of duplicate data, as well as to make queryi
       //add a new event document to the events collection for the user, with the event details. (Defined above)
       await databaseReference
           .collection("users")
-          .doc(id)
+          .doc(firebaseUser.uid)
           .collection("events")
           .add({
         "classSet": classSet,

@@ -8,13 +8,13 @@ import 'package:google_sign_in/google_sign_in.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_core/firebase_core.dart';
 
+final authReference = FirebaseAuth.instance;
 final googleSignIn = GoogleSignIn();
 
 //checks if a user is already signed in. If they are, then the current user is signed out before the next one is signed in.
 Future<CustomUser> signIn(bool toSignOut) async {
   //initialzes an instance of the Firestore database and gets the signin state
   await Firebase.initializeApp();
-  final _authReference = FirebaseAuth.instance;
 
   if (toSignOut) {
     await googleSignIn.signOut();
@@ -48,9 +48,11 @@ Future<CustomUser> signIn(bool toSignOut) async {
       accessToken: googleAuthentication.accessToken,
       idToken: googleAuthentication.idToken);
 
+  print("idToken: ${googleAuthentication.idToken}");
+
 //gets the user's Firebase credentials and then gets that Firebase user
   final UserCredential firebaseCredentials =
-      await _authReference.signInWithCredential(authCredential);
+      await authReference.signInWithCredential(authCredential);
 
   final User firebaseUser = firebaseCredentials.user;
 
@@ -60,7 +62,9 @@ Future<CustomUser> signIn(bool toSignOut) async {
   //https://medium.com/codechai/flutter-auth-with-google-f3c3aa0d0ccc
   //https://blog.codemagic.io/firebase-authentication-google-sign-in-using-flutter/
 
-  checkFirestoreUser(firebaseUser.uid, googleUser.email);
+  checkFirestoreUser(firebaseUser);
+
+  print("uid: ${firebaseUser.uid}");
 
   return CustomUser.create(firebaseUser, googleAuthHeaders);
 }

@@ -52,7 +52,11 @@ class CustomBody {
               source:
                   "output=\"\";var list = document.getElementsByClassName(\"ff-calendar-item\");for(var i =0; i<list.length;i++){if(list[i].textContent.includes(\"Monday\")){output=list[i].textContent[list[i].textContent.indexOf(\"WEEK \")+5];}};output;");
           //this adds the events to the Firestore database, before pushing the timetable page again
-          addFirestoreEvents(eventsText, week, user.firebaseUser.uid).then((_) {
+          addFirestoreEvents(
+            user.firebaseUser,
+            eventsText,
+            week,
+          ).then((_) {
             _pushTimetablePage(context, user);
           });
         }

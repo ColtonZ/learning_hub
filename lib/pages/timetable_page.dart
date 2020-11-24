@@ -58,7 +58,7 @@ class CustomScaffold {
         //Otherwise, display a web view, which will allow the user to login to Firefly and then will scrape the dashboard for the user's timetable data.
         body: FutureBuilder(
             //counts how many Firefly events the user has
-            future: fireflyEventCount(user.firebaseUser.uid),
+            future: fireflyEventCount(user.firebaseUser),
             builder: (context, snapshot) {
               if (snapshot.connectionState == ConnectionState.done) {
                 if (snapshot.data == 0) {
