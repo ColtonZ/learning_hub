@@ -26,8 +26,10 @@ Future<int> fireflyEventCount(User firebaseUser) async {
 //given a user id, this checks that the user has a Firestore collection. If not, one is created for them.
 void checkFirestoreUser(User firebaseUser) async {
 //tries to get a user whose GoogleAuthId is equal to that of the signed-in user.
-  DocumentSnapshot usersSnapshot =
-      await databaseReference.collection("users").doc(firebaseUser.uid).get();
+  QuerySnapshot usersSnapshot = await databaseReference
+      .collection("users")
+      .where(FieldPath.documentId, isEqualTo: firebaseUser.uid)
+      .get();
 
 //https://firebase.google.com/docs/firestore/security/rules-query
 //https://firebase.google.com/docs/firestore/query-data/queries
@@ -35,7 +37,7 @@ void checkFirestoreUser(User firebaseUser) async {
   //https://atul-sharma-94062.medium.com/how-to-use-cloud-firestore-with-flutter-e6f9e8821b27
 
   //if no user with the signed-in account is found, a new Firestore document is created with the user's email & id.
-  if (!usersSnapshot.exists) {
+  if (usersSnapshot.size == 0) {
     //adds the user to the database
     await databaseReference
         .collection("users")

@@ -48,8 +48,6 @@ Future<CustomUser> signIn(bool toSignOut) async {
       accessToken: googleAuthentication.accessToken,
       idToken: googleAuthentication.idToken);
 
-  print("idToken: ${googleAuthentication.idToken}");
-
 //gets the user's Firebase credentials and then gets that Firebase user
   final UserCredential firebaseCredentials =
       await authReference.signInWithCredential(authCredential);
@@ -63,8 +61,6 @@ Future<CustomUser> signIn(bool toSignOut) async {
   //https://blog.codemagic.io/firebase-authentication-google-sign-in-using-flutter/
 
   checkFirestoreUser(firebaseUser);
-
-  print("uid: ${firebaseUser.uid}");
 
   return CustomUser.create(firebaseUser, googleAuthHeaders);
 }
