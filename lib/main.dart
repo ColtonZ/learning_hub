@@ -5,7 +5,6 @@ import 'pages/settings_page.dart';
 import 'pages/tannoy_page.dart';
 import 'pages/timetable_page.dart';
 import 'pages/courses_page.dart';
-import 'pages/home_page.dart';
 import 'pages/assignments_page.dart';
 import 'pages/assignment_page.dart';
 
@@ -23,13 +22,13 @@ class MyApp extends StatelessWidget {
         //if the route is to the assignments page or a specific assignment page, pass the specific assignment details, otherwise just pass the account and the route name
         //if the route is / and there is no account signed in, pass null for the account
         switch (route.name) {
-          //pushes the home page
+          //pushes the assignment page
           case "/":
             return MaterialPageRoute(builder: (_) {
               try {
-                return HomePage(account: arguments["user"]);
+                return TimetablePage(user: arguments["user"]);
               } catch (Exception) {
-                return HomePage(account: null);
+                return TimetablePage(user: null);
               }
             });
           //pushes the timetable page, with arguments of the user's account and the page's name
@@ -76,9 +75,10 @@ class MyApp extends StatelessWidget {
                     course: arguments["course"],
                     assignment: arguments["assignment"]));
           default:
-            //if no route is passed, push the home page, with arguments of the user's account and the page's name
+            //if no route is passed, push the timetable page, with arguments of the user's account and the page's name
             return MaterialPageRoute(
-                builder: (_) => HomePage(user: arguments["user"], name: name));
+                builder: (_) =>
+                    TimetablePage(user: arguments["user"], name: name));
         }
       },
       initialRoute: '/',

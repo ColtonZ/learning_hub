@@ -20,22 +20,28 @@ Future<CustomUser> signIn(bool toSignOut) async {
     await googleSignIn.signOut();
   }
 
-  // Sign the user in with Google, requesting their data from Google Classroom
-  final GoogleSignInAccount googleUser = await GoogleSignIn(scopes: [
-    "profile",
-    "email",
-    "https://www.googleapis.com/auth/classroom.announcements",
-    "https://www.googleapis.com/auth/classroom.courses",
-    "https://www.googleapis.com/auth/classroom.coursework.me",
-    "https://www.googleapis.com/auth/classroom.coursework.students",
-    "https://www.googleapis.com/auth/classroom.profile.emails",
-    "https://www.googleapis.com/auth/classroom.profile.photos",
-    "https://www.googleapis.com/auth/classroom.push-notifications",
-    "https://www.googleapis.com/auth/classroom.rosters",
-    "https://www.googleapis.com/auth/classroom.student-submissions.me.readonly",
-    "https://www.googleapis.com/auth/classroom.student-submissions.students.readonly",
-    "https://www.googleapis.com/auth/classroom.topics",
-  ]).signIn();
+  //Sign the user in with Google, requesting their data from Google Classroom
+  //If the user taps off, an error would be thrown, and the sign in tries again.
+  GoogleSignInAccount googleUser;
+  while (googleUser == null) {
+    try {
+      googleUser = await GoogleSignIn(scopes: [
+        "profile",
+        "email",
+        "https://www.googleapis.com/auth/classroom.announcements",
+        "https://www.googleapis.com/auth/classroom.courses",
+        "https://www.googleapis.com/auth/classroom.coursework.me",
+        "https://www.googleapis.com/auth/classroom.coursework.students",
+        "https://www.googleapis.com/auth/classroom.profile.emails",
+        "https://www.googleapis.com/auth/classroom.profile.photos",
+        "https://www.googleapis.com/auth/classroom.push-notifications",
+        "https://www.googleapis.com/auth/classroom.rosters",
+        "https://www.googleapis.com/auth/classroom.student-submissions.me.readonly",
+        "https://www.googleapis.com/auth/classroom.student-submissions.students.readonly",
+        "https://www.googleapis.com/auth/classroom.topics",
+      ]).signIn();
+    } catch (e) {}
+  }
 
 //fetches the Google User's auth headers for requests later
   final GoogleSignInAuthentication googleAuthentication =
