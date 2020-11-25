@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import '../objects/custom_navigation_bar.dart';
 import '../objects/custom_app_bar.dart';
 import '../objects/customUser.dart';
+import '../objects/events_list_view.dart';
 
 import '../backend/authBackend.dart';
 import '../backend/firestoreBackend.dart';
@@ -71,9 +72,7 @@ class CustomScaffold {
                   );
                 } else {
                   //otherwise build the page
-                  return Center(
-                    child: Text("You have ${snapshot.data} events."),
-                  );
+                  return EventsListView.create(context, user, snapshot.data);
                 }
               } else {
                 //whilst getting courses, return a loading indicator
