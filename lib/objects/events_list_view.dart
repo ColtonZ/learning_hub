@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 
-import '../backend/courseWorkBackend.dart';
 import '../theming.dart';
 import 'customUser.dart';
 import 'event.dart';
@@ -30,7 +29,7 @@ class EventsListView {
       BuildContext context, CustomUser user, Event event) {
     //checks if list tile should have subtitle
     return ListTile(
-        leading: Text("Start: 0000\nEnd: 0000"),
+        leading: Text("${event.times[0][1]}\n${event.times[0][2]}"),
         title: Text(
           //returns the tile header as the subject
           event.name, style: subtitleStyle,

@@ -12,24 +12,29 @@ final databaseReference = FirebaseFirestore.instance;
 Future<List<Event>> getEventsList(User firebaseUser) async {
   //https://stackoverflow.com/questions/54456665/how-to-count-the-number-of-documents-firestore-on-flutter
   //gets all events from the database which were added automatically from the pupil dashboard
-  QuerySnapshot eventsSnapshot = await databaseReference
-      .collection("users")
-      .doc(firebaseUser.uid)
-      .collection("events")
-      .get();
+
+  try {
+    QuerySnapshot eventsSnapshot = await databaseReference
+        .collection("users")
+        .doc(firebaseUser.uid)
+        .collection("events")
+        .get();
 
 //returns the number of events that were added automatically
-  List<DocumentSnapshot> events = eventsSnapshot.docs;
+    List<DocumentSnapshot> events = eventsSnapshot.docs;
 
-  List<Event> eventsList = new List<Event>();
+    List<Event> eventsList = new List<Event>();
 
-  events.forEach((event) {
-    Event current = new Event.fromFirestore(event);
-    current.output();
-    eventsList.add(current);
-  });
+    events.forEach((event) {
+      Event current = new Event.fromFirestore(event);
+      current.output();
+      eventsList.add(current);
+    });
 
-  return eventsList;
+    return eventsList;
+  } catch (e) {
+    return null;
+  }
 }
 
 //given a user id, this checks that the user has a Firestore collection. If not, one is created for them.
@@ -95,6 +100,16 @@ This is to try and limit the amount of duplicate data, as well as to make queryi
       : week == "A"
           ? ["B", "A"]
           : ["A", "B"];
+
+  databaseReference.collection("users").doc(firebaseUser.uid).update({
+    "weekA": weeks[0] == "A"
+        ? DateTime.utc(
+                DateTime.now().year, DateTime.now().month, DateTime.now().day)
+            .subtract(Duration(days: DateTime.now().weekday - 1))
+        : DateTime.utc(
+                DateTime.now().year, DateTime.now().month, DateTime.now().day)
+            .subtract(Duration(days: DateTime.now().weekday + 6))
+  });
 
 //each event is in the format: "<class>, <teacher>, <start time> - <end time> in <room> (<set>)" (where the <> indicate a parameter)
 //first the string is split into a list of events (each being seperated by a semicolon and a space), and then each event is split into individual details accordingly.
@@ -278,4 +293,13 @@ This is to try and limit the amount of duplicate data, as well as to make queryi
 
   //once all events have been added, something needs to be returned, so that we can wait to build the page until all events have been added (so all events are displayed to the user)
   return "done";
+}
+
+Future<String> getCurrentWeek(User firebaseUser) async {
+  DocumentSnapshot userDoc =
+      await databaseReference.collection("users").doc(firebaseUser.uid).get();
+
+  DateTime weekA = userDoc.data()["weekA"].toDate();
+
+  return -weekA.difference(DateTime.now()).inDays % 7 % 2 == 0 ? "A" : "B";
 }

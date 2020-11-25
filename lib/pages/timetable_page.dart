@@ -7,6 +7,7 @@ import '../objects/events_list_view.dart';
 
 import '../backend/authBackend.dart';
 import '../backend/firestoreBackend.dart';
+import '../backend/eventsBackend.dart';
 
 import '../pages/web_view_page.dart';
 
@@ -72,7 +73,17 @@ class CustomScaffold {
                   );
                 } else {
                   //otherwise build the page
-                  return EventsListView.create(context, user, snapshot.data);
+                  return FutureBuilder(
+                    future: eventsToday(user.firebaseUser, snapshot.data),
+                    builder: (context, snapshot) {
+                      if (snapshot.connectionState == ConnectionState.done) {
+                        return EventsListView.create(
+                            context, user, snapshot.data);
+                      } else {
+                        return Center(child: CircularProgressIndicator());
+                      }
+                    },
+                  );
                 }
               } else {
                 //whilst getting courses, return a loading indicator
