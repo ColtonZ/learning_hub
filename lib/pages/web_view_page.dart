@@ -29,13 +29,9 @@ class WebViewPageState extends State<WebViewPage> {
 //details the looks of the page
 class CustomBody {
   static Widget create(BuildContext context, CustomUser user, String url) {
-    InAppWebViewController _webViewController;
     return new InAppWebView(
       //load the webview according to the specific page which was passed
       initialUrl: "https://intranet.stpaulsschool.org.uk$url",
-      onWebViewCreated: (InAppWebViewController controller) {
-        _webViewController = controller;
-      },
       onLoadStop: (InAppWebViewController controller, String url) async {
         //this checks if, when a page is loaded, it is the correct one. If it is, the data is scraped and the timetable page returned.
         //https://medium.com/flutter/the-power-of-webviews-in-flutter-a56234b57df2

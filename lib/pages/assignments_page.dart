@@ -69,8 +69,7 @@ class CustomScaffold {
                 //checks if the user has assignments. If they do, return the assignments as a list view, otherwise return an error message
                 try {
                   //creates a list view of the assignments
-                  return AssignmentsListView.create(
-                      context, user, course, id, assignments);
+                  return AssignmentsListView.create(context, user, assignments);
                 } catch (error) {
                   return Center(
                     child: Text("You have no assignments to display."),

@@ -20,12 +20,10 @@ class AssignmentPage extends StatefulWidget {
   //takes in the widget's arguments
   final GoogleSignInAccount account;
   final String name;
-  final String course;
   final Assignment assignment;
   final CustomUser user;
 
-  AssignmentPage(
-      {this.account, this.user, this.name, this.course, this.assignment});
+  AssignmentPage({this.account, this.user, this.name, this.assignment});
 
   @override
   //initialises the courses page state
@@ -36,7 +34,7 @@ class AssignmentPageState extends State<AssignmentPage> {
   Widget build(BuildContext context) {
     String name = widget.name;
     CustomUser user = widget.user;
-    String course = widget.course;
+    String course = widget.assignment.courseName;
     Assignment assignment = widget.assignment;
     List<String> months = [
       "Jan",

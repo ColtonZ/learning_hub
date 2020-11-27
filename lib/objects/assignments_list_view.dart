@@ -6,8 +6,8 @@ import 'customUser.dart';
 
 class AssignmentsListView {
   //creates a list view
-  static ListView create(BuildContext context, CustomUser user, String course,
-      String id, List<Assignment> assignments) {
+  static ListView create(
+      BuildContext context, CustomUser user, List<Assignment> assignments) {
     return ListView.builder(
       itemCount: (assignments.length * 2),
       //half the items will be dividers, the other will be list tiles
@@ -19,8 +19,7 @@ class AssignmentsListView {
         }
         final index = item ~/ 2;
         //creates a list tile for the assignment
-        return _buildCustomListRow(
-            context, user, course, id, assignments[index]);
+        return _buildCustomListRow(context, user, assignments[index]);
       },
     );
   }
@@ -29,8 +28,6 @@ class AssignmentsListView {
   static Widget _buildCustomListRow(
     BuildContext context,
     CustomUser user,
-    String course,
-    String id,
     Assignment assignment,
   ) {
     return ListTile(
@@ -77,7 +74,7 @@ class AssignmentsListView {
             ? Icon(Icons.notification_important)
             : Icon(Icons.check),
         onTap: () {
-          _pushAssignmentPage(context, user, course, assignment);
+          _pushAssignmentPage(context, user, assignment);
         });
   }
 
@@ -86,13 +83,11 @@ class AssignmentsListView {
   static void _pushAssignmentPage(
     BuildContext context,
     CustomUser user,
-    String course,
     Assignment assignment,
   ) {
     Map args = {
       "user": user,
       "assignment": assignment,
-      "course": course,
     };
     Navigator.of(context).pushNamed('/assignment', arguments: args);
   }

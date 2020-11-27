@@ -9,7 +9,7 @@ TextStyle navigationBarStyle = TextStyle(
   fontSize: 10,
 );
 TextStyle titleStyle = TextStyle(
-    fontFamily: "Montserrat", fontWeight: FontWeight.w700, fontSize: 20);
+    fontFamily: "Montserrat", fontWeight: FontWeight.w500, fontSize: 22);
 TextStyle subtitleStyle = TextStyle(
     fontFamily: "Montserrat", fontWeight: FontWeight.w500, fontSize: 18);
 TextStyle header3Style =

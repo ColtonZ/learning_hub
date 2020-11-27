@@ -5,6 +5,8 @@ import 'question.dart';
 
 class Assignment {
   //each assignment can have a lot of properties!
+  final String courseId;
+  final String courseName;
   final String title;
   final String description;
   final String id;
@@ -24,6 +26,8 @@ class Assignment {
   final String answer;
 
   Assignment({
+    this.courseId,
+    this.courseName,
     this.id,
     this.title,
     this.description,
@@ -43,7 +47,9 @@ class Assignment {
     this.answer,
   });
 
-  factory Assignment.fromJson(Map<String, dynamic> assignmentJson,
+  factory Assignment.fromJson(
+      String courseName,
+      Map<String, dynamic> assignmentJson,
       Map<String, dynamic> submissionJson) {
     DateTime d;
     List<Attachment> a = [];
@@ -126,6 +132,8 @@ class Assignment {
     //if the assignment has student submissions, return that, otherwise return just the assignment (and thus an assignment with fewer properties)
     if (submissionJson != null) {
       return Assignment(
+        courseName: courseName,
+        courseId: assignmentJson["courseId"],
         id: assignmentJson["id"],
         title: assignmentJson["title"],
         description: assignmentJson["description"],
@@ -152,6 +160,8 @@ class Assignment {
       );
     } else {
       return Assignment(
+        courseName: courseName,
+        courseId: assignmentJson["courseId"],
         id: assignmentJson["id"],
         title: assignmentJson["title"],
         description: assignmentJson["description"],

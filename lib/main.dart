@@ -62,17 +62,17 @@ class MyApp extends StatelessWidget {
           case "/assignments":
             return MaterialPageRoute(
                 builder: (_) => AssignmentsPage(
-                    user: arguments["user"],
-                    name: name,
-                    id: arguments["id"],
-                    course: arguments["course"]));
+                      user: arguments["user"],
+                      name: name,
+                      id: arguments["id"],
+                      course: arguments["course"],
+                    ));
           //pushes the page for a specific assignment, with arguments of the user's account and the page's name, as well as the name of the course the assignment belongs to and the full assignment object
           case "/assignment":
             return MaterialPageRoute(
                 builder: (_) => AssignmentPage(
                     user: arguments["user"],
                     name: name,
-                    course: arguments["course"],
                     assignment: arguments["assignment"]));
           default:
             //if no route is passed, push the timetable page, with arguments of the user's account and the page's name

@@ -1,13 +1,17 @@
 import 'package:flutter/material.dart';
+import 'package:learning_hub/objects/assignments_list_view.dart';
+import 'package:learning_hub/theming.dart';
 
 import '../objects/custom_navigation_bar.dart';
 import '../objects/custom_app_bar.dart';
 import '../objects/customUser.dart';
+import '../objects/event.dart';
 import '../objects/events_list_view.dart';
 
 import '../backend/authBackend.dart';
 import '../backend/firestoreBackend.dart';
 import '../backend/eventsBackend.dart';
+import '../backend/courseWorkBackend.dart';
 
 import '../pages/web_view_page.dart';
 
@@ -73,17 +77,8 @@ class CustomScaffold {
                   );
                 } else {
                   //otherwise build the page
-                  return FutureBuilder(
-                    future: eventsToday(user.firebaseUser, snapshot.data),
-                    builder: (context, snapshot) {
-                      if (snapshot.connectionState == ConnectionState.done) {
-                        return EventsListView.create(
-                            context, user, snapshot.data);
-                      } else {
-                        return Center(child: CircularProgressIndicator());
-                      }
-                    },
-                  );
+                  return PortraitView.create(
+                      snapshot.data, context, name, user);
                 }
               } else {
                 //whilst getting courses, return a loading indicator
@@ -93,5 +88,57 @@ class CustomScaffold {
         //builds the navigation bar for the given page
         bottomNavigationBar:
             CustomNavigationBar.create(context, name, user, 0));
+  }
+}
+
+class PortraitView {
+  static Widget create(
+      List<Event> events, BuildContext context, String name, CustomUser user) {
+    return Column(
+      children: [
+        Divider(),
+        Text(
+          "Today's Events",
+          style: titleStyle,
+        ),
+        Divider(),
+        Expanded(
+          child: FutureBuilder(
+            future: eventsToday(user.firebaseUser, events),
+            builder: (context, todaySnapshot) {
+              if (todaySnapshot.connectionState == ConnectionState.done) {
+                return EventsListView.create(context, user, todaySnapshot.data);
+              } else {
+                return Center(child: CircularProgressIndicator());
+              }
+            },
+          ),
+        ),
+        Divider(),
+        Text(
+          "Tasks To-Do",
+          style: titleStyle,
+        ),
+        Divider(),
+        Expanded(
+          child: FutureBuilder(
+            future: tasksToDo(user),
+            builder: (context, tasksSnapshot) {
+              if (tasksSnapshot.connectionState == ConnectionState.done) {
+                try {
+                  return AssignmentsListView.create(
+                      context, user, tasksSnapshot.data);
+                } catch (error) {
+                  return Center(
+                      child: Text("You have no incomplete assignments."));
+                }
+              } else {
+                return Center(child: CircularProgressIndicator());
+              }
+            },
+          ),
+        ),
+      ],
+    );
   }
 }

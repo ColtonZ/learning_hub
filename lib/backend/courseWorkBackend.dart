@@ -2,7 +2,6 @@ import 'dart:async';
 import 'dart:convert';
 
 import 'package:http/http.dart' as http;
-import 'package:learning_hub/backend/helperBackend.dart';
 
 import '../objects/course.dart';
 import '../objects/assignment.dart';
@@ -78,17 +77,24 @@ Future<Assignment> sendAssignmentRequest(
           "https://classroom.googleapis.com//v1/courses/$courseId/courseWork/$assignmentId/studentSubmissions"),
       headers: headers);
 
+  http.Response courseResponse = await http.get(
+      Uri.encodeFull("https://classroom.googleapis.com//v1/courses/$courseId/"),
+      headers: headers);
+
   final assignmentResponseBody = assignmentResponse.body;
   final submissionResponseBody = submissionResponse.body;
+  final courseResponseBody = courseResponse.body;
 
   //converts the responses into JSON
   var assignmentData = json.decode(assignmentResponseBody);
   var submissionData = json.decode(submissionResponseBody);
+  var courseData = json.decode(courseResponseBody);
 
   var submissions = submissionData["studentSubmissions"] as List;
 
   //converts the two json responses (the assignment details and the submission details) into an assignment object and returns it
-  Assignment assignment = Assignment.fromJson(assignmentData, submissions[0]);
+  Assignment assignment =
+      Assignment.fromJson(courseData["name"], assignmentData, submissions[0]);
 
   return assignment;
 }
@@ -96,7 +102,6 @@ Future<Assignment> sendAssignmentRequest(
 Future<bool> isCourseDone(String id, CustomUser user) async {
   bool toDo = false;
 
-  //TODO: Make this faster so it doesn't load the entire course first!
   try {
     //gets the user's auth headers
     Map<String, String> headers = user.authHeaders;
@@ -138,4 +143,24 @@ Future<bool> isCourseDone(String id, CustomUser user) async {
     //if this error is called, it means that the course has no assignments. If this is the case, there are no assignments to be done, so return false.
   }
   return toDo;
+}
+
+Future<List<Assignment>> tasksToDo(CustomUser user) async {
+  List<Course> allCourses = await getCourses(user);
+  List<Assignment> toDo = new List<Assignment>();
+  for (Course course in allCourses) {
+    if (!await isCourseDone(course.id, user)) {
+      List<Assignment> courseAssignments =
+          await getAssignments(course.id, user);
+      courseAssignments.forEach((assignment) {
+        if (assignment.state != "TURNED_IN" &&
+            assignment.state != "RETURNED" &&
+            assignment.state != "true" &&
+            assignment.dueDate != null) {
+          toDo.add(assignment);
+        }
+      });
+    }
+  }
+  return null;
 }
