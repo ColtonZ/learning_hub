@@ -63,7 +63,7 @@ class CustomScaffold {
             future: getEventsList(user.firebaseUser),
             builder: (context, snapshot) {
               if (snapshot.connectionState == ConnectionState.done) {
-                if (snapshot.data == null) {
+                if (snapshot.data == null || snapshot.data.length == 0) {
                   //if they have no events, return a web view body so the user can login to Firefly
                   //https://stackoverflow.com/questions/54691767/navigation-inside-nested-future
                   return WebViewPage(
