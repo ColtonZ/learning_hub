@@ -189,8 +189,6 @@ This is to try and limit the amount of duplicate data, as well as to make queryi
     //performs absolute division of the event day by 5, so that, if the day is greater than 5, we know it must occur in the second week (as each user has at least one Firefly event each day, and no Firefly events on weekends).
     String eventWeek = weeks[day ~/ 5];
 
-    //print("Class: ${eventDetails[0]} | Teacher: ${eventDetails[1]} | Start Time: ${timings[0]} | End Time: ${timings[1]} | location: $location | Set: $classSet | Day: $eventDay | Week: $eventWeek");
-
     //this tries to get all events in the user's events collection where the class, teacher, set, location are the same (and the event was added by Firefly)
     QuerySnapshot matchingEvent = await databaseReference
         .collection("users")

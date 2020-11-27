@@ -10,6 +10,7 @@ class CoursesListView {
   static ListView create(
       BuildContext context, CustomUser user, List<Course> courses) {
     return ListView.builder(
+      addAutomaticKeepAlives: true,
       itemCount: (courses.length * 2),
       //half the items will be dividers, the other will be list tiles
       padding: const EdgeInsets.all(8.0),
@@ -34,7 +35,7 @@ class CoursesListView {
             //sends a future to check if the course has work to be done
             future: isCourseDone(course.id, user),
             builder: (context, snapshot) {
-              //once the http request has been sent, show an icon saying if the course has work to be done or not. If an error is returned, return an error icon. Whilst loading, return a loading icon.
+              //once the http request has been sent, show an icon saying if the course has work to be done or not. If an error is returned, return an error icon. Whilst loading, return a loading indicator.
               if (snapshot.connectionState == ConnectionState.done) {
                 try {
                   return Icon(snapshot.data
@@ -44,7 +45,11 @@ class CoursesListView {
                   return Icon(Icons.error);
                 }
               } else {
-                return Icon(Icons.data_usage);
+                return Container(
+                  child: CircularProgressIndicator(),
+                  width: 25,
+                  height: 25,
+                );
               }
             }),
         title: Text(

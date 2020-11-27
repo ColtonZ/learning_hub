@@ -2,6 +2,7 @@ import 'dart:async';
 import 'dart:convert';
 
 import 'package:http/http.dart' as http;
+import 'package:learning_hub/backend/helperBackend.dart';
 
 import '../objects/course.dart';
 import '../objects/assignment.dart';
@@ -80,10 +81,6 @@ Future<Assignment> sendAssignmentRequest(
   final assignmentResponseBody = assignmentResponse.body;
   final submissionResponseBody = submissionResponse.body;
 
-  //prints out the responses for testing purposes
-  //printWrapped(assignmentResponseBody);
-  //printWrapped(submissionResponseBody);
-
   //converts the responses into JSON
   var assignmentData = json.decode(assignmentResponseBody);
   var submissionData = json.decode(submissionResponseBody);
@@ -123,26 +120,18 @@ Future<bool> isCourseDone(String id, CustomUser user) async {
               "https://classroom.googleapis.com//v1/courses/$id/courseWork/${assignments[index]["id"]}/studentSubmissions"),
           headers: headers);
 
-      print("Title: ${assignments[index]["title"]}");
-
       var submissionData = json.decode(submissionResponse.body);
 
       var submissions = submissionData["studentSubmissions"] as List;
 
-      http.Response assignmentResponse = await http.get(
-          Uri.encodeFull(
-              "https://classroom.googleapis.com//v1/courses/$id/courseWork/${assignments[index]["id"]}"),
-          headers: headers);
-
-      var assignmentData = json.decode(assignmentResponse.body);
-
-      //check each assignment, and if it has not been submitted or marked, has a due date and is not late, then mark the task as needing to be done);
+//check each assignment, and if it has not been submitted or marked, and is not late, then check its due date. If it has a due date, mark the task as needing to be done);
       if (submissions[0]["state"] != "TURNED_IN" &&
           submissions[0]["state"] != "RETURNED" &&
-          assignmentData["dueDate"] != null &&
           submissions[0]["late"] != "true") {
-        toDo = true;
-        break;
+        if (assignments[index]["dueDate"] != null) {
+          toDo = true;
+          break;
+        }
       }
     }
   } catch (error) {
