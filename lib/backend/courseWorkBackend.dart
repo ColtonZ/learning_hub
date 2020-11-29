@@ -7,6 +7,8 @@ import '../objects/course.dart';
 import '../objects/assignment.dart';
 import '../objects/customUser.dart';
 
+import 'firestoreBackend.dart';
+
 Future<List<Course>> getCourses(CustomUser user) async {
   //gets the user's auth headers
   Map<String, String> headers = user.authHeaders;
@@ -116,7 +118,9 @@ Future<bool> isCourseDone(String id, CustomUser user) async {
 
     var assignments = data["courseWork"] as List;
 
-    for (int index = 0; index < assignments.length; index++) {
+    for (int index = 0;
+        index < (assignments.length < 5 ? assignments.length : 5);
+        index++) {
       //for each assignment in the list of courseWork, the method will request the full assignment for the given id.
       //with the id, the method then gets all student submissions for that given assignment, so that it can check if all the work has been submitted
 
@@ -148,19 +152,32 @@ Future<bool> isCourseDone(String id, CustomUser user) async {
 Future<List<Assignment>> tasksToDo(CustomUser user) async {
   List<Course> allCourses = await getCourses(user);
   List<Assignment> toDo = new List<Assignment>();
-  for (Course course in allCourses) {
-    if (!await isCourseDone(course.id, user)) {
-      List<Assignment> courseAssignments =
-          await getAssignments(course.id, user);
-      courseAssignments.forEach((assignment) {
-        if (assignment.state != "TURNED_IN" &&
-            assignment.state != "RETURNED" &&
-            assignment.state != "true" &&
-            assignment.dueDate != null) {
-          toDo.add(assignment);
+
+  bool checked = await checkedRecently(user.firebaseUser);
+
+  if (checked) {
+    return await getFirestoreTasks(user.firebaseUser);
+  } else {
+    for (Course course in allCourses) {
+      try {
+        bool done = await isCourseDone(course.id, user);
+        if (!done) {
+          List<Assignment> courseAssignments =
+              await getAssignments(course.id, user);
+          int length =
+              courseAssignments.length < 5 ? courseAssignments.length : 5;
+          for (int i = 0; i < length; i++) {
+            Assignment assignment = courseAssignments[i];
+            if (assignment.state != "TURNED_IN" &&
+                assignment.state != "RETURNED" &&
+                assignment.state != "true" &&
+                assignment.dueDate != null) {
+              toDo.add(assignment);
+            }
+          }
         }
-      });
+      } catch (e) {}
     }
+    return toDo;
   }
-  return null;
 }

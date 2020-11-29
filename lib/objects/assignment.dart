@@ -1,3 +1,5 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
+
 import 'dart:core';
 
 import 'attachment.dart';
@@ -19,7 +21,7 @@ class Assignment {
   final List<Attachment> attachments;
   final List<Attachment> submissionAttachments;
   final Question question;
-  final String points;
+  final int points;
   final String state;
   final bool isLate;
   final int grade;
@@ -54,7 +56,7 @@ class Assignment {
     DateTime d;
     List<Attachment> a = [];
     List<Attachment> s = [];
-    String p;
+    int p;
     Question q;
     bool l;
     int g;
@@ -176,5 +178,75 @@ class Assignment {
         question: q,
       );
     }
+  }
+
+  factory Assignment.fromFirestore(DocumentSnapshot document) {
+    List<Attachment> a = [];
+    List<Attachment> s = [];
+    Question q;
+
+    Map<String, dynamic> documentMap = document.data();
+
+//creates a list of attachments for each task. If an error is thrown, this means that the task has no attachment, and so an empty list is returned.
+    try {
+      List<Attachment> a = new List<Attachment>();
+      (documentMap["attachments"] as List).forEach((attachment) {
+        //this converts each attachment string into an actual attachment object
+        Attachment att = Attachment.fromList(attachment.toString().split(", "));
+        //this removes all attachments which start with [Template] as these are files made by Google for each task
+        if (!att.title.startsWith("[Template]")) {
+          a.add(att);
+        }
+      });
+    } catch (error) {
+      a = [];
+    }
+
+//attempts to create a list of attachments which have been submitted by a student. If this fails, it means that the student has not submitted anything, and so the attachments list is empty.
+    try {
+      List<Attachment> s = new List<Attachment>();
+      (documentMap["submissionAttachments"] as List).forEach((attachment) {
+        //this converts each attachment string into an actual attachment object
+        Attachment att = Attachment.fromList(attachment.toString().split(", "));
+        //this removes all attachments which start with [Template] as these are files made by Google for each task
+        if (!att.title.startsWith("[Template]")) {
+          s.add(att);
+        }
+      });
+    } catch (error) {
+      s = [];
+    }
+
+//if the assignment is a multiple choice question, add a Question object, otherwise return a null object (an error is thrown if the assignment is not a multiple choice question, which is caught)
+    try {
+      q = Question.fromList(
+          documentMap["multipleChoiceQuestion"].toString().split(":-:"));
+    } catch (error) {
+      q = null;
+    }
+
+    return Assignment(
+      courseName: documentMap["courseName"],
+      courseId: documentMap["courseId"],
+      id: documentMap["id"],
+      title: documentMap["title"],
+      description: documentMap["description"],
+      status: documentMap["state"],
+      type: documentMap["workType"],
+      //converts the creation time and update time of the assignment to the user's local time
+      creationTime: documentMap["creationTime"].toDate(),
+      updateTime: documentMap["updateTime"].toDate(),
+      creatorId: documentMap["creatorUserId"],
+      dueDate: documentMap["dueDate"].toDate(),
+      attachments: a,
+      submissionAttachments: s,
+      question: q,
+      points: documentMap["maxPoints"],
+      state: documentMap["state"],
+      isLate: documentMap["late"],
+      grade: documentMap["assignedGrade"],
+      //if the assignment is a short answer or multiple choice question, the answer is the answer that the student gave to the question. Otherwise, the answer is null, as the assignment is not a question.
+      answer: documentMap["answer"],
+    );
   }
 }

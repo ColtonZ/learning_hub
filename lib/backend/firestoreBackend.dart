@@ -4,6 +4,7 @@ import 'dart:core';
 
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:learning_hub/objects/event.dart';
+import 'package:learning_hub/objects/assignment.dart';
 
 //initialzes an instance of the Firestore database
 final databaseReference = FirebaseFirestore.instance;
@@ -300,4 +301,52 @@ Future<String> getCurrentWeek(User firebaseUser) async {
   DateTime weekA = userDoc.data()["weekA"].toDate();
 
   return -weekA.difference(DateTime.now()).inDays % 7 % 2 == 0 ? "A" : "B";
+}
+
+Future<bool> checkedRecently(User firebaseUser) async {
+  try {
+    DocumentSnapshot userDoc =
+        await databaseReference.collection("users").doc(firebaseUser.uid).get();
+    DateTime lastChecked = userDoc.data()["lastChecked"].toDate();
+    if (lastChecked.difference(DateTime.now()).inMinutes.toInt() > -300) {
+      return true;
+    } else {
+      databaseReference.collection("users").doc(firebaseUser.uid).update({
+        "lastChecked": DateTime.utc(DateTime.now().year, DateTime.now().month,
+            DateTime.now().day, DateTime.now().hour, DateTime.now().minute)
+      });
+      return false;
+    }
+  } catch (e) {
+    databaseReference.collection("users").doc(firebaseUser.uid).update({
+      "lastChecked": DateTime.utc(DateTime.now().year, DateTime.now().month,
+          DateTime.now().day, DateTime.now().hour, DateTime.now().minute)
+    });
+    return false;
+  }
+}
+
+Future<List<Assignment>> getFirestoreTasks(User firebaseUser) async {
+  //gets all events from the database which were added automatically from the pupil dashboard
+
+  try {
+    QuerySnapshot tasksSnapshot = await databaseReference
+        .collection("users")
+        .doc(firebaseUser.uid)
+        .collection("toDo")
+        .get();
+
+//returns the number of events that were added automatically
+    List<DocumentSnapshot> assignments = tasksSnapshot.docs;
+
+    List<Assignment> assignmentsList = new List<Assignment>();
+
+    assignments.forEach((assignment) {
+      Assignment current = new Assignment.fromFirestore(assignment);
+      assignmentsList.add(current);
+    });
+    return assignmentsList;
+  } catch (e) {
+    return null;
+  }
 }

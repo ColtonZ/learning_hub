@@ -21,4 +21,11 @@ class Question {
       options: o,
     );
   }
+
+  factory Question.fromList(List<String> list) {
+    return Question(
+      type: "Multiple Choice",
+      options: list,
+    );
+  }
 }

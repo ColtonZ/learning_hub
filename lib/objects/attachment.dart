@@ -62,4 +62,13 @@ class Attachment {
       );
     }
   }
+  factory Attachment.fromList(List<String> list) {
+    return Attachment(
+      id: list[0],
+      title: list[1],
+      link: list[2],
+      thumbnail: list[3],
+      type: list[4],
+    );
+  }
 }
