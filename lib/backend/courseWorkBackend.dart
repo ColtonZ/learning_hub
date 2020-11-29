@@ -102,7 +102,7 @@ Future<Assignment> sendAssignmentRequest(
 }
 
 Future<bool> isCourseDone(String id, CustomUser user) async {
-  bool toDo = false;
+  bool done = true;
 
   try {
     //gets the user's auth headers
@@ -118,9 +118,9 @@ Future<bool> isCourseDone(String id, CustomUser user) async {
 
     var assignments = data["courseWork"] as List;
 
-    for (int index = 0;
-        index < (assignments.length < 5 ? assignments.length : 5);
-        index++) {
+    int length = assignments.length < 5 ? assignments.length : 5;
+
+    for (int index = 0; index < length; index++) {
       //for each assignment in the list of courseWork, the method will request the full assignment for the given id.
       //with the id, the method then gets all student submissions for that given assignment, so that it can check if all the work has been submitted
 
@@ -135,10 +135,9 @@ Future<bool> isCourseDone(String id, CustomUser user) async {
 
 //check each assignment, and if it has not been submitted or marked, and is not late, then check its due date. If it has a due date, mark the task as needing to be done);
       if (submissions[0]["state"] != "TURNED_IN" &&
-          submissions[0]["state"] != "RETURNED" &&
-          submissions[0]["late"] != "true") {
+          submissions[0]["state"] != "RETURNED") {
         if (assignments[index]["dueDate"] != null) {
-          toDo = true;
+          done = false;
           break;
         }
       }
@@ -146,7 +145,7 @@ Future<bool> isCourseDone(String id, CustomUser user) async {
   } catch (error) {
     //if this error is called, it means that the course has no assignments. If this is the case, there are no assignments to be done, so return false.
   }
-  return toDo;
+  return done;
 }
 
 Future<List<Assignment>> tasksToDo(CustomUser user) async {

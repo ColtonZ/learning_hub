@@ -69,8 +69,7 @@ class AssignmentsListView {
         //if the assignment has been turned in or returned, set the icon to say that it has been done. Otherwise, set the icon to an exclamation mark to show it needs doing.
         leading: (assignment.state != "TURNED_IN" &&
                 assignment.state != "RETURNED" &&
-                assignment.dueDate != null &&
-                assignment.isLate != true)
+                assignment.dueDate != null)
             ? Icon(Icons.notification_important)
             : Icon(Icons.check),
         onTap: () {
