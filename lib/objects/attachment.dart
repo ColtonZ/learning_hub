@@ -64,11 +64,11 @@ class Attachment {
   }
   factory Attachment.fromList(List<String> list) {
     return Attachment(
-      id: list[0],
-      title: list[1],
-      link: list[2],
-      thumbnail: list[3],
-      type: list[4],
+      id: list[0] == "null" ? null : list[0],
+      title: list[1] == "null" ? null : list[1],
+      link: list[2] == "null" ? null : list[2],
+      thumbnail: list[3] == "null" ? null : list[3],
+      type: list[4] == "null" ? null : list[4],
     );
   }
 }

@@ -107,7 +107,14 @@ class PortraitView {
             future: eventsToday(user.firebaseUser, events),
             builder: (context, todaySnapshot) {
               if (todaySnapshot.connectionState == ConnectionState.done) {
-                return EventsListView.create(context, user, todaySnapshot.data);
+                if (todaySnapshot.data.length > 0) {
+                  return EventsListView.create(
+                      context, user, todaySnapshot.data);
+                } else {
+                  return Center(
+                    child: Text("You have no events in the calendar today."),
+                  );
+                }
               } else {
                 return Center(child: CircularProgressIndicator());
               }
@@ -125,10 +132,10 @@ class PortraitView {
             future: tasksToDo(user),
             builder: (context, tasksSnapshot) {
               if (tasksSnapshot.connectionState == ConnectionState.done) {
-                try {
+                if (tasksSnapshot.data.length > 0) {
                   return AssignmentsListView.create(
                       context, user, tasksSnapshot.data);
-                } catch (error) {
+                } else {
                   return Center(
                       child: Text("You have no incomplete assignments."));
                 }

@@ -95,9 +95,7 @@ class Assignment {
           a.add(att);
         }
       });
-    } catch (error) {
-      a = [];
-    }
+    } catch (error) {}
 
 //attempts to create a list of attachments which have been submitted by a student. If this fails, it means that the student has not submitted anything, and so the attachments list is empty.
     try {
@@ -105,9 +103,7 @@ class Assignment {
       sList.forEach((attachment) {
         s.add(Attachment.fromJson(attachment));
       });
-    } catch (error) {
-      s = [];
-    }
+    } catch (error) {}
 
 //if the assignment is a multiple choice question, add a Question object, otherwise return a null object (an error is thrown if the assignment is not a multiple choice question, which is caught)
     try {
@@ -189,7 +185,7 @@ class Assignment {
 
 //creates a list of attachments for each task. If an error is thrown, this means that the task has no attachment, and so an empty list is returned.
     try {
-      List<Attachment> a = new List<Attachment>();
+      a = new List<Attachment>();
       (documentMap["attachments"] as List).forEach((attachment) {
         //this converts each attachment string into an actual attachment object
         Attachment att = Attachment.fromList(attachment.toString().split(", "));
@@ -198,13 +194,11 @@ class Assignment {
           a.add(att);
         }
       });
-    } catch (error) {
-      a = [];
-    }
+    } catch (error) {}
 
 //attempts to create a list of attachments which have been submitted by a student. If this fails, it means that the student has not submitted anything, and so the attachments list is empty.
     try {
-      List<Attachment> s = new List<Attachment>();
+      s = new List<Attachment>();
       (documentMap["submissionAttachments"] as List).forEach((attachment) {
         //this converts each attachment string into an actual attachment object
         Attachment att = Attachment.fromList(attachment.toString().split(", "));
@@ -213,9 +207,7 @@ class Assignment {
           s.add(att);
         }
       });
-    } catch (error) {
-      s = [];
-    }
+    } catch (error) {}
 
 //if the assignment is a multiple choice question, add a Question object, otherwise return a null object (an error is thrown if the assignment is not a multiple choice question, which is caught)
     try {
@@ -232,11 +224,11 @@ class Assignment {
       title: documentMap["title"],
       description: documentMap["description"],
       status: documentMap["state"],
-      type: documentMap["workType"],
+      type: documentMap["type"],
       //converts the creation time and update time of the assignment to the user's local time
       creationTime: documentMap["creationTime"].toDate(),
       updateTime: documentMap["updateTime"].toDate(),
-      creatorId: documentMap["creatorUserId"],
+      creatorId: documentMap["creatorId"],
       dueDate: documentMap["dueDate"].toDate(),
       attachments: a,
       submissionAttachments: s,

@@ -39,8 +39,8 @@ class CoursesListView {
               if (snapshot.connectionState == ConnectionState.done) {
                 try {
                   return Icon(snapshot.data
-                      ? Icons.notification_important
-                      : Icons.check);
+                      ? Icons.check
+                      : Icons.notification_important);
                 } catch (error) {
                   return Icon(Icons.error);
                 }

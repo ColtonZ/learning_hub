@@ -157,6 +157,7 @@ Future<List<Assignment>> tasksToDo(CustomUser user) async {
   if (checked) {
     return await getFirestoreTasks(user.firebaseUser);
   } else {
+    removeClassroomTasks(user.firebaseUser);
     for (Course course in allCourses) {
       try {
         bool done = await isCourseDone(course.id, user);
@@ -172,6 +173,7 @@ Future<List<Assignment>> tasksToDo(CustomUser user) async {
                 assignment.state != "true" &&
                 assignment.dueDate != null) {
               toDo.add(assignment);
+              firestoreToDoAdd(user.firebaseUser, assignment);
             }
           }
         }

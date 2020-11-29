@@ -21,14 +21,12 @@ Future<List<Event>> getEventsList(User firebaseUser) async {
         .collection("events")
         .get();
 
-//returns the number of events that were added automatically
     List<DocumentSnapshot> events = eventsSnapshot.docs;
 
     List<Event> eventsList = new List<Event>();
 
     events.forEach((event) {
       Event current = new Event.fromFirestore(event);
-      current.output();
       eventsList.add(current);
     });
 
@@ -57,7 +55,7 @@ void checkFirestoreUser(User firebaseUser) async {
     await databaseReference
         .collection("users")
         .doc(firebaseUser.uid)
-        .set({"email": firebaseUser.email});
+        .set({"email": firebaseUser.email, "lastChecked": null, "weekA": null});
   }
 }
 
@@ -349,4 +347,76 @@ Future<List<Assignment>> getFirestoreTasks(User firebaseUser) async {
   } catch (e) {
     return null;
   }
+}
+
+void firestoreToDoAdd(User firebaseUser, Assignment assignment) async {
+  List<String> attachmentStrings = new List<String>();
+  assignment.attachments.forEach((attachment) {
+    attachmentStrings.add(
+        "${attachment.id}, ${attachment.title}, ${attachment.link}, ${attachment.thumbnail}, ${attachment.type}");
+  });
+
+  List<String> submissionStrings = new List<String>();
+  assignment.submissionAttachments.forEach((attachment) {
+    submissionStrings.add(
+        "${attachment.id}, ${attachment.title}, ${attachment.link}, ${attachment.thumbnail}, ${attachment.type}");
+  });
+
+  String question = "";
+  try {
+    assignment.question.options.forEach((option) {
+      question += ":-:$option";
+    });
+    question = question.substring(2);
+  } catch (e) {}
+
+  await databaseReference
+      .collection("users")
+      .doc(firebaseUser.uid)
+      .collection("toDo")
+      .add({
+    "platform": "GC",
+    "courseId": assignment.courseId,
+    "courseName": assignment.courseName,
+    "title": assignment.title,
+    "description": assignment.description,
+    "id": assignment.id,
+    "status": assignment.status,
+    "type": assignment.type,
+    "creationTime": assignment.creationTime,
+    "updateTime": assignment.updateTime,
+    "creatorId": assignment.creatorId,
+    "dueDate": assignment.dueDate,
+    "attachments": attachmentStrings,
+    "submissionAttachments": submissionStrings,
+    "question": question,
+    "points": assignment.points,
+    "state": assignment.state,
+    "isLate": assignment.isLate,
+    "grade": assignment.grade,
+    "answer": assignment.answer,
+  });
+}
+
+void removeClassroomTasks(User user) async {
+  //fetch all existing Firestore events added from Firefly
+  QuerySnapshot tasks = await databaseReference
+      .collection("users")
+      .doc(user.uid)
+      .collection("toDo")
+      .where("platform", isEqualTo: "GC")
+      .get();
+
+//create a list of these events
+  List<DocumentSnapshot> tasksList = tasks.docs;
+
+//loop through the list, deleting each event
+  tasksList.forEach((event) {
+    databaseReference
+        .collection("users")
+        .doc(user.uid)
+        .collection("toDo")
+        .doc(event.id)
+        .delete();
+  });
 }

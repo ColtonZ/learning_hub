@@ -10,11 +10,11 @@ class CustomNavigationBar {
       BuildContext context, String name, CustomUser user) {
     Map args = {"user": user};
     if (name == "/assignments") {
-      Navigator.of(context).pop();
+      Navigator.pop(context);
     }
     if (name == "/assignment") {
-      Navigator.of(context).pop();
-      Navigator.of(context).pop();
+      Navigator.canPop(context);
+      Navigator.pop(context);
     }
     Navigator.of(context).pushReplacementNamed('/account', arguments: args);
   }
@@ -23,11 +23,11 @@ class CustomNavigationBar {
       BuildContext context, String name, CustomUser user) {
     Map args = {"user": user};
     if (name == "/assignments") {
-      Navigator.of(context).pop();
+      Navigator.pop(context);
     }
     if (name == "/assignment") {
-      Navigator.of(context).pop();
-      Navigator.of(context).pop();
+      Navigator.canPop(context);
+      Navigator.pop(context);
     }
     Navigator.of(context).pushReplacementNamed('/courses', arguments: args);
   }
@@ -36,11 +36,11 @@ class CustomNavigationBar {
       BuildContext context, String name, CustomUser user) {
     Map args = {"user": user};
     if (name == "/assignments") {
-      Navigator.of(context).pop();
+      Navigator.pop(context);
     }
     if (name == "/assignment") {
-      Navigator.of(context).pop();
-      Navigator.of(context).pop();
+      Navigator.canPop(context);
+      Navigator.pop(context);
     }
     Navigator.of(context).pushReplacementNamed('/settings', arguments: args);
   }
@@ -49,11 +49,11 @@ class CustomNavigationBar {
       BuildContext context, String name, CustomUser user) {
     Map args = {"user": user};
     if (name == "/assignments") {
-      Navigator.of(context).pop();
+      Navigator.pop(context);
     }
     if (name == "/assignment") {
-      Navigator.of(context).pop();
-      Navigator.of(context).pop();
+      Navigator.canPop(context);
+      Navigator.pop(context);
     }
     Navigator.of(context).pushReplacementNamed('/tannoy', arguments: args);
   }
@@ -62,11 +62,11 @@ class CustomNavigationBar {
       BuildContext context, String name, CustomUser user) {
     Map args = {"user": user};
     if (name == "/assignments") {
-      Navigator.of(context).pop();
+      Navigator.pop(context);
     }
     if (name == "/assignment") {
-      Navigator.of(context).pop();
-      Navigator.of(context).pop();
+      Navigator.canPop(context);
+      Navigator.pop(context);
     }
     Navigator.of(context).pushReplacementNamed('/timetable', arguments: args);
   }
