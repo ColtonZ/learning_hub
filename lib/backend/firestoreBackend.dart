@@ -298,7 +298,9 @@ Future<String> getCurrentWeek(User firebaseUser) async {
 
   DateTime weekA = userDoc.data()["weekA"].toDate();
 
-  return -weekA.difference(DateTime.now()).inDays % 7 % 2 == 0 ? "A" : "B";
+  return (-weekA.difference(DateTime.now()).inDays + 1) % 7 % 2 == 0
+      ? "A"
+      : "B";
 }
 
 Future<bool> checkedRecently(User firebaseUser) async {
