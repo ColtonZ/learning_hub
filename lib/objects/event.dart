@@ -21,10 +21,11 @@ class Event implements Comparable<Event> {
       this.teacher,
       this.times});
 
-  //creates a event object, given a line from a text file
+  //creates a event object, given a Firestore document
   factory Event.fromFirestore(DocumentSnapshot document) {
     Map<String, dynamic> documentMap = document.data();
     List<List<String>> t = new List<List<String>>();
+    //loop through each of the event's times, and convert it into a list
     (documentMap["times"] as List).forEach((time) {
       t.add(time.toString().split(", "));
     });
@@ -40,6 +41,7 @@ class Event implements Comparable<Event> {
     );
   }
 
+//outputs the event's details
   void output() {
     print(
         "classSet: $classSet | location: $location | name: $name | platform: $platform | teacher: $teacher | times: $times");
@@ -47,9 +49,13 @@ class Event implements Comparable<Event> {
 
 //https://www.woolha.com/tutorials/dart-sorting-list-with-comparator-and-comparable
 
+//defines how to compare to events to each other (for sorting a list of events)
   int compareTo(Event other) {
+    //if the tasks start at the same time, compare their end times; otherwise return the difference of their times
     if (times[0][1] == other.times[0][1]) {
+      //if the tasks end at the same time, compare their names alphabetically; otherwise return the difference of their times
       if (times[0][2] == other.times[0][2]) {
+        //return the alphabetical difference of their names (if two events have the same name, start time and end time, the order is arbitrary)
         return name.compareTo(other.name);
       } else {
         return int.parse(times[0][2]) - int.parse(other.times[0][2]);

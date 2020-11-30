@@ -17,4 +17,4 @@ TextStyle header3Style =
 TextStyle header4Style =
     TextStyle(fontFamily: "Jost", fontWeight: FontWeight.w100, fontSize: 16);
 TextStyle paragraph1Style = TextStyle();
-MaterialAccentColor accentColour = Colors.deepPurpleAccent;
+MaterialAccentColor accentColour = Colors.cyanAccent;

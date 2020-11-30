@@ -14,6 +14,7 @@ Future<List<Event>> getEventsList(User firebaseUser) async {
   //https://stackoverflow.com/questions/54456665/how-to-count-the-number-of-documents-firestore-on-flutter
   //gets all events from the database which were added automatically from the pupil dashboard
 
+//try to get a list of the user's events
   try {
     QuerySnapshot eventsSnapshot = await databaseReference
         .collection("users")
@@ -21,10 +22,12 @@ Future<List<Event>> getEventsList(User firebaseUser) async {
         .collection("events")
         .get();
 
+//get the document for each event
     List<DocumentSnapshot> events = eventsSnapshot.docs;
 
     List<Event> eventsList = new List<Event>();
 
+//foreach event in the list of events, add it to the events list
     events.forEach((event) {
       Event current = new Event.fromFirestore(event);
       eventsList.add(current);
@@ -100,6 +103,7 @@ This is to try and limit the amount of duplicate data, as well as to make queryi
           ? ["B", "A"]
           : ["A", "B"];
 
+//update the last weekA in the Firestore db. I.e., if this week is a week A, add the date of this Monday to the database, otherwise add the date of the monday prior.
   databaseReference.collection("users").doc(firebaseUser.uid).update({
     "weekA": weeks[0] == "A"
         ? DateTime.utc(
@@ -293,30 +297,38 @@ This is to try and limit the amount of duplicate data, as well as to make queryi
 }
 
 Future<String> getCurrentWeek(User firebaseUser) async {
+  //get the user's doc
   DocumentSnapshot userDoc =
       await databaseReference.collection("users").doc(firebaseUser.uid).get();
 
+//convert the last time it was week A to a date
   DateTime weekA = userDoc.data()["weekA"].toDate();
 
+//if that happened an even number of weeks ago, it must be week A, otherwise it'll be week B
   return (-weekA.difference(DateTime.now()).inDays + 1) % 7 % 2 == 0
       ? "A"
       : "B";
 }
 
 Future<bool> checkedRecently(User firebaseUser) async {
+  //try to get the lastChecked time of the Classroom tasks. If it was never checked before, an exception is thrown
   try {
+    //get the time the tasks were last checked
     DocumentSnapshot userDoc =
         await databaseReference.collection("users").doc(firebaseUser.uid).get();
     DateTime lastChecked = userDoc.data()["lastChecked"].toDate();
+    //if the times were checked within 5 hours, return true (i.e. it was checked recently)
     if (lastChecked.difference(DateTime.now()).inMinutes.toInt() > -300) {
       return true;
     } else {
+      //if the times were not within the past 5 hours, update the time that it was last checked to the current time, and return false
       databaseReference.collection("users").doc(firebaseUser.uid).update({
         "lastChecked": DateTime.utc(DateTime.now().year, DateTime.now().month,
             DateTime.now().day, DateTime.now().hour, DateTime.now().minute)
       });
       return false;
     }
+    //if it was never checked before, update the time it was last checked to now, and return false
   } catch (e) {
     databaseReference.collection("users").doc(firebaseUser.uid).update({
       "lastChecked": DateTime.utc(DateTime.now().year, DateTime.now().month,
@@ -328,7 +340,6 @@ Future<bool> checkedRecently(User firebaseUser) async {
 
 Future<List<Assignment>> getFirestoreTasks(User firebaseUser) async {
   //gets all events from the database which were added automatically from the pupil dashboard
-
   try {
     QuerySnapshot tasksSnapshot = await databaseReference
         .collection("users")
@@ -336,17 +347,19 @@ Future<List<Assignment>> getFirestoreTasks(User firebaseUser) async {
         .collection("toDo")
         .get();
 
-//returns the number of events that were added automatically
+    //create a list of the assignment docs
     List<DocumentSnapshot> assignments = tasksSnapshot.docs;
 
     List<Assignment> assignmentsList = new List<Assignment>();
 
+//foreach assignment in the list, convert it into an Assignment object, and add it to the list
     assignments.forEach((assignment) {
       Assignment current = new Assignment.fromFirestore(assignment);
       assignmentsList.add(current);
     });
     return assignmentsList;
   } catch (e) {
+    //if an error is thrown, there are no assignments, so return null
     return null;
   }
 }
@@ -354,24 +367,29 @@ Future<List<Assignment>> getFirestoreTasks(User firebaseUser) async {
 void firestoreToDoAdd(User firebaseUser, Assignment assignment) async {
   List<String> attachmentStrings = new List<String>();
   assignment.attachments.forEach((attachment) {
+    //foreach of the task's attachments, convert its details into a string so that it can be uploaded to Firestore
     attachmentStrings.add(
         "${attachment.id}, ${attachment.title}, ${attachment.link}, ${attachment.thumbnail}, ${attachment.type}");
   });
 
   List<String> submissionStrings = new List<String>();
   assignment.submissionAttachments.forEach((attachment) {
+    //foreach of the student's attachments, convert its details into a string so that it can be uploaded to Firestore
     submissionStrings.add(
         "${attachment.id}, ${attachment.title}, ${attachment.link}, ${attachment.thumbnail}, ${attachment.type}");
   });
 
   String question = "";
   try {
+    //check if the task has a question. If it does, convert the options for the question into a string. This string is seperated by :-: as it is unlikely that will occur in one of the options.
     assignment.question.options.forEach((option) {
       question += ":-:$option";
     });
+    //remove the first :-: of the string (i.e. the separator before the first option)
     question = question.substring(2);
   } catch (e) {}
 
+//add the assignment's details to the Firestore database
   await databaseReference
       .collection("users")
       .doc(firebaseUser.uid)

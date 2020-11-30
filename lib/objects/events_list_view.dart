@@ -27,14 +27,15 @@ class EventsListView {
   //builds the list tile for the course
   static Widget _buildCustomListRow(
       BuildContext context, CustomUser user, Event event) {
-    //checks if list tile should have subtitle
     return ListTile(
-        leading: Text("${event.times[0][1]}\n${event.times[0][2]}"),
+        //the leading value is the event start time, with its end time below
+        leading: Text(
+            "${event.times[0][1].substring(0, 2)}:${event.times[0][1].substring(2)}\n${event.times[0][2].substring(0, 2)}:${event.times[0][2].substring(2)}"),
         title: Text(
           //returns the tile header as the subject
           event.name, style: subtitleStyle,
         ),
-        //returns other details as the subtitle
+        //returns other details as the subtitle. This changes depending on whether the event has a location or not
         subtitle: Text(
           "${event.location == null ? "" : event.location}${event.location != null && event.teacher != null ? " • " : ""}${event.teacher == null ? "" : event.teacher}",
           style: header3Style,

@@ -49,6 +49,7 @@ class Assignment {
     this.answer,
   });
 
+//convert the JSON of an assignment into an assignment object
   factory Assignment.fromJson(
       String courseName,
       Map<String, dynamic> assignmentJson,
@@ -176,6 +177,7 @@ class Assignment {
     }
   }
 
+//convert a Firestore doc into an assignment object
   factory Assignment.fromFirestore(DocumentSnapshot document) {
     List<Attachment> a = [];
     List<Attachment> s = [];

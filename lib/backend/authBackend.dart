@@ -16,6 +16,7 @@ Future<CustomUser> signIn(bool toSignOut) async {
   //initialzes an instance of the Firestore database and gets the signin state
   await Firebase.initializeApp();
 
+//if the user needs to be signed out first, sign them out
   if (toSignOut) {
     await googleSignIn.signOut();
   }
@@ -23,7 +24,9 @@ Future<CustomUser> signIn(bool toSignOut) async {
   //Sign the user in with Google, requesting their data from Google Classroom
   //If the user taps off, an error would be thrown, and the sign in tries again.
   GoogleSignInAccount googleUser;
-  while (googleUser == null) {
+  int repeats = 0;
+  while (googleUser == null && repeats < 2) {
+    //try to sign the user in. If it doesn't work, try again for a maximum of 2 times.
     try {
       googleUser = await GoogleSignIn(scopes: [
         "profile",
@@ -40,7 +43,9 @@ Future<CustomUser> signIn(bool toSignOut) async {
         "https://www.googleapis.com/auth/classroom.student-submissions.students.readonly",
         "https://www.googleapis.com/auth/classroom.topics",
       ]).signIn();
-    } catch (e) {}
+    } catch (e) {
+      repeats++;
+    }
   }
 
 //fetches the Google User's auth headers for requests later
@@ -66,6 +71,7 @@ Future<CustomUser> signIn(bool toSignOut) async {
   //https://medium.com/codechai/flutter-auth-with-google-f3c3aa0d0ccc
   //https://blog.codemagic.io/firebase-authentication-google-sign-in-using-flutter/
 
+//checks that the user has a Firestore document
   checkFirestoreUser(firebaseUser);
 
   return CustomUser.create(firebaseUser, googleAuthHeaders);

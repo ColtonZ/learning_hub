@@ -95,6 +95,7 @@ class PortraitView {
   static Widget create(
       List<Event> events, BuildContext context, String name, CustomUser user) {
     return Column(
+      //split the page into two: today's events, and the tasks that need doing
       children: [
         Divider(),
         Text(
@@ -104,13 +105,16 @@ class PortraitView {
         Divider(),
         Expanded(
           child: FutureBuilder(
+            //get a list of today's events
             future: eventsToday(user.firebaseUser, events),
             builder: (context, todaySnapshot) {
               if (todaySnapshot.connectionState == ConnectionState.done) {
                 if (todaySnapshot.data.length > 0) {
+                  //if there's more than one event today, create a list view of today's events
                   return EventsListView.create(
                       context, user, todaySnapshot.data);
                 } else {
+                  //if there are no events in the calendar today, tell the user as much
                   return Center(
                     child: Text("You have no events in the calendar today."),
                   );
@@ -129,13 +133,16 @@ class PortraitView {
         Divider(),
         Expanded(
           child: FutureBuilder(
+            //get the user's tasks that need doing
             future: tasksToDo(user),
             builder: (context, tasksSnapshot) {
               if (tasksSnapshot.connectionState == ConnectionState.done) {
                 if (tasksSnapshot.data.length > 0) {
+                  //if the user has tasks to do, return a list view of their tasks
                   return AssignmentsListView.create(
                       context, user, tasksSnapshot.data);
                 } else {
+                //if a user has no tasks to do, tell them as much.
                   return Center(
                       child: Text("You have no incomplete assignments."));
                 }
