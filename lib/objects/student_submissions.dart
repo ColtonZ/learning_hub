@@ -18,7 +18,6 @@ class StudentSubmissions {
             height: MediaQuery.of(context).size.height / 50,
           ),
           Container(
-            color: Colors.white,
             child: Column(
               children: [
                 Icon(Icons.expand_more),
@@ -35,7 +34,7 @@ class StudentSubmissions {
                       leading: Radio(
                         value: i,
                         groupValue: _value,
-                        activeColor: accentColour,
+                        activeColor: Theme.of(context).accentColor,
                         onChanged: i == 5 ? null : (int value) {},
                       ),
                     )
@@ -54,7 +53,6 @@ class StudentSubmissions {
             height: MediaQuery.of(context).size.height / 50,
           ),
           Container(
-            color: Colors.white,
             child: Column(
               children: [
                 Icon(Icons.expand_more),
@@ -67,9 +65,12 @@ class StudentSubmissions {
                   //creates a form field for the user to submit their answer and then hand it in.
                   child: Column(children: [
                     TextFormField(
+                      cursorColor: Theme.of(context).accentColor,
                       decoration: InputDecoration(hintText: "Type your answer"),
                     ),
                     RaisedButton(
+                      color: Theme.of(context).highlightColor,
+                      disabledColor: Theme.of(context).highlightColor,
                       onPressed: null,
                       child: Text(
                         "Turn in",
@@ -92,7 +93,6 @@ class StudentSubmissions {
             height: MediaQuery.of(context).size.height / 50,
           ),
           Container(
-            color: Colors.white,
             child: Column(
               children: [
                 Icon(Icons.expand_more),

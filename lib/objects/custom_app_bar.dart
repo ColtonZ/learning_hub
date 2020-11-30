@@ -7,7 +7,7 @@ class CustomAppBar {
   static AppBar create(BuildContext context, String title) {
     return new AppBar(
       title: Text(title, style: pageTitleStyle),
-      backgroundColor: accentColour,
+      backgroundColor: Theme.of(context).accentColor,
     );
   }
 }

@@ -224,7 +224,7 @@ class CustomScaffold {
                             ),
                             //this container fades out when the panel is slid up, thus hiding the pull up arrow and showing the pull down arrow
                             Container(
-                              color: Colors.white,
+                              color: Theme.of(context).backgroundColor,
                               child: Column(
                                 children: [
                                   Icon(Icons.expand_less),
@@ -250,6 +250,7 @@ class CustomScaffold {
                       panel: Center(
                         child: StudentSubmissions.create(context, assignment),
                       ),
+                      color: Theme.of(context).backgroundColor,
                     ),
                   ],
                 ),

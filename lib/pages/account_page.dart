@@ -88,6 +88,7 @@ class CustomScaffold {
               ),
               //creates a Sign Out button
               RaisedButton(
+                  color: Theme.of(context).accentColor,
                   child: Container(
                     width: 100,
                     child: Row(

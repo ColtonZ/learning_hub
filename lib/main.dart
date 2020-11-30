@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:learning_hub/theming.dart';
 
 import 'pages/account_page.dart';
 import 'pages/settings_page.dart';
@@ -82,6 +83,10 @@ class MyApp extends StatelessWidget {
         }
       },
       initialRoute: '/',
+      theme:
+          WidgetsBinding.instance.window.platformBrightness == Brightness.dark
+              ? darkTheme
+              : lightTheme,
     );
   }
 }

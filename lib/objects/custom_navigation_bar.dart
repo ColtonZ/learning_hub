@@ -103,8 +103,8 @@ class CustomNavigationBar {
       ],
       //details other information about the navigation bar
       currentIndex: index,
-      selectedItemColor: accentColour,
-      unselectedItemColor: Colors.black,
+      selectedItemColor: Theme.of(context).accentColor,
+      unselectedItemColor: Theme.of(context).buttonColor,
       //the type just says that the icons should not move when selected
       type: BottomNavigationBarType.fixed,
       showSelectedLabels: true,
