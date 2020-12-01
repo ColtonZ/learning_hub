@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+
 import 'package:learning_hub/objects/assignments_list_view.dart';
 import 'package:learning_hub/theming.dart';
 
@@ -39,7 +40,7 @@ class TimetablePageState extends State<TimetablePage> {
               if (snapshot.connectionState == ConnectionState.done) {
                 user = snapshot.data;
                 //once the user has been signed in, load the page
-                return CustomScaffold.create(context, name, user);
+                return _CustomScaffold(user: user, name: name);
               } else {
                 //whilst signing in, return a loading indicator
                 return Scaffold(
@@ -49,14 +50,28 @@ class TimetablePageState extends State<TimetablePage> {
                         CustomNavigationBar.create(context, name, user, 0));
               }
             })
-        : CustomScaffold.create(context, name, user);
+        : _CustomScaffold(user: user, name: name);
   }
 }
 
+class _CustomScaffold extends StatefulWidget {
+  final CustomUser user;
+  final String name;
+
+  _CustomScaffold({this.user, this.name});
+
+  @override
+  _CustomScaffoldState createState() => _CustomScaffoldState();
+}
+
 //details the looks of the page
-class CustomScaffold {
-  static Scaffold create(BuildContext context, String name, CustomUser user) {
-    return new Scaffold(
+class _CustomScaffoldState extends State<_CustomScaffold> {
+  @override
+  Widget build(BuildContext context) {
+    CustomUser user = widget.user;
+    String name = widget.name;
+    DateTime time = DateTime.now();
+    return Scaffold(
         //returns the custom app bar with the timetable page title
         appBar: CustomAppBar.create(context, "Your Timetable"),
         //builds the body
@@ -65,6 +80,7 @@ class CustomScaffold {
         body: FutureBuilder(
             //counts how many Firefly events the user has
             future: getEventsList(user.firebaseUser),
+            //https://flutter.dev/docs/development/ui/interactive
             builder: (context, snapshot) {
               if (snapshot.connectionState == ConnectionState.done) {
                 if (snapshot.data == null || snapshot.data.length == 0) {
@@ -77,8 +93,11 @@ class CustomScaffold {
                   );
                 } else {
                   //otherwise build the page
-                  return PortraitView.create(
-                      snapshot.data, context, name, user);
+                  return _PortraitView(
+                      events: snapshot.data,
+                      time: time,
+                      name: name,
+                      user: user);
                 }
               } else {
                 //whilst getting courses, return a loading indicator
@@ -91,22 +110,90 @@ class CustomScaffold {
   }
 }
 
-class PortraitView {
-  static Widget create(
-      List<Event> events, BuildContext context, String name, CustomUser user) {
+class _PortraitView extends StatefulWidget {
+  final CustomUser user;
+  final String name;
+  final DateTime time;
+  final List<Event> events;
+
+  _PortraitView({this.user, this.name, this.time, this.events});
+
+  @override
+  _PortraitViewState createState() => _PortraitViewState();
+}
+
+class _PortraitViewState extends State<_PortraitView> {
+  DateTime time = DateTime.now();
+  List<String> months = [
+    'January',
+    'February',
+    'March',
+    'April',
+    'May',
+    'June',
+    'July',
+    'August',
+    'September',
+    'October',
+    'November',
+    'December'
+  ];
+
+  List<String> days = [
+    "Monday",
+    "Tuesday",
+    "Wednesday",
+    "Thursday",
+    "Friday",
+    "Saturday",
+    "Sunday"
+  ];
+
+  @override
+  Widget build(BuildContext context) {
+    CustomUser user = widget.user;
+    List<Event> events = widget.events;
     return Column(
       //split the page into two: today's events, and the tasks that need doing
       children: [
         Divider(),
+        Row(
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: [
+            IconButton(
+              icon: Icon(Icons.arrow_left),
+              onPressed: () {
+                setState(() {
+                  time = time.subtract(Duration(days: 1));
+                });
+              },
+            ),
+            Text(
+              "Your Events",
+              style: titleStyle,
+            ),
+            IconButton(
+              icon: Icon(Icons.arrow_right),
+              onPressed: () {
+                setState(() {
+                  time = time.add(Duration(days: 1));
+                });
+              },
+            ),
+          ],
+        ),
+        Container(
+          height: 5,
+        ),
         Text(
-          "Today's Events",
-          style: titleStyle,
+          "${days[time.weekday-1]} ${time.day} ${months[time.month - 1]} ${time.year}",
+          style: subtitleStyle,
         ),
         Divider(),
         Expanded(
           child: FutureBuilder(
             //get a list of today's events
-            future: getEvents(DateTime.now(), user.firebaseUser, events),
+            future: getEvents(time, user.firebaseUser, events),
             builder: (context, eventsSnaphsot) {
               if (eventsSnaphsot.connectionState == ConnectionState.done) {
                 if (eventsSnaphsot.data.length > 0) {
@@ -116,7 +203,7 @@ class PortraitView {
                 } else {
                   //if there are no events in the calendar today, tell the user as much
                   return Center(
-                    child: Text("You have no events in the calendar today."),
+                    child: Text("You have no events in the calendar on this day."),
                   );
                 }
               } else {
