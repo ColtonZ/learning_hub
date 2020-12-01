@@ -106,13 +106,13 @@ class PortraitView {
         Expanded(
           child: FutureBuilder(
             //get a list of today's events
-            future: eventsToday(user.firebaseUser, events),
-            builder: (context, todaySnapshot) {
-              if (todaySnapshot.connectionState == ConnectionState.done) {
-                if (todaySnapshot.data.length > 0) {
+            future: getEvents(DateTime.now(), user.firebaseUser, events),
+            builder: (context, eventsSnaphsot) {
+              if (eventsSnaphsot.connectionState == ConnectionState.done) {
+                if (eventsSnaphsot.data.length > 0) {
                   //if there's more than one event today, create a list view of today's events
                   return EventsListView.create(
-                      context, user, todaySnapshot.data);
+                      context, user, eventsSnaphsot.data);
                 } else {
                   //if there are no events in the calendar today, tell the user as much
                   return Center(
@@ -142,7 +142,7 @@ class PortraitView {
                   return AssignmentsListView.create(
                       context, user, tasksSnapshot.data);
                 } else {
-                //if a user has no tasks to do, tell them as much.
+                  //if a user has no tasks to do, tell them as much.
                   return Center(
                       child: Text("You have no incomplete assignments."));
                 }
