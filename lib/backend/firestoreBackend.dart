@@ -385,7 +385,9 @@ void firestoreToDoAdd(User firebaseUser, Assignment assignment) async {
     });
     //remove the first :-: of the string (i.e. the separator before the first option)
     question = question.substring(2);
-  } catch (e) {}
+  } catch (e) {
+    question = question == "" ? null : question;
+  }
 
 //add the assignment's details to the Firestore database
   await databaseReference

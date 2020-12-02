@@ -324,7 +324,6 @@ class AddEventState extends State<AddEvent> {
                   padding: const EdgeInsets.symmetric(vertical: 8.0),
                   child: ElevatedButton(
                     onPressed: () async {
-                      //TODO: Fix adding events
                       // Validate will return true if the form is valid, or false if
                       // the form is invalid.
                       if (_formKey.currentState.validate() &&
