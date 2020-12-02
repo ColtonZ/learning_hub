@@ -4,10 +4,21 @@ import '../theming.dart';
 import 'assignment.dart';
 import 'customUser.dart';
 
-class AssignmentsListView {
-  //creates a list view
-  static ListView create(
-      BuildContext context, CustomUser user, List<Assignment> assignments) {
+class AssignmentsListView extends StatefulWidget {
+  final List<Assignment> assignments;
+  final CustomUser user;
+
+  AssignmentsListView({this.assignments, this.user});
+
+  @override
+  AssignmentsListViewState createState() => AssignmentsListViewState();
+}
+
+//details the looks of the page
+class AssignmentsListViewState extends State<AssignmentsListView> {
+  Widget build(BuildContext context) {
+    List<Assignment> assignments = widget.assignments;
+    CustomUser user = widget.user;
     return ListView.builder(
       itemCount: (assignments.length * 2),
       //half the items will be dividers, the other will be list tiles

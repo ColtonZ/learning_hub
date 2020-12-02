@@ -32,26 +32,38 @@ class TannoyPageState extends State<TannoyPage> {
               if (snapshot.connectionState == ConnectionState.done) {
                 user = snapshot.data;
                 //once signed in, the page is loaded
-                return CustomScaffold.create(context, name, user);
+                return _CustomScaffold(name: name, user: user);
               } else {
                 //whilst signing in, return a loading indicator
                 return Scaffold(
-                    appBar: CustomAppBar.create(context, "Tannoy Notices"),
+                    appBar: CustomAppBar(title: "Tannoy Notices"),
                     body: Center(child: CircularProgressIndicator()),
                     bottomNavigationBar:
-                        CustomNavigationBar.create(context, name, user, 2));
+                        CustomNavigationBar(name: name, user: user, index: 2));
               }
             })
-        : CustomScaffold.create(context, name, user);
+        : _CustomScaffold(name: name, user: user);
   }
 }
 
+class _CustomScaffold extends StatefulWidget {
+  final String name;
+  final CustomUser user;
+
+  _CustomScaffold({this.name, this.user});
+
+  @override
+  _CustomScaffoldState createState() => _CustomScaffoldState();
+}
+
 //details the looks of the page
-class CustomScaffold {
-  static Scaffold create(BuildContext context, String name, CustomUser user) {
+class _CustomScaffoldState extends State<_CustomScaffold> {
+  Widget build(BuildContext context) {
+    String name = widget.name;
+    CustomUser user = widget.user;
     return new Scaffold(
         //returns the custom app bar with the tannoy page title
-        appBar: CustomAppBar.create(context, "Tannoy Notices"),
+        appBar: CustomAppBar(title: "Tannoy Notices"),
         //builds the body
         body: Center(
             child: Text(
@@ -60,6 +72,6 @@ class CustomScaffold {
         )),
         //builds the navigation bar for the given page
         bottomNavigationBar:
-            CustomNavigationBar.create(context, name, user, 2));
+            CustomNavigationBar(name: name, user: user, index: 2));
   }
 }

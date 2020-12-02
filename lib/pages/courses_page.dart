@@ -35,26 +35,38 @@ class CoursesPageState extends State<CoursesPage> {
               if (snapshot.connectionState == ConnectionState.done) {
                 user = snapshot.data;
                 //once signed in, the page is loaded
-                return CustomScaffold.create(context, name, user);
+                return _CustomScaffold(name: name, user: user);
               } else {
                 //whilst signing in, return a loading indicator
                 return Scaffold(
-                    appBar: CustomAppBar.create(context, "Your Courses"),
+                    appBar: CustomAppBar(title: "Your Courses"),
                     body: Center(child: CircularProgressIndicator()),
                     bottomNavigationBar:
-                        CustomNavigationBar.create(context, name, user, 1));
+                        CustomNavigationBar(name: name, user: user, index: 1));
               }
             })
-        : CustomScaffold.create(context, name, user);
+        : _CustomScaffold(name: name, user: user);
   }
 }
 
+class _CustomScaffold extends StatefulWidget {
+  final String name;
+  final CustomUser user;
+
+  _CustomScaffold({this.name, this.user});
+
+  @override
+  _CustomScaffoldState createState() => _CustomScaffoldState();
+}
+
 //details the looks of the page
-class CustomScaffold {
-  static Scaffold create(BuildContext context, String name, CustomUser user) {
+class _CustomScaffoldState extends State<_CustomScaffold> {
+  Widget build(BuildContext context) {
+    String name = widget.name;
+    CustomUser user = widget.user;
     return new Scaffold(
         //returns the custom app bar with the courses page title
-        appBar: CustomAppBar.create(context, "Your Courses"),
+        appBar: CustomAppBar(title: "Your Courses"),
         //builds the body
         body: FutureBuilder(
             future: getCourses(user),
@@ -64,7 +76,7 @@ class CustomScaffold {
                 //checks if the user has courses. If they do, return the courses, otherwise return an error message
                 try {
                   //creates a list view of the courses
-                  return CoursesListView.create(context, user, courses);
+                  return CoursesListView(user: user, courses: courses);
                 } catch (Exception) {
                   return Center(
                     child: Text("You have no courses to display."),
@@ -77,6 +89,6 @@ class CustomScaffold {
             }),
         //builds the navigation bar for the given page
         bottomNavigationBar:
-            CustomNavigationBar.create(context, name, user, 1));
+            CustomNavigationBar(name: name, user: user, index: 1));
   }
 }

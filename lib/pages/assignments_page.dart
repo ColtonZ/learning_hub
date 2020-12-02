@@ -39,27 +39,43 @@ class AssignmentsPageState extends State<AssignmentsPage> {
               if (snapshot.connectionState == ConnectionState.done) {
                 user = snapshot.data;
                 //once signed in, load the page
-                return CustomScaffold.create(context, name, user, course, id);
+                return _CustomScaffold(
+                    name: name, user: user, course: course, id: id);
               } else {
                 //whilst signing in, return a loading indicator
                 return Scaffold(
-                    appBar: CustomAppBar.create(context, course),
+                    appBar: CustomAppBar(title: "Account Details"),
                     body: Center(child: CircularProgressIndicator()),
                     bottomNavigationBar:
-                        CustomNavigationBar.create(context, name, user, 1));
+                        CustomNavigationBar(name: name, user: user, index: 1));
               }
             })
-        : CustomScaffold.create(context, name, user, course, id);
+        : _CustomScaffold(name: name, user: user, course: course, id: id);
   }
 }
 
+class _CustomScaffold extends StatefulWidget {
+  final String name;
+  final CustomUser user;
+  final String course;
+  final String id;
+
+  _CustomScaffold({this.name, this.user, this.course, this.id});
+
+  @override
+  _CustomScaffoldState createState() => _CustomScaffoldState();
+}
+
 //details the looks of the page
-class CustomScaffold {
-  static Scaffold create(BuildContext context, String name, CustomUser user,
-      String course, String id) {
+class _CustomScaffoldState extends State<_CustomScaffold> {
+  Widget build(BuildContext context) {
+    String name = widget.name;
+    CustomUser user = widget.user;
+    String course = widget.course;
+    String id = widget.id;
     return new Scaffold(
         //returns the custom app bar with the assignments page title
-        appBar: CustomAppBar.create(context, course),
+        appBar: CustomAppBar(title: course),
         //builds the body
         body: FutureBuilder(
             future: getAssignments(id, user),
@@ -69,7 +85,8 @@ class CustomScaffold {
                 //checks if the user has assignments. If they do, return the assignments as a list view, otherwise return an error message
                 try {
                   //creates a list view of the assignments
-                  return AssignmentsListView.create(context, user, assignments);
+                  return AssignmentsListView(
+                      user: user, assignments: assignments);
                 } catch (error) {
                   return Center(
                     child: Text("You have no assignments to display."),
@@ -82,6 +99,6 @@ class CustomScaffold {
             }),
         //builds the navigation bar for the given page
         bottomNavigationBar:
-            CustomNavigationBar.create(context, name, user, 1));
+            CustomNavigationBar(name: name, user: user, index: 1));
   }
 }

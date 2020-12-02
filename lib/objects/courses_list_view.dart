@@ -5,10 +5,21 @@ import '../theming.dart';
 import 'customUser.dart';
 import 'course.dart';
 
-class CoursesListView {
-  //creates a list view
-  static ListView create(
-      BuildContext context, CustomUser user, List<Course> courses) {
+class CoursesListView extends StatefulWidget {
+  final List<Course> courses;
+  final CustomUser user;
+
+  CoursesListView({this.courses, this.user});
+
+  @override
+  CoursesListViewState createState() => CoursesListViewState();
+}
+
+//details the looks of the page
+class CoursesListViewState extends State<CoursesListView> {
+  Widget build(BuildContext context) {
+    List<Course> courses = widget.courses;
+    CustomUser user = widget.user;
     return ListView.builder(
       addAutomaticKeepAlives: true,
       itemCount: (courses.length * 2),

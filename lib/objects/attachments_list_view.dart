@@ -4,10 +4,21 @@ import 'package:url_launcher/url_launcher.dart';
 import '../theming.dart';
 import 'attachment.dart';
 
-class AttachmentsListView {
-  //creates a list view
-  static ListView create(
-      BuildContext context, String description, List<Attachment> attachments) {
+class AttachmentsListView extends StatefulWidget {
+  final List<Attachment> attachments;
+  final String description;
+
+  AttachmentsListView({this.attachments, this.description});
+
+  @override
+  AttachmentsListViewState createState() => AttachmentsListViewState();
+}
+
+//details the looks of the page
+class AttachmentsListViewState extends State<AttachmentsListView> {
+  Widget build(BuildContext context) {
+    List<Attachment> attachments = widget.attachments;
+    String description = widget.description;
     return ListView.builder(
       itemCount: (attachments.length * 2 + 2),
       //half the items will be dividers, the other will be list tiles

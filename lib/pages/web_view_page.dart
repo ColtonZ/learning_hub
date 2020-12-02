@@ -22,13 +22,25 @@ class WebViewPageState extends State<WebViewPage> {
     CustomUser user = widget.user;
     String url = widget.url;
     //checks if the user is signed in, if not, they are signed in. If they are, the page is loaded
-    return CustomBody.create(context, user, url);
+    return _CustomBody(user: user, url: url);
   }
 }
 
+class _CustomBody extends StatefulWidget {
+  final String url;
+  final CustomUser user;
+
+  _CustomBody({this.url, this.user});
+
+  @override
+  _CustomBodyState createState() => _CustomBodyState();
+}
+
 //details the looks of the page
-class CustomBody {
-  static Widget create(BuildContext context, CustomUser user, String url) {
+class _CustomBodyState extends State<_CustomBody> {
+  Widget build(BuildContext context) {
+    String url = widget.url;
+    CustomUser user = widget.user;
     return new InAppWebView(
       //load the webview according to the specific page which was passed
       initialUrl: "https://intranet.stpaulsschool.org.uk$url",

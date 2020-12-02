@@ -34,7 +34,46 @@ class AssignmentPageState extends State<AssignmentPage> {
   Widget build(BuildContext context) {
     String name = widget.name;
     CustomUser user = widget.user;
-    String course = widget.assignment.courseName;
+    Assignment assignment = widget.assignment;
+    //checks if the user is signed in, if not, they are signed in. If they are, load the page
+    return user == null
+        ? FutureBuilder(
+            future: signIn(false),
+            builder: (context, snapshot) {
+              if (snapshot.connectionState == ConnectionState.done) {
+                user = snapshot.data;
+                //once signed in, load the page
+                return _CustomScaffold(
+                    name: name, user: user, assignment: assignment);
+              } else {
+                //whilst signing in, return a loading indicator
+                return Scaffold(
+                    appBar:  CustomAppBar(title: "Account Details"),
+                    body: Center(child: CircularProgressIndicator()),
+                    bottomNavigationBar:
+                        CustomNavigationBar(name: name, user: user, index: 1));
+              }
+            })
+        : _CustomScaffold(name: name, user: user, assignment: assignment);
+  }
+}
+
+class _CustomScaffold extends StatefulWidget {
+  final String name;
+  final CustomUser user;
+  final Assignment assignment;
+
+  _CustomScaffold({this.name, this.user, this.assignment});
+
+  @override
+  _CustomScaffoldState createState() => _CustomScaffoldState();
+}
+
+//details the looks of the page
+class _CustomScaffoldState extends State<_CustomScaffold> {
+  Widget build(BuildContext context) {
+    String name = widget.name;
+    CustomUser user = widget.user;
     Assignment assignment = widget.assignment;
     List<String> months = [
       "Jan",
@@ -50,44 +89,10 @@ class AssignmentPageState extends State<AssignmentPage> {
       "Nov",
       "Dec"
     ];
-    //checks if the user is signed in, if not, they are signed in. If they are, load the page
-    return user == null
-        ? FutureBuilder(
-            future: signIn(false),
-            builder: (context, snapshot) {
-              if (snapshot.connectionState == ConnectionState.done) {
-                user = snapshot.data;
-                //once signed in, load the page
-                return CustomScaffold.create(
-                    context, name, user, course, assignment, months);
-              } else {
-                //whilst signing in, return a loading indicator
-                return Scaffold(
-                    appBar: CustomAppBar.create(context, course),
-                    body: Center(child: CircularProgressIndicator()),
-                    bottomNavigationBar:
-                        CustomNavigationBar.create(context, name, user, 1));
-              }
-            })
-        : CustomScaffold.create(
-            context, name, user, course, assignment, months);
-  }
-}
-
-//details the looks of the page
-class CustomScaffold {
-  static Scaffold create(
-    BuildContext context,
-    String name,
-    CustomUser user,
-    String course,
-    Assignment assignment,
-    List<String> months,
-  ) {
     return new Scaffold(
 
         //returns the custom app bar with the assignments page title
-        appBar: CustomAppBar.create(context, course),
+        appBar:  CustomAppBar(title: assignment.courseName),
         //builds the body
         body: Center(
           child: Column(
@@ -207,12 +212,11 @@ class CustomScaffold {
               Expanded(
                 child: Stack(
                   children: [
-                    AttachmentsListView.create(
-                        context,
-                        assignment.description != null
+                    AttachmentsListView(
+                        description: assignment.description != null
                             ? assignment.description
                             : "This task has no description.",
-                        assignment.attachments),
+                        attachments: assignment.attachments),
                     //returns a panel which allows the user to slide up and view their attached work
                     //from https://pub.dev/packages/sliding_up_panel
                     SlidingUpPanel(
@@ -248,7 +252,10 @@ class CustomScaffold {
                               MediaQuery.of(context).size.width / 20)),
                       //creates the list of the student's submissions
                       panel: Center(
-                        child: StudentSubmissions.create(context, assignment),
+                        child: StudentSubmissions(
+                          user: user,
+                          assignment: assignment,
+                        ),
                       ),
                       color: Theme.of(context).backgroundColor,
                     ),
@@ -259,6 +266,6 @@ class CustomScaffold {
           ),
         ), //builds the navigation bar for the given page
         bottomNavigationBar:
-            CustomNavigationBar.create(context, name, user, 1));
+            CustomNavigationBar(name: name, user: user, index: 1));
   }
 }

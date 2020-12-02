@@ -3,7 +3,18 @@ import 'package:flutter/material.dart';
 import 'customUser.dart';
 import '../theming.dart';
 
-class CustomNavigationBar {
+class CustomNavigationBar extends StatefulWidget {
+  final String name;
+  final CustomUser user;
+  final int index;
+
+  CustomNavigationBar({this.name, this.user, this.index});
+
+  @override
+  CustomNavigationBarState createState() => CustomNavigationBarState();
+}
+
+class CustomNavigationBarState extends State<CustomNavigationBar> {
   //defines a series of methods, each with the route of the page to push and any additional logic, as well as arguments.
   //each page will ensure that, if coming from the assignments or assignment page to pop back far enough, as otherwise you may end up with too many pages on top of each other
   static void _pushAccountPage(
@@ -73,8 +84,11 @@ class CustomNavigationBar {
 
   //creates a new navigation bar with the given tabs to provide consistency
   //checks what the current page is, and gives it a name accordingly
-  static BottomNavigationBar create(
-      BuildContext context, String name, CustomUser user, int index) {
+  @override
+  Widget build(BuildContext context) {
+    String name = widget.name;
+    CustomUser user = widget.user;
+    int index = widget.index;
     return new BottomNavigationBar(
       selectedLabelStyle: navigationBarStyle,
       unselectedLabelStyle: navigationBarStyle,

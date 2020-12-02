@@ -4,10 +4,21 @@ import '../theming.dart';
 import 'customUser.dart';
 import 'event.dart';
 
-class EventsListView {
-  //creates a list view
-  static ListView create(
-      BuildContext context, CustomUser user, List<Event> events) {
+class EventsListView extends StatefulWidget {
+  final List<Event> events;
+  final CustomUser user;
+
+  EventsListView({this.events, this.user});
+
+  @override
+  EventsListViewState createState() => EventsListViewState();
+}
+
+//details the looks of the page
+class EventsListViewState extends State<EventsListView> {
+  Widget build(BuildContext context) {
+    List<Event> events = widget.events;
+    CustomUser user = widget.user;
     return ListView.builder(
       itemCount: (events.length * 2),
       //half the items will be dividers, the other will be list tiles

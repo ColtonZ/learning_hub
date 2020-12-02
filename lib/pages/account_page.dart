@@ -35,26 +35,38 @@ class AccountPageState extends State<AccountPage> {
               if (snapshot.connectionState == ConnectionState.done) {
                 user = snapshot.data;
                 //once signed in, load the page
-                return CustomScaffold.create(context, name, user);
+                return _CustomScaffold(name: name, user: user);
               } else {
                 //whilst signing in, return a loading indicator
                 return Scaffold(
-                    appBar: CustomAppBar.create(context, "Account Details"),
+                    appBar: CustomAppBar(title: "Account Details"),
                     body: Center(child: CircularProgressIndicator()),
                     bottomNavigationBar:
-                        CustomNavigationBar.create(context, name, user, 4));
+                        CustomNavigationBar(name: name, user: user, index: 4));
               }
             })
-        : CustomScaffold.create(context, name, user);
+        : _CustomScaffold(name: name, user: user);
   }
 }
 
+class _CustomScaffold extends StatefulWidget {
+  final String name;
+  final CustomUser user;
+
+  _CustomScaffold({this.name, this.user});
+
+  @override
+  _CustomScaffoldState createState() => _CustomScaffoldState();
+}
+
 //details the looks of the page
-class CustomScaffold {
-  static Scaffold create(BuildContext context, String name, CustomUser user) {
+class _CustomScaffoldState extends State<_CustomScaffold> {
+  Widget build(BuildContext context) {
+    CustomUser user = widget.user;
+    String name = widget.name;
     return new Scaffold(
         //returns the custom app bar with the account page title
-        appBar: CustomAppBar.create(context, "Account Details"),
+        appBar: CustomAppBar(title: "Account Details"),
         //designs the account page
         body: Center(
           child: Column(
@@ -112,7 +124,7 @@ class CustomScaffold {
         ),
         //creates the bottom navigation bar
         bottomNavigationBar:
-            CustomNavigationBar.create(context, name, user, 4));
+            CustomNavigationBar(name: name, user: user, index: 4));
   }
 
   //to sign out, push the account page again, but without any user data, and with an argument telling the page to sign out first

@@ -3,11 +3,23 @@ import 'package:flutter/material.dart';
 import '../theming.dart';
 import 'assignment.dart';
 import 'attachments_list_view.dart';
+import 'customUser.dart';
 
-class StudentSubmissions {
-  //creates a list view of the student's submission
-  //checks on the type of the assignment to work out if it should be looking for attached files, or for a question response
-  static Widget create(BuildContext context, Assignment assignment) {
+class StudentSubmissions extends StatefulWidget {
+  final Assignment assignment;
+  final CustomUser user;
+
+  StudentSubmissions({this.assignment, this.user});
+
+  @override
+  StudentSubmissionsState createState() => StudentSubmissionsState();
+}
+
+//details the looks of the page
+class StudentSubmissionsState extends State<StudentSubmissions> {
+  Widget build(BuildContext context) {
+    CustomUser user = widget.user;
+    Assignment assignment = widget.assignment;
     int _value = 0;
     //if it is a multiple choice question, return the "Your work" page as a series of radio buttons to select from for multiple choice
     if (assignment.type == "MULTIPLE_CHOICE_QUESTION") {
@@ -105,8 +117,9 @@ class StudentSubmissions {
           ),
           Expanded(
               //creates the list view of the attachments, with no 'description' (as it should only say **Attachments:**)
-              child: AttachmentsListView.create(
-                  context, "", assignment.submissionAttachments))
+              child: AttachmentsListView(
+                  description: "",
+                  attachments: assignment.submissionAttachments))
         ],
       ));
     }
