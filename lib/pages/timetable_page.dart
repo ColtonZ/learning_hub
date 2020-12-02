@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:learning_hub/objects/addEventPopup.dart';
 
 import 'package:learning_hub/objects/assignments_list_view.dart';
 import 'package:learning_hub/theming.dart';
@@ -160,25 +161,73 @@ class _PortraitViewState extends State<_PortraitView> {
         Row(
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
-            IconButton(
-              icon: Icon(Icons.arrow_left),
-              onPressed: () {
-                setState(() {
-                  time = time.subtract(Duration(days: 1));
-                });
-              },
+            Row(
+              mainAxisAlignment: MainAxisAlignment.start,
+              children: [
+                Padding(
+                  padding: EdgeInsets.fromLTRB(14, 0, 0, 0),
+                  child: IconButton(
+                    icon: Icon(Icons.calendar_today),
+                    onPressed: () async {
+                      DateTime picked = await showDatePicker(
+                        context: context,
+                        initialDate: DateTime.now(),
+                        firstDate: DateTime.now().subtract(Duration(days: 365)),
+                        lastDate: DateTime.now().add(Duration(days: 365)),
+                      );
+                      if (picked != null && picked != DateTime.now())
+                        setState(() {
+                          time = picked;
+                        });
+                    },
+                  ),
+                ),
+              ],
             ),
-            Text(
-              "Your Events",
-              style: titleStyle,
+            Expanded(
+              child: Row(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: [
+                  IconButton(
+                    icon: Icon(Icons.arrow_left),
+                    onPressed: () {
+                      setState(() {
+                        time = time.subtract(Duration(days: 1));
+                      });
+                    },
+                  ),
+                  Text(
+                    "Your Events",
+                    style: titleStyle,
+                  ),
+                  IconButton(
+                    icon: Icon(Icons.arrow_right),
+                    onPressed: () {
+                      setState(() {
+                        time = time.add(Duration(days: 1));
+                      });
+                    },
+                  ),
+                ],
+              ),
             ),
-            IconButton(
-              icon: Icon(Icons.arrow_right),
-              onPressed: () {
-                setState(() {
-                  time = time.add(Duration(days: 1));
-                });
-              },
+            Row(
+              mainAxisAlignment: MainAxisAlignment.start,
+              children: [
+                Padding(
+                  padding: EdgeInsets.fromLTRB(0, 0, 14, 0),
+                  child: IconButton(
+                    icon: Icon(Icons.add),
+                    onPressed: () async {
+                      showDialog(
+                          context: context,
+                          builder: (BuildContext context) {
+                            return AddEvent(user: user);
+                          });
+                    },
+                  ),
+                ),
+              ],
             ),
           ],
         ),
@@ -186,7 +235,7 @@ class _PortraitViewState extends State<_PortraitView> {
           height: 5,
         ),
         Text(
-          "${days[time.weekday-1]} ${time.day} ${months[time.month - 1]} ${time.year}",
+          "${days[time.weekday - 1]} ${time.day} ${months[time.month - 1]} ${time.year}",
           style: subtitleStyle,
         ),
         Divider(),
@@ -203,7 +252,8 @@ class _PortraitViewState extends State<_PortraitView> {
                 } else {
                   //if there are no events in the calendar today, tell the user as much
                   return Center(
-                    child: Text("You have no events in the calendar on this day."),
+                    child:
+                        Text("You have no events in the calendar on this day."),
                   );
                 }
               } else {

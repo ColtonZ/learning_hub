@@ -305,9 +305,7 @@ Future<String> getCurrentWeek(User firebaseUser) async {
   DateTime weekA = userDoc.data()["weekA"].toDate();
 
 //if that happened an even number of weeks ago, it must be week A, otherwise it'll be week B
-  return (-weekA.difference(DateTime.now()).inDays) ~/ 7 % 2 == 0
-      ? "A"
-      : "B";
+  return (-weekA.difference(DateTime.now()).inDays) ~/ 7 % 2 == 0 ? "A" : "B";
 }
 
 Future<bool> checkedRecently(User firebaseUser) async {
@@ -439,4 +437,129 @@ void removeClassroomTasks(User user) async {
         .doc(event.id)
         .delete();
   });
+}
+
+Future<String> addCustomEvent(
+    User firebaseUser,
+    String name,
+    String teacher,
+    String location,
+    List<bool> days,
+    bool weekA,
+    bool weekB,
+    String start,
+    String end) async {
+  List<int> weekDays = new List<int>();
+
+  location = location == "" ? null : location;
+  teacher = teacher == "" ? null : teacher;
+
+  for (int i = 0; i < 7; i++) {
+    if (days[i]) {
+      weekDays.add(i);
+    }
+  }
+
+  for (int day in weekDays) {
+    //this tries to get all events in the user's events collection where the class, teacher, set, location are the same (and the event was added by Firefly)
+    QuerySnapshot matchingEvent = await databaseReference
+        .collection("users")
+        .doc(firebaseUser.uid)
+        .collection("events")
+        .where("name", isEqualTo: name)
+        .where("platform", isEqualTo: "LH")
+        .where("location", isEqualTo: location)
+        .where("teacher", isEqualTo: teacher)
+        .get();
+
+    //if a matching event exists, then the current event's details are simply added to the event just found in the database (to stop too much duplicate data)
+    //otherwise, a new event is added according to the given details
+    if (matchingEvent.docs.isNotEmpty) {
+      bool exists;
+
+      //fetch the details of the event, including its ID
+      DocumentSnapshot firestoreEvent = matchingEvent.docs.first;
+      String docId = firestoreEvent.id;
+
+      //fetch the times of the event already in the database, so that they can be modified accordingly
+      List<dynamic> times = firestoreEvent.get("times");
+
+      //set the document for the event in the database to the event with the afformentioned ID
+      var docToUpdate = databaseReference
+          .collection("users")
+          .doc(firebaseUser.uid)
+          .collection("events")
+          .doc(docId);
+
+      //loop through each of the times of the event already in the database (each time is a string, in the format: "<day>, <start time>, <end time>, <weeks>")
+      //i.e. if an event occurs every Monday on week A from 9am to 9:35am, it would be saved as: "0, 0900, 0935, A"
+      //this is so that we can work out if an event only happens every other week (e.g. just on week A or B), or if it happens every week (on both weeks A & B)
+
+      exists = false;
+      for (int i = 0; i < times.length; i++) {
+        //checks if the current time we've fetched from the array of times is the same as the timings for the event we want to add (excluding when it repeats)
+        if (times[i].startsWith("$day, $start, $end")) {
+          //if a matching time exists for the given event:
+
+          //state that we have already added the event's timings
+          exists = true;
+
+          //check whe the event repeats. If it repeats on a week that differs from the week of the event we are currently adding (i.e. to stop duplicate timings), then enter the if statement
+
+          //updates the timings field of the event we are editing. First the value in the timings array that matches is removed.
+          await docToUpdate.update(<String, dynamic>{
+            "times": FieldValue.arrayRemove(
+                ["$day, $start, $end, ${times[i].split(", ")[3]}"])
+          });
+
+          String weeksToAdd;
+
+          if ((weekA && (weekB || times[i].split(", ")[3] == "B")) ||
+              (weekB && (weekA || times[i].split(", ")[3] == "A"))) {
+            weeksToAdd = "AB";
+          } else if (weekA) {
+            weeksToAdd = "A";
+          } else {
+            weeksToAdd = "B";
+          }
+
+          //then the value in the array representing the repeats is re-added, according to the new timings.
+          await docToUpdate.update(<String, dynamic>{
+            "times": FieldValue.arrayUnion(["$day, $start, $end, $weeksToAdd"])
+          });
+        }
+      }
+
+      //if, having checked every time that the event occurs, there are none matching the time of the current event (exists is false), a new time is added to the event in the database.
+      //this, by definition, would only repeat on the current week (although as we continue to loop through the web scraped events, repeats may be added as above)
+      if (!exists) {
+        //adds a new time to the event's timings field according to the format above
+        await docToUpdate.update(<String, dynamic>{
+          "times": FieldValue.arrayUnion([
+            "$day, $start, $end, ${weekA == true ? weekB == true ? "AB" : "A" : "B"}"
+          ])
+        });
+      }
+    }
+    //if no matching event exists:
+    else {
+      //add a new event document to the events collection for the user, with the event details. (Defined above)
+      await databaseReference
+          .collection("users")
+          .doc(firebaseUser.uid)
+          .collection("events")
+          .add({
+        "classSet": null,
+        "location": location,
+        "name": name,
+        "platform": "LH",
+        "teacher": teacher,
+        //the times are set as an array of length 1, in the format used in the above "if" statement, so as to allow for more times to be added in the future
+        "times": [
+          "$day, $start, $end, ${weekA == true ? weekB == true ? "AB" : "A" : "B"}"
+        ]
+      });
+    }
+  }
+  return "done";
 }

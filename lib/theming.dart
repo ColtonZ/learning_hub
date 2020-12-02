@@ -27,7 +27,7 @@ ThemeData darkTheme = ThemeData(
     bottomAppBarTheme:
         BottomAppBarTheme(color: Color.fromARGB(255, 171, 146, 191)));
 ThemeData lightTheme = ThemeData(
-    accentColor: Color.fromARGB(255, 37, 147, 130),
+    accentColor: Colors.purple,
     brightness: Brightness.light,
     buttonColor: Colors.black,
     backgroundColor: Colors.white,
