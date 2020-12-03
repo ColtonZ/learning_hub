@@ -255,6 +255,7 @@ class _CustomScaffoldState extends State<_CustomScaffold> {
                               MediaQuery.of(context).size.width / 20)),
                       //creates the list of the student's submissions
                       panel: Center(
+                        //TODO: Set up file upload/download & fix all this
                         child: StudentSubmissions(
                           user: user,
                           assignment: assignment,

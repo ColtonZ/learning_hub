@@ -96,7 +96,7 @@ class StudentSubmissionsState extends State<StudentSubmissions> {
           ),
         ],
       ));
-    } else {
+    } else if (assignment.type == "ASSIGNMENT") {
       //if the assignment isn't a question, return the panel as a list view of attachments, showing what the student has attached as their submission
       return Center(
           child: Column(
@@ -120,6 +120,26 @@ class StudentSubmissionsState extends State<StudentSubmissions> {
               child: AttachmentsListView(
                   description: "",
                   attachments: assignment.submissionAttachments))
+        ],
+      ));
+    } else {
+      return Center(
+          child: Column(
+        children: [
+          Container(
+            height: MediaQuery.of(context).size.height / 50,
+          ),
+          Container(
+            child: Column(
+              children: [
+                Icon(Icons.expand_more),
+                Text(
+                  "Your work",
+                  style: header3Style,
+                )
+              ],
+            ),
+          ),
         ],
       ));
     }

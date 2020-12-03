@@ -116,7 +116,8 @@ class AddPersonalTaskState extends State<AddPersonalTask> {
                 Container(
                   width: MediaQuery.of(context).size.width - 10,
                   padding: const EdgeInsets.symmetric(vertical: 8.0),
-                  child: ElevatedButton(
+                  child: RaisedButton(
+                    color: Theme.of(context).accentColor,
                     onPressed: () async {
                       // Validate will return true if the form is valid, or false if
                       // the form is invalid.

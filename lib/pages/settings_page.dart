@@ -64,6 +64,7 @@ class _CustomScaffoldState extends State<_CustomScaffold> {
     String name = widget.name;
     CustomUser user = widget.user;
     return new Scaffold(
+        //TODO: Set up page to allow for all data to be wiped
         //returns the custom app bar with the settings page title
         appBar: CustomAppBar(title: "Settings", reload: false),
         //builds the body
