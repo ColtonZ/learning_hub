@@ -95,7 +95,7 @@ class Assignment {
         //this converts each attachment JSON into an actual attachment object
         Attachment att = Attachment.fromJson(attachment);
         //this removes all attachments which start with [Template] as these are files made by Google for each task
-        if (!att.title.startsWith("[Template]")) {
+        if (att.title == null || !att.title.startsWith("[Template]")) {
           a.add(att);
         }
       });
@@ -197,7 +197,7 @@ class Assignment {
         //this converts each attachment string into an actual attachment object
         Attachment att = Attachment.fromList(attachment.toString().split(", "));
         //this removes all attachments which start with [Template] as these are files made by Google for each task
-        if (!att.title.startsWith("[Template]")) {
+        if (att.title == null || !att.title.startsWith("[Template]")) {
           a.add(att);
         }
       });
@@ -210,7 +210,7 @@ class Assignment {
         //this converts each attachment string into an actual attachment object
         Attachment att = Attachment.fromList(attachment.toString().split(", "));
         //this removes all attachments which start with [Template] as these are files made by Google for each task
-        if (!att.title.startsWith("[Template]")) {
+        if (att.title == null || !att.title.startsWith("[Template]")) {
           s.add(att);
         }
       });

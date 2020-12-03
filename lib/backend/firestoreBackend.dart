@@ -383,14 +383,14 @@ Future<String> firestoreToDoAdd(
   } catch (e) {}
 
   String question = "";
-  try {
+  if (assignment.type == "MULTIPLE_CHOICE_QUESTION") {
     //check if the task has a question. If it does, convert the options for the question into a string. This string is seperated by :-: as it is unlikely that will occur in one of the options.
     assignment.question.options.forEach((option) {
       question += ":-:$option";
     });
     //remove the first :-: of the string (i.e. the separator before the first option)
     question = question.substring(3);
-  } catch (e) {
+  } else {
     question = question == "" ? null : question;
   }
 
@@ -543,9 +543,8 @@ Future<String> addCustomEvent(
       if (!exists) {
         //adds a new time to the event's timings field according to the format above
         await docToUpdate.update(<String, dynamic>{
-          "times": FieldValue.arrayUnion([
-            "$day, $start, $end, ${weekA ? weekB? "AB" : "A" : "B"}"
-          ])
+          "times": FieldValue.arrayUnion(
+              ["$day, $start, $end, ${weekA ? weekB ? "AB" : "A" : "B"}"])
         });
       }
     }
@@ -563,9 +562,7 @@ Future<String> addCustomEvent(
         "platform": "LH",
         "teacher": teacher,
         //the times are set as an array of length 1, in the format used in the above "if" statement, so as to allow for more times to be added in the future
-        "times": [
-          "$day, $start, $end, ${weekA? weekB ? "AB" : "A" : "B"}"
-        ]
+        "times": ["$day, $start, $end, ${weekA ? weekB ? "AB" : "A" : "B"}"]
       });
     }
   }
