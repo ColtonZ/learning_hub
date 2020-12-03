@@ -209,7 +209,7 @@ class AddEventState extends State<AddEvent> {
                   ),
                 ),
                 Text(
-                  "${daysFilled == false ? "You must select at least one day for this event." : ""}",
+                  "${!daysFilled ? "You must select at least one day for this event." : ""}",
                   style: TextStyle(color: Colors.red, fontSize: 12),
                 ),
                 Divider(),
@@ -256,7 +256,7 @@ class AddEventState extends State<AddEvent> {
                   ),
                 ),
                 Text(
-                  "${weeksFilled == false ? "You must select at least one week for this event." : ""}",
+                  "${!weeksFilled ? "You must select at least one week for this event." : ""}",
                   style: TextStyle(color: Colors.red, fontSize: 12),
                 ),
                 Divider(),
@@ -316,7 +316,7 @@ class AddEventState extends State<AddEvent> {
                   ),
                 ),
                 Text(
-                  "${timesValid == false ? "Your event must end after it starts." : ""}",
+                  "${!timesValid ? "Your event must end after it starts." : ""}",
                   style: TextStyle(color: Colors.red, fontSize: 12),
                 ),
                 Container(
@@ -328,7 +328,7 @@ class AddEventState extends State<AddEvent> {
                       // the form is invalid.
                       if (_formKey.currentState.validate() &&
                           days.contains(true) &&
-                          !(boxValueA == false && boxValueB == false) &&
+                          (boxValueA || boxValueB) &&
                           int.parse(start) < int.parse(end)) {
                         daysFilled = true;
                         await addCustomEvent(user.firebaseUser, title, teacher,
@@ -344,7 +344,7 @@ class AddEventState extends State<AddEvent> {
                           daysFilled = true;
                         });
                       }
-                      if (boxValueA == false && boxValueB == false) {
+                      if (!boxValueA && !boxValueB) {
                         setState(() {
                           weeksFilled = false;
                         });

@@ -194,7 +194,9 @@ class _MainPageState extends State<_MainPage> {
                       context: context,
                       builder: (BuildContext context) {
                         return AddEvent(user: user);
-                      });
+                      }).then((_) {
+                    setState(() {});
+                  });
                 },
               ),
             ),
@@ -262,7 +264,9 @@ class _MainPageState extends State<_MainPage> {
                       context: context,
                       builder: (BuildContext context) {
                         return AddPersonalTask(user: user);
-                      });
+                      }).then((_) {
+                    setState(() {});
+                  });
                 },
               ),
             ),

@@ -259,7 +259,7 @@ class Assignment {
     return Assignment(
         platform: "LH",
         title: title,
-        description: description,
+        description: description == "" ? null : description,
         courseName:
             subject == "" ? "Personal Task" : "Personal Task • $subject",
         dueDate: dueDate,

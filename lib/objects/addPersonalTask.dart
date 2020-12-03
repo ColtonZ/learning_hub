@@ -125,7 +125,6 @@ class AddPersonalTaskState extends State<AddPersonalTask> {
                             title, description, subject, dueDate);
                         await firestoreToDoAdd(user.firebaseUser, assignment);
                         Navigator.of(context).pop();
-                        setState(() {});
                       }
                     },
                     child: Text('Add Personal Task'),

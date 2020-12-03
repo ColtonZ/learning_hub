@@ -141,64 +141,64 @@ class _CustomScaffoldState extends State<_CustomScaffold> {
                 height: MediaQuery.of(context).size.height / 52,
               ),
               Row(
+                mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                 children: <Widget>[
                   Container(
                     width: 15,
                   ),
                   //tries to get the name of the user who created the task, if it cannot, then it just returns the task's creation date
-                  Expanded(
-                    child: FutureBuilder(
-                      future: getGoogleUserName(assignment.creatorId, user),
-                      builder: (context, snapshot) {
-                        if (snapshot.connectionState == ConnectionState.done) {
-                          if (snapshot.data != null) {
-                            String name = snapshot.data;
-                            //checks if the task was edited after creation
-                            return Text(
-                              assignment.creationTime
-                                      .add(Duration(minutes: 5))
-                                      .isBefore(assignment.updateTime)
-                                  //returns the task's creator and its due date
-                                  ? "$name • ${assignment.creationTime.day.toString()} ${months[assignment.creationTime.month - 1]} (Edited ${assignment.updateTime.day.toString()} ${months[assignment.updateTime.month - 1]})"
-                                  : "$name • ${assignment.creationTime.day.toString()} ${months[assignment.creationTime.month - 1]}",
-                              style: header3Style,
-                            );
-                          } else {
-                            return Text(
-                              assignment.creationTime
-                                      .add(Duration(minutes: 5))
-                                      .isBefore(assignment.updateTime)
-                                  //returns just the task's due date
-                                  ? "${assignment.creationTime.day.toString()} ${months[assignment.creationTime.month - 1]} (Edited ${assignment.updateTime.day.toString()} ${months[assignment.updateTime.month - 1]})"
-                                  : "${assignment.creationTime.day.toString()} ${months[assignment.creationTime.month - 1]}",
-                              style: header3Style,
-                            );
-                          }
-                          //returns "loading..." whilst trying to get the task's creator
+                  FutureBuilder(
+                    future: getGoogleUserName(assignment.creatorId, user),
+                    builder: (context, snapshot) {
+                      if (snapshot.connectionState == ConnectionState.done) {
+                        if (snapshot.data != null) {
+                          String name = snapshot.data;
+                          //checks if the task was edited after creation
+                          return Text(
+                            assignment.creationTime
+                                    .add(Duration(minutes: 5))
+                                    .isBefore(assignment.updateTime)
+                                //returns the task's creator and its due date
+                                ? "$name • ${assignment.creationTime.day.toString()} ${months[assignment.creationTime.month - 1]} (Edited ${assignment.updateTime.day.toString()} ${months[assignment.updateTime.month - 1]})"
+                                : "$name • ${assignment.creationTime.day.toString()} ${months[assignment.creationTime.month - 1]}",
+                            style: header3Style,
+                          );
                         } else {
                           return Text(
-                            "Loading...",
+                            assignment.creationTime
+                                    .add(Duration(minutes: 5))
+                                    .isBefore(assignment.updateTime)
+                                //returns just the task's due date
+                                ? "${assignment.creationTime.day.toString()} ${months[assignment.creationTime.month - 1]} (Edited ${assignment.updateTime.day.toString()} ${months[assignment.updateTime.month - 1]})"
+                                : "${assignment.creationTime.day.toString()} ${months[assignment.creationTime.month - 1]}",
                             style: header3Style,
                           );
                         }
-                      },
-                    ),
+                        //returns "loading..." whilst trying to get the task's creator
+                      } else {
+                        return Text(
+                          "Loading...",
+                          style: header3Style,
+                        );
+                      }
+                    },
                   ),
                   Container(
                     width: 5,
                   ),
-                  //checks if the task has a due date. If it does, display it
-                  Expanded(
-                    child: ListTile(
-                      title: Text(
-                        assignment.dueDate != null
-                            ? "Due ${assignment.dueDate.day} ${months[assignment.dueDate.month - 1]}"
-                            : "No due date",
-                        textAlign: TextAlign.right,
-                        style: header3Style,
-                      ),
-                    ),
+                  Text("|"),
+                  Container(
+                    width: 5,
                   ),
+                  //checks if the task has a due date. If it does, display it
+                  Text(
+                    assignment.dueDate != null
+                        ? "Due ${assignment.dueDate.day} ${months[assignment.dueDate.month - 1]}"
+                        : "No due date",
+                    textAlign: TextAlign.right,
+                    style: header3Style,
+                  ),
+
                   Container(
                     width: 15,
                   ),

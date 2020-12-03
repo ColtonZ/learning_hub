@@ -55,7 +55,7 @@ class AttachmentsListViewState extends State<AttachmentsListView> {
             height: MediaQuery.of(context).size.height / 52,
           ),
           //returns a header for attachments if there are any - no header otherwise
-          attachments == true
+          attachments 
               ? Row(children: [
                   Expanded(
                       child: Text(

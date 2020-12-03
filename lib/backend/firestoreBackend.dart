@@ -544,7 +544,7 @@ Future<String> addCustomEvent(
         //adds a new time to the event's timings field according to the format above
         await docToUpdate.update(<String, dynamic>{
           "times": FieldValue.arrayUnion([
-            "$day, $start, $end, ${weekA == true ? weekB == true ? "AB" : "A" : "B"}"
+            "$day, $start, $end, ${weekA ? weekB? "AB" : "A" : "B"}"
           ])
         });
       }
@@ -564,7 +564,7 @@ Future<String> addCustomEvent(
         "teacher": teacher,
         //the times are set as an array of length 1, in the format used in the above "if" statement, so as to allow for more times to be added in the future
         "times": [
-          "$day, $start, $end, ${weekA == true ? weekB == true ? "AB" : "A" : "B"}"
+          "$day, $start, $end, ${weekA? weekB ? "AB" : "A" : "B"}"
         ]
       });
     }

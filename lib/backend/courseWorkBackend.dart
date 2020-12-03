@@ -186,7 +186,7 @@ Future<List<Assignment>> tasksToDo(CustomUser user, bool reload) async {
             //if the tasks is not done, add it to the list of tasks to do, and add it to the Firestore database
             if (assignment.state != "TURNED_IN" &&
                 assignment.state != "RETURNED" &&
-                assignment.isLate != "true" &&
+                !assignment.isLate &&
                 assignment.dueDate != null) {
               firestoreToDoAdd(user.firebaseUser, assignment);
             }
