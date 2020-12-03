@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 
 import 'package:learning_hub/objects/assignments_list_view.dart';
 import 'package:learning_hub/theming.dart';
+import 'package:learning_hub/constants.dart';
 
 import '../objects/custom_navigation_bar.dart';
 import '../objects/custom_app_bar.dart';
@@ -127,30 +128,6 @@ class _MainPage extends StatefulWidget {
 class _MainPageState extends State<_MainPage> {
   DateTime time = DateTime.now();
   bool tasksReload = false;
-  List<String> months = [
-    'January',
-    'February',
-    'March',
-    'April',
-    'May',
-    'June',
-    'July',
-    'August',
-    'September',
-    'October',
-    'November',
-    'December'
-  ];
-
-  List<String> days = [
-    "Monday",
-    "Tuesday",
-    "Wednesday",
-    "Thursday",
-    "Friday",
-    "Saturday",
-    "Sunday"
-  ];
 
   @override
   Widget build(BuildContext context) {

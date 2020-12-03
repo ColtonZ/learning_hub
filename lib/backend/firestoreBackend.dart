@@ -316,7 +316,8 @@ Future<bool> checkedRecently(User firebaseUser, bool reload) async {
         await databaseReference.collection("users").doc(firebaseUser.uid).get();
     DateTime lastChecked = userDoc.data()["lastChecked"].toDate();
     //if the times were checked within 5 hours, return true (i.e. it was checked recently)
-    if (lastChecked.difference(DateTime.now()).inMinutes.toInt() > -1440 && !reload) {
+    if (lastChecked.difference(DateTime.now()).inMinutes.toInt() > -1440 &&
+        !reload) {
       return true;
     } else {
       //if the times were not within the past 5 hours, update the time that it was last checked to the current time, and return false
@@ -362,20 +363,24 @@ Future<List<Assignment>> getFirestoreTasks(User firebaseUser) async {
   }
 }
 
-void firestoreToDoAdd(User firebaseUser, Assignment assignment) async {
+Future<String> firestoreToDoAdd(
+    User firebaseUser, Assignment assignment) async {
   List<String> attachmentStrings = new List<String>();
-  assignment.attachments.forEach((attachment) {
-    //foreach of the task's attachments, convert its details into a string so that it can be uploaded to Firestore
-    attachmentStrings.add(
-        "${attachment.id}, ${attachment.title}, ${attachment.link}, ${attachment.thumbnail}, ${attachment.type}");
-  });
-
+  try {
+    assignment.attachments.forEach((attachment) {
+      //foreach of the task's attachments, convert its details into a string so that it can be uploaded to Firestore
+      attachmentStrings.add(
+          "${attachment.id}, ${attachment.title}, ${attachment.link}, ${attachment.thumbnail}, ${attachment.type}");
+    });
+  } catch (e) {}
   List<String> submissionStrings = new List<String>();
-  assignment.submissionAttachments.forEach((attachment) {
-    //foreach of the student's attachments, convert its details into a string so that it can be uploaded to Firestore
-    submissionStrings.add(
-        "${attachment.id}, ${attachment.title}, ${attachment.link}, ${attachment.thumbnail}, ${attachment.type}");
-  });
+  try {
+    assignment.submissionAttachments.forEach((attachment) {
+      //foreach of the student's attachments, convert its details into a string so that it can be uploaded to Firestore
+      submissionStrings.add(
+          "${attachment.id}, ${attachment.title}, ${attachment.link}, ${attachment.thumbnail}, ${attachment.type}");
+    });
+  } catch (e) {}
 
   String question = "";
   try {
@@ -384,7 +389,7 @@ void firestoreToDoAdd(User firebaseUser, Assignment assignment) async {
       question += ":-:$option";
     });
     //remove the first :-: of the string (i.e. the separator before the first option)
-    question = question.substring(2);
+    question = question.substring(3);
   } catch (e) {
     question = question == "" ? null : question;
   }
@@ -416,6 +421,7 @@ void firestoreToDoAdd(User firebaseUser, Assignment assignment) async {
     "grade": assignment.grade,
     "answer": assignment.answer,
   });
+  return "done";
 }
 
 void removeClassroomTasks(User user) async {

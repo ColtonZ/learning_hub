@@ -164,13 +164,9 @@ Future<List<Assignment>> tasksToDo(CustomUser user, bool reload) async {
   bool checked = await checkedRecently(user.firebaseUser, reload);
 
 //if the tasks were checked recently, get the tasks from the Firestore database. Otherwise, fetch the tasks from Classroom.
-  if (checked) {
-    //return a list of the tasks from Firestore
-    return await getFirestoreTasks(user.firebaseUser);
-  } else {
+  if (!checked) {
     //get a list of the user's courses
     List<Course> allCourses = await getCourses(user);
-    List<Assignment> toDo = new List<Assignment>();
     //first remove the Classroom tasks from Firestore (as they will be out of date)
     removeClassroomTasks(user.firebaseUser);
 
@@ -190,15 +186,14 @@ Future<List<Assignment>> tasksToDo(CustomUser user, bool reload) async {
             //if the tasks is not done, add it to the list of tasks to do, and add it to the Firestore database
             if (assignment.state != "TURNED_IN" &&
                 assignment.state != "RETURNED" &&
-                assignment.state != "true" &&
+                assignment.isLate != "true" &&
                 assignment.dueDate != null) {
-              toDo.add(assignment);
               firestoreToDoAdd(user.firebaseUser, assignment);
             }
           }
         }
       } catch (e) {}
     }
-    return toDo;
   }
+  return await getFirestoreTasks(user.firebaseUser);
 }

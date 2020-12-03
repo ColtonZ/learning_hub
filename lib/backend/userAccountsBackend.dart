@@ -7,7 +7,9 @@ import '../objects/customUser.dart';
 
 Future<String> getGoogleUserName(String userId, CustomUser user) async {
   //sends an http request for the user, given their ID
-
+  if (userId == null) {
+    return "Personal Task";
+  }
   Map<String, String> headers = user.authHeaders;
 
   http.Response response = await http.get(

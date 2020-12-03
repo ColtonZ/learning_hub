@@ -53,7 +53,8 @@ class Assignment {
 
 //convert the JSON of an assignment into an assignment object
   factory Assignment.fromJson(
-      String courseName,String platform,
+      String courseName,
+      String platform,
       Map<String, dynamic> assignmentJson,
       Map<String, dynamic> submissionJson) {
     DateTime d;
@@ -233,8 +234,12 @@ class Assignment {
       status: documentMap["state"],
       type: documentMap["type"],
       //converts the creation time and update time of the assignment to the user's local time
-      creationTime: documentMap["creationTime"].toDate(),
-      updateTime: documentMap["updateTime"].toDate(),
+      creationTime: documentMap["creationTime"] == null
+          ? null
+          : documentMap["creationTime"].toDate(),
+      updateTime: documentMap["updateTime"] == null
+          ? null
+          : documentMap["updateTime"].toDate(),
       creatorId: documentMap["creatorId"],
       dueDate: documentMap["dueDate"].toDate(),
       attachments: a,
@@ -247,5 +252,19 @@ class Assignment {
       //if the assignment is a short answer or multiple choice question, the answer is the answer that the student gave to the question. Otherwise, the answer is null, as the assignment is not a question.
       answer: documentMap["answer"],
     );
+  }
+
+  factory Assignment.createCustom(
+      String title, String description, String subject, DateTime dueDate) {
+    return Assignment(
+        platform: "LH",
+        title: title,
+        description: description,
+        courseName:
+            subject == "" ? "Personal Task" : "Personal Task • $subject",
+        dueDate: dueDate,
+        creationTime: DateTime.now(),
+        updateTime: DateTime.now(),
+        type: "PERSONAL");
   }
 }

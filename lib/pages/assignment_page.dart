@@ -48,7 +48,8 @@ class AssignmentPageState extends State<AssignmentPage> {
               } else {
                 //whilst signing in, return a loading indicator
                 return Scaffold(
-                    appBar:  CustomAppBar(title: "Account Details", reload: false),
+                    appBar:
+                        CustomAppBar(title: "Account Details", reload: false),
                     body: Center(child: CircularProgressIndicator()),
                     bottomNavigationBar:
                         CustomNavigationBar(name: name, user: user, index: 1));
@@ -92,7 +93,7 @@ class _CustomScaffoldState extends State<_CustomScaffold> {
     return new Scaffold(
 
         //returns the custom app bar with the assignments page title
-        appBar:  CustomAppBar(title: assignment.courseName, reload: false),
+        appBar: CustomAppBar(title: assignment.courseName, reload: false),
         //builds the body
         body: Center(
           child: Column(
@@ -115,7 +116,9 @@ class _CustomScaffoldState extends State<_CustomScaffold> {
                               ? Icons.short_text
                               : assignment.type == "MULTIPLE_CHOICE_QUESTION"
                                   ? Icons.check_circle_outline
-                                  : Icons.warning),
+                                  : assignment.type == "PERSONAL"
+                                      ? Icons.person_outline
+                                      : Icons.warning),
                     ),
                     width: MediaQuery.of(context).size.width / 10,
                   ),
@@ -148,7 +151,7 @@ class _CustomScaffoldState extends State<_CustomScaffold> {
                       future: getGoogleUserName(assignment.creatorId, user),
                       builder: (context, snapshot) {
                         if (snapshot.connectionState == ConnectionState.done) {
-                          try {
+                          if (snapshot.data != null) {
                             String name = snapshot.data;
                             //checks if the task was edited after creation
                             return Text(
@@ -160,7 +163,7 @@ class _CustomScaffoldState extends State<_CustomScaffold> {
                                   : "$name • ${assignment.creationTime.day.toString()} ${months[assignment.creationTime.month - 1]}",
                               style: header3Style,
                             );
-                          } catch (error) {
+                          } else {
                             return Text(
                               assignment.creationTime
                                       .add(Duration(minutes: 5))
