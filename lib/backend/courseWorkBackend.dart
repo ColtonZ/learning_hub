@@ -100,8 +100,8 @@ Future<Assignment> sendAssignmentRequest(
   var submissions = submissionData["studentSubmissions"] as List;
 
   //converts the two json responses (the assignment details and the submission details) into an assignment object and returns it
-  Assignment assignment =
-      Assignment.fromJson(courseData["name"], assignmentData, submissions[0]);
+  Assignment assignment = Assignment.fromJson(
+      courseData["name"], "GC", assignmentData, submissions[0]);
 
   return assignment;
 }
@@ -159,19 +159,18 @@ Future<bool> isCourseDone(String id, CustomUser user) async {
   return done;
 }
 
-Future<List<Assignment>> tasksToDo(CustomUser user) async {
-  //get a list of the user's courses
-  List<Course> allCourses = await getCourses(user);
-  List<Assignment> toDo = new List<Assignment>();
-
+Future<List<Assignment>> tasksToDo(CustomUser user, bool reload) async {
 //see if the user's incomplete assignments were last checked recently
-  bool checked = await checkedRecently(user.firebaseUser);
+  bool checked = await checkedRecently(user.firebaseUser, reload);
 
 //if the tasks were checked recently, get the tasks from the Firestore database. Otherwise, fetch the tasks from Classroom.
   if (checked) {
     //return a list of the tasks from Firestore
     return await getFirestoreTasks(user.firebaseUser);
   } else {
+    //get a list of the user's courses
+    List<Course> allCourses = await getCourses(user);
+    List<Assignment> toDo = new List<Assignment>();
     //first remove the Classroom tasks from Firestore (as they will be out of date)
     removeClassroomTasks(user.firebaseUser);
 

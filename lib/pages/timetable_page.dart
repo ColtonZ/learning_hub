@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:learning_hub/objects/addEventPopup.dart';
 
 import 'package:learning_hub/objects/assignments_list_view.dart';
 import 'package:learning_hub/theming.dart';
@@ -9,6 +8,8 @@ import '../objects/custom_app_bar.dart';
 import '../objects/customUser.dart';
 import '../objects/event.dart';
 import '../objects/events_list_view.dart';
+import '../objects/addEventPopup.dart';
+import '../objects/addPersonalTask.dart';
 
 import '../backend/authBackend.dart';
 import '../backend/firestoreBackend.dart';
@@ -45,7 +46,7 @@ class TimetablePageState extends State<TimetablePage> {
               } else {
                 //whilst signing in, return a loading indicator
                 return Scaffold(
-                    appBar: CustomAppBar(title: "Your Timetable"),
+                    appBar: CustomAppBar(title: "Your Timetable", reload: true),
                     body: Center(child: CircularProgressIndicator()),
                     bottomNavigationBar:
                         CustomNavigationBar(name: name, user: user, index: 0));
@@ -74,7 +75,7 @@ class _CustomScaffoldState extends State<_CustomScaffold> {
     DateTime time = DateTime.now();
     return Scaffold(
         //returns the custom app bar with the timetable page title
-        appBar: CustomAppBar(title: "Your Timetable"),
+        appBar: CustomAppBar(title: "Your Timetable", reload: true),
         //builds the body
         //checks if the user has at least one event in the Firestore database added automatically from Firefly. If they do, load the timetable page.
         //Otherwise, display a web view, which will allow the user to login to Firefly and then will scrape the dashboard for the user's timetable data.
@@ -94,7 +95,7 @@ class _CustomScaffoldState extends State<_CustomScaffold> {
                   );
                 } else {
                   //otherwise build the page
-                  return _PortraitView(
+                  return _MainPage(
                       events: snapshot.data,
                       time: time,
                       name: name,
@@ -111,20 +112,21 @@ class _CustomScaffoldState extends State<_CustomScaffold> {
   }
 }
 
-class _PortraitView extends StatefulWidget {
+class _MainPage extends StatefulWidget {
   final CustomUser user;
   final String name;
   final DateTime time;
   final List<Event> events;
 
-  _PortraitView({this.user, this.name, this.time, this.events});
+  _MainPage({this.user, this.name, this.time, this.events});
 
   @override
-  _PortraitViewState createState() => _PortraitViewState();
+  _MainPageState createState() => _MainPageState();
 }
 
-class _PortraitViewState extends State<_PortraitView> {
+class _MainPageState extends State<_MainPage> {
   DateTime time = DateTime.now();
+  bool tasksReload = false;
   List<String> months = [
     'January',
     'February',
@@ -161,28 +163,23 @@ class _PortraitViewState extends State<_PortraitView> {
         Row(
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
-            Row(
-              mainAxisAlignment: MainAxisAlignment.start,
-              children: [
-                Padding(
-                  padding: EdgeInsets.fromLTRB(14, 0, 0, 0),
-                  child: IconButton(
-                    icon: Icon(Icons.calendar_today),
-                    onPressed: () async {
-                      DateTime picked = await showDatePicker(
-                        context: context,
-                        initialDate: DateTime.now(),
-                        firstDate: DateTime.now().subtract(Duration(days: 365)),
-                        lastDate: DateTime.now().add(Duration(days: 365)),
-                      );
-                      if (picked != null && picked != DateTime.now())
-                        setState(() {
-                          time = picked;
-                        });
-                    },
-                  ),
-                ),
-              ],
+            Padding(
+              padding: EdgeInsets.fromLTRB(14, 0, 0, 0),
+              child: IconButton(
+                icon: Icon(Icons.calendar_today),
+                onPressed: () async {
+                  DateTime picked = await showDatePicker(
+                    context: context,
+                    initialDate: DateTime.now(),
+                    firstDate: DateTime.now().subtract(Duration(days: 365)),
+                    lastDate: DateTime.now().add(Duration(days: 365)),
+                  );
+                  if (picked != null && picked != DateTime.now())
+                    setState(() {
+                      time = picked;
+                    });
+                },
+              ),
             ),
             Expanded(
               child: Row(
@@ -211,23 +208,18 @@ class _PortraitViewState extends State<_PortraitView> {
                 ],
               ),
             ),
-            Row(
-              mainAxisAlignment: MainAxisAlignment.start,
-              children: [
-                Padding(
-                  padding: EdgeInsets.fromLTRB(0, 0, 14, 0),
-                  child: IconButton(
-                    icon: Icon(Icons.add),
-                    onPressed: () async {
-                      showDialog(
-                          context: context,
-                          builder: (BuildContext context) {
-                            return AddEvent(user: user);
-                          });
-                    },
-                  ),
-                ),
-              ],
+            Padding(
+              padding: EdgeInsets.fromLTRB(0, 0, 14, 0),
+              child: IconButton(
+                icon: Icon(Icons.add),
+                onPressed: () async {
+                  showDialog(
+                      context: context,
+                      builder: (BuildContext context) {
+                        return AddEvent(user: user);
+                      });
+                },
+              ),
             ),
           ],
         ),
@@ -263,17 +255,50 @@ class _PortraitViewState extends State<_PortraitView> {
           ),
         ),
         Divider(),
-        Text(
-          "Tasks To-Do",
-          style: titleStyle,
+        Row(
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: [
+            Padding(
+              padding: EdgeInsets.fromLTRB(14, 0, 0, 0),
+              child: IconButton(
+                icon: Icon(Icons.refresh),
+                onPressed: () {
+                  setState(() {
+                    tasksReload = true;
+                  });
+                },
+              ),
+            ),
+            Expanded(
+              child: Text(
+                "Tasks To-Do",
+                style: titleStyle,
+                textAlign: TextAlign.center,
+              ),
+            ),
+            Padding(
+              padding: EdgeInsets.fromLTRB(0, 0, 14, 0),
+              child: IconButton(
+                icon: Icon(Icons.add),
+                onPressed: () async {
+                  showDialog(
+                      context: context,
+                      builder: (BuildContext context) {
+                        return AddPersonalTask(user: user);
+                      });
+                },
+              ),
+            ),
+          ],
         ),
         Divider(),
         Expanded(
           child: FutureBuilder(
             //get the user's tasks that need doing
-            future: tasksToDo(user),
+            future: tasksToDo(user, tasksReload),
             builder: (context, tasksSnapshot) {
               if (tasksSnapshot.connectionState == ConnectionState.done) {
+                tasksReload = false;
                 if (tasksSnapshot.data.length > 0) {
                   //if the user has tasks to do, return a list view of their tasks
                   return AssignmentsListView(

@@ -36,7 +36,7 @@ class TannoyPageState extends State<TannoyPage> {
               } else {
                 //whilst signing in, return a loading indicator
                 return Scaffold(
-                    appBar: CustomAppBar(title: "Tannoy Notices"),
+                    appBar: CustomAppBar(title: "Tannoy Notices", reload: false),
                     body: Center(child: CircularProgressIndicator()),
                     bottomNavigationBar:
                         CustomNavigationBar(name: name, user: user, index: 2));
@@ -63,7 +63,7 @@ class _CustomScaffoldState extends State<_CustomScaffold> {
     CustomUser user = widget.user;
     return new Scaffold(
         //returns the custom app bar with the tannoy page title
-        appBar: CustomAppBar(title: "Tannoy Notices"),
+        appBar: CustomAppBar(title: "Tannoy Notices", reload: false),
         //builds the body
         body: Center(
             child: Text(

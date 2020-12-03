@@ -39,7 +39,7 @@ class CoursesPageState extends State<CoursesPage> {
               } else {
                 //whilst signing in, return a loading indicator
                 return Scaffold(
-                    appBar: CustomAppBar(title: "Your Courses"),
+                    appBar: CustomAppBar(title: "Your Courses", reload: false),
                     body: Center(child: CircularProgressIndicator()),
                     bottomNavigationBar:
                         CustomNavigationBar(name: name, user: user, index: 1));
@@ -66,7 +66,7 @@ class _CustomScaffoldState extends State<_CustomScaffold> {
     CustomUser user = widget.user;
     return new Scaffold(
         //returns the custom app bar with the courses page title
-        appBar: CustomAppBar(title: "Your Courses"),
+        appBar: CustomAppBar(title: "Your Courses", reload: false),
         //builds the body
         body: FutureBuilder(
             future: getCourses(user),

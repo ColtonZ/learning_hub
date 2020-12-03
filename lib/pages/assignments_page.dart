@@ -44,7 +44,7 @@ class AssignmentsPageState extends State<AssignmentsPage> {
               } else {
                 //whilst signing in, return a loading indicator
                 return Scaffold(
-                    appBar: CustomAppBar(title: "Account Details"),
+                    appBar: CustomAppBar(title: "Account Details", reload: false),
                     body: Center(child: CircularProgressIndicator()),
                     bottomNavigationBar:
                         CustomNavigationBar(name: name, user: user, index: 1));
@@ -75,7 +75,7 @@ class _CustomScaffoldState extends State<_CustomScaffold> {
     String id = widget.id;
     return new Scaffold(
         //returns the custom app bar with the assignments page title
-        appBar: CustomAppBar(title: course),
+        appBar: CustomAppBar(title: course, reload: false),
         //builds the body
         body: FutureBuilder(
             future: getAssignments(id, user),

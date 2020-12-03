@@ -48,7 +48,7 @@ class AssignmentPageState extends State<AssignmentPage> {
               } else {
                 //whilst signing in, return a loading indicator
                 return Scaffold(
-                    appBar:  CustomAppBar(title: "Account Details"),
+                    appBar:  CustomAppBar(title: "Account Details", reload: false),
                     body: Center(child: CircularProgressIndicator()),
                     bottomNavigationBar:
                         CustomNavigationBar(name: name, user: user, index: 1));
@@ -92,7 +92,7 @@ class _CustomScaffoldState extends State<_CustomScaffold> {
     return new Scaffold(
 
         //returns the custom app bar with the assignments page title
-        appBar:  CustomAppBar(title: assignment.courseName),
+        appBar:  CustomAppBar(title: assignment.courseName, reload: false),
         //builds the body
         body: Center(
           child: Column(

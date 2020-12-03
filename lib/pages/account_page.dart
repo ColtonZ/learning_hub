@@ -39,7 +39,8 @@ class AccountPageState extends State<AccountPage> {
               } else {
                 //whilst signing in, return a loading indicator
                 return Scaffold(
-                    appBar: CustomAppBar(title: "Account Details"),
+                    appBar:
+                        CustomAppBar(title: "Account Details", reload: false),
                     body: Center(child: CircularProgressIndicator()),
                     bottomNavigationBar:
                         CustomNavigationBar(name: name, user: user, index: 4));
@@ -66,7 +67,7 @@ class _CustomScaffoldState extends State<_CustomScaffold> {
     String name = widget.name;
     return new Scaffold(
         //returns the custom app bar with the account page title
-        appBar: CustomAppBar(title: "Account Details"),
+        appBar: CustomAppBar(title: "Account Details", reload: false),
         //designs the account page
         body: Center(
           child: Column(

@@ -38,7 +38,7 @@ class SettingsPageState extends State<SettingsPage> {
               } else {
                 //whilst signing in, return a loading indicator
                 return Scaffold(
-                    appBar: CustomAppBar(title: "Settings"),
+                    appBar: CustomAppBar(title: "Settings", reload: false),
                     body: Center(child: CircularProgressIndicator()),
                     bottomNavigationBar:
                         CustomNavigationBar(name: name, user: user, index: 3));
@@ -65,7 +65,7 @@ class _CustomScaffoldState extends State<_CustomScaffold> {
     CustomUser user = widget.user;
     return new Scaffold(
         //returns the custom app bar with the settings page title
-        appBar: CustomAppBar(title: "Settings"),
+        appBar: CustomAppBar(title: "Settings", reload: false),
         //builds the body
         body: Center(
             child: Text(user.firebaseUser.displayName, style: titleStyle)),

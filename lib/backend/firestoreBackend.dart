@@ -308,7 +308,7 @@ Future<String> getCurrentWeek(User firebaseUser) async {
   return (-weekA.difference(DateTime.now()).inDays) ~/ 7 % 2 == 0 ? "A" : "B";
 }
 
-Future<bool> checkedRecently(User firebaseUser) async {
+Future<bool> checkedRecently(User firebaseUser, bool reload) async {
   //try to get the lastChecked time of the Classroom tasks. If it was never checked before, an exception is thrown
   try {
     //get the time the tasks were last checked
@@ -316,7 +316,7 @@ Future<bool> checkedRecently(User firebaseUser) async {
         await databaseReference.collection("users").doc(firebaseUser.uid).get();
     DateTime lastChecked = userDoc.data()["lastChecked"].toDate();
     //if the times were checked within 5 hours, return true (i.e. it was checked recently)
-    if (lastChecked.difference(DateTime.now()).inMinutes.toInt() > -300) {
+    if (lastChecked.difference(DateTime.now()).inMinutes.toInt() > -1440 && !reload) {
       return true;
     } else {
       //if the times were not within the past 5 hours, update the time that it was last checked to the current time, and return false
@@ -395,7 +395,7 @@ void firestoreToDoAdd(User firebaseUser, Assignment assignment) async {
       .doc(firebaseUser.uid)
       .collection("toDo")
       .add({
-    "platform": "GC",
+    "platform": assignment.platform,
     "courseId": assignment.courseId,
     "courseName": assignment.courseName,
     "title": assignment.title,
