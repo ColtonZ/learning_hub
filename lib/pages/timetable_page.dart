@@ -7,7 +7,6 @@ import 'package:learning_hub/constants.dart';
 import '../objects/custom_navigation_bar.dart';
 import '../objects/custom_app_bar.dart';
 import '../objects/customUser.dart';
-import '../objects/event.dart';
 import '../objects/events_list_view.dart';
 import '../objects/addEventPopup.dart';
 import '../objects/addPersonalTask.dart';
@@ -96,11 +95,7 @@ class _CustomScaffoldState extends State<_CustomScaffold> {
                   );
                 } else {
                   //otherwise build the page
-                  return _MainPage(
-                      events: snapshot.data,
-                      time: time,
-                      name: name,
-                      user: user);
+                  return _MainPage(time: time, name: name, user: user);
                 }
               } else {
                 //whilst getting courses, return a loading indicator
@@ -117,9 +112,8 @@ class _MainPage extends StatefulWidget {
   final CustomUser user;
   final String name;
   final DateTime time;
-  final List<Event> events;
 
-  _MainPage({this.user, this.name, this.time, this.events});
+  _MainPage({this.user, this.name, this.time});
 
   @override
   _MainPageState createState() => _MainPageState();
@@ -132,7 +126,7 @@ class _MainPageState extends State<_MainPage> {
   @override
   Widget build(BuildContext context) {
     CustomUser user = widget.user;
-    List<Event> events = widget.events;
+
     return Column(
       //split the page into two: today's events, and the tasks that need doing
       children: [
@@ -213,7 +207,8 @@ class _MainPageState extends State<_MainPage> {
         Expanded(
           child: FutureBuilder(
             //get a list of today's events
-            future: getEvents(time, user.firebaseUser, events),
+            future: getEventsList(user.firebaseUser)
+                .then((events) => getEvents(time, user.firebaseUser, events)),
             builder: (context, eventsSnaphsot) {
               if (eventsSnaphsot.connectionState == ConnectionState.done) {
                 if (eventsSnaphsot.data.length > 0) {
