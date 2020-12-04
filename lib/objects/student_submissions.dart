@@ -4,6 +4,8 @@ import '../theming.dart';
 import 'assignment.dart';
 import 'attachments_list_view.dart';
 import 'customUser.dart';
+import '../backend/courseWorkBackend.dart';
+import 'package:url_launcher/url_launcher.dart';
 
 class StudentSubmissions extends StatefulWidget {
   final Assignment assignment;
@@ -17,17 +19,18 @@ class StudentSubmissions extends StatefulWidget {
 
 //details the looks of the page
 class StudentSubmissionsState extends State<StudentSubmissions> {
+  String answer;
   Widget build(BuildContext context) {
     CustomUser user = widget.user;
     Assignment assignment = widget.assignment;
-    int _value = 0;
-    //if it is a multiple choice question, return the "Your work" page as a series of radio buttons to select from for multiple choice
+    //if it is a multiple choice question, retur"Your work" page as a series of radio buttons to select from for multiple choice
     if (assignment.type == "MULTIPLE_CHOICE_QUESTION") {
+      answer = answer ?? assignment.question.options[0];
       return Center(
           child: Column(
         children: [
           Container(
-            height: MediaQuery.of(context).size.height / 50,
+            height: 15,
           ),
           Container(
             child: Column(
@@ -37,20 +40,52 @@ class StudentSubmissionsState extends State<StudentSubmissions> {
                   "Your work",
                   style: header3Style,
                 ),
+                Divider(),
+                Text(
+                  "It is not currently possible to submit multiple choice questions.",
+                  textAlign: TextAlign.center,
+                  style: TextStyle(color: Colors.red, fontSize: 12),
+                ),
+                Divider(),
                 //https://material.io/develop/flutter/components/radio-buttons
                 //creates a series of radio buttons, each with one of the options that you can select as an answer to the multiple choice question
-                Column(children: [
-                  for (int i = 0; i < assignment.question.options.length; i++)
-                    ListTile(
-                      title: Text(assignment.question.options[i]),
-                      leading: Radio(
-                        value: i,
-                        groupValue: _value,
-                        activeColor: Theme.of(context).accentColor,
-                        onChanged: i == 5 ? null : (int value) {},
-                      ),
-                    )
-                ]),
+                Container(
+                  height: 275,
+                  child: SingleChildScrollView(
+                    scrollDirection: Axis.vertical,
+                    child: Column(
+                      children: [
+                        for (int i = 0;
+                            i < assignment.question.options.length;
+                            i++)
+                          ListTile(
+                            title: Text(assignment.question.options[i]),
+                            leading: Radio(
+                              value: assignment.question.options[i],
+                              groupValue: answer,
+                              activeColor: Theme.of(context).accentColor,
+                              onChanged: (selected) {
+                                setState(() {
+                                  answer = selected;
+                                });
+                              },
+                            ),
+                          )
+                      ],
+                    ),
+                  ),
+                ),
+
+                Padding(
+                  padding: EdgeInsets.fromLTRB(0, 25, 0, 0),
+                  child: RaisedButton(
+                    color: Theme.of(context).accentColor,
+                    child: Text("View in Classroom"),
+                    onPressed: () {
+                      launch(assignment.url);
+                    },
+                  ),
+                ),
               ],
             ),
           ),
@@ -72,24 +107,19 @@ class StudentSubmissionsState extends State<StudentSubmissions> {
                   "Your work",
                   style: header3Style,
                 ),
-                Form(
-                  //https://api.flutter.dev/flutter/widgets/Form-class.html
-                  //creates a form field for the user to submit their answer and then hand it in.
-                  child: Column(children: [
-                    TextFormField(
-                      cursorColor: Theme.of(context).accentColor,
-                      decoration: InputDecoration(hintText: "Type your answer"),
-                    ),
-                    RaisedButton(
-                      color: Theme.of(context).highlightColor,
-                      disabledColor: Theme.of(context).highlightColor,
-                      onPressed: null,
-                      child: Text(
-                        "Turn in",
-                        style: header3Style,
-                      ),
-                    )
-                  ]),
+                Divider(),
+                Text(
+                  "It is not currently possible to submit short answer questions.",
+                  textAlign: TextAlign.center,
+                  style: TextStyle(color: Colors.red, fontSize: 12),
+                ),
+                Divider(),
+                Row(
+                  children: [
+                    Text(assignment.answer != null
+                        ? "Your response: ${assignment.answer}"
+                        : "You have not submitted this task."),
+                  ],
                 )
               ],
             ),
@@ -111,15 +141,33 @@ class StudentSubmissionsState extends State<StudentSubmissions> {
                 Text(
                   "Your work",
                   style: header3Style,
-                )
+                ),
+                Container(height: 25),
               ],
             ),
           ),
+          Divider(),
+          Text(
+            "It is not currently possible to submit assignments.",
+            textAlign: TextAlign.center,
+            style: TextStyle(color: Colors.red, fontSize: 12),
+          ),
+          Divider(),
           Expanded(
               //creates the list view of the attachments, with no 'description' (as it should only say **Attachments:**)
               child: AttachmentsListView(
                   description: "",
-                  attachments: assignment.submissionAttachments))
+                  attachments: assignment.submissionAttachments)),
+          Padding(
+            padding: EdgeInsets.fromLTRB(0, 25, 0, 25),
+            child: RaisedButton(
+              color: Theme.of(context).accentColor,
+              child: Text("View in Classroom"),
+              onPressed: () {
+                launch(assignment.url);
+              },
+            ),
+          ),
         ],
       ));
     } else {
@@ -136,8 +184,23 @@ class StudentSubmissionsState extends State<StudentSubmissions> {
                 Text(
                   "Your work",
                   style: header3Style,
-                )
+                ),
+                Container(height: 25),
               ],
+            ),
+          ),
+          Padding(
+            padding: EdgeInsets.fromLTRB(0, 0, 0, 25),
+            child: RaisedButton(
+              color: Theme.of(context).accentColor,
+              child: Text("Mark task as done"),
+              onPressed: () {
+                setState(() {
+                  markAsDone(user, assignment).then((refreshedAssignment) {
+                    assignment = refreshedAssignment;
+                  });
+                });
+              },
             ),
           ),
         ],

@@ -7,9 +7,11 @@ import 'question.dart';
 
 class Assignment {
   //each assignment can have a lot of properties!
+  final String url;
   final String platform;
   final String courseId;
   final String courseName;
+  final String submissionId;
   final String title;
   final String description;
   final String id;
@@ -29,9 +31,11 @@ class Assignment {
   final String answer;
 
   Assignment({
+    this.url,
     this.platform,
     this.courseId,
     this.courseName,
+    this.submissionId,
     this.id,
     this.title,
     this.description,
@@ -134,6 +138,7 @@ class Assignment {
     //if the assignment has student submissions, return that, otherwise return just the assignment (and thus an assignment with fewer properties)
     if (submissionJson != null) {
       return Assignment(
+        url: assignmentJson["alternateLink"],
         platform: platform,
         courseName: courseName,
         courseId: assignmentJson["courseId"],
@@ -152,6 +157,7 @@ class Assignment {
         question: q,
         points: p,
         state: submissionJson["state"],
+        submissionId: submissionJson["id"],
         isLate: l,
         grade: g,
         //if the assignment is a short answer or multiple choice question, the answer is the answer that the student gave to the question. Otherwise, the answer is null, as the assignment is not a question.
@@ -163,6 +169,7 @@ class Assignment {
       );
     } else {
       return Assignment(
+        url: assignmentJson["alternateLink"],
         platform: platform,
         courseName: courseName,
         courseId: assignmentJson["courseId"],
@@ -218,13 +225,13 @@ class Assignment {
 
 //if the assignment is a multiple choice question, add a Question object, otherwise return a null object (an error is thrown if the assignment is not a multiple choice question, which is caught)
     try {
-      q = Question.fromList(
-          documentMap["multipleChoiceQuestion"].toString().split(":-:"));
+      q = Question.fromList(documentMap["question"].toString().split(":-:"));
     } catch (error) {
       q = null;
     }
 
     return Assignment(
+      url: documentMap["url"],
       platform: documentMap["platform"],
       courseName: documentMap["courseName"],
       courseId: documentMap["courseId"],
@@ -249,6 +256,7 @@ class Assignment {
       state: documentMap["state"],
       isLate: documentMap["late"],
       grade: documentMap["assignedGrade"],
+      submissionId: documentMap["submissionId"],
       //if the assignment is a short answer or multiple choice question, the answer is the answer that the student gave to the question. Otherwise, the answer is null, as the assignment is not a question.
       answer: documentMap["answer"],
     );

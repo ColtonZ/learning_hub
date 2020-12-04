@@ -227,18 +227,29 @@ class _CustomScaffoldState extends State<_CustomScaffold> {
                         child: Column(
                           children: [
                             Container(
-                              height: MediaQuery.of(context).size.height / 50,
+                              height: 15,
                             ),
                             //this container fades out when the panel is slid up, thus hiding the pull up arrow and showing the pull down arrow
                             Container(
                               color: Theme.of(context).backgroundColor,
                               child: Column(
+                                mainAxisAlignment:
+                                    MainAxisAlignment.spaceAround,
                                 children: [
                                   Icon(Icons.expand_less),
                                   Text(
                                     "Your work",
                                     style: header3Style,
-                                  )
+                                  ),
+                                  SizedBox(
+                                    width: MediaQuery.of(context).size.width,
+                                    height: 23,
+                                    child: DecoratedBox(
+                                      decoration: BoxDecoration(
+                                          color: Theme.of(context)
+                                              .backgroundColor),
+                                    ),
+                                  ),
                                 ],
                               ),
                             ),
@@ -246,8 +257,13 @@ class _CustomScaffoldState extends State<_CustomScaffold> {
                         ),
                       ),
                       padding: EdgeInsets.fromLTRB(15, 0, 15, 0),
-                      minHeight: MediaQuery.of(context).size.height / 10,
-                      maxHeight: MediaQuery.of(context).size.height / 2,
+                      backdropTapClosesPanel: true,
+                      minHeight: 85,
+                      maxHeight: assignment.type == "PERSONAL"
+                          ? 170
+                          : assignment.type == "SHORT_ANSWER_QUESTION"
+                              ? 250
+                              : 500,
                       borderRadius: BorderRadius.only(
                           topLeft: Radius.circular(
                               MediaQuery.of(context).size.width / 20),
@@ -255,7 +271,6 @@ class _CustomScaffoldState extends State<_CustomScaffold> {
                               MediaQuery.of(context).size.width / 20)),
                       //creates the list of the student's submissions
                       panel: Center(
-                        //TODO: Set up file upload/download & fix all this
                         child: StudentSubmissions(
                           user: user,
                           assignment: assignment,

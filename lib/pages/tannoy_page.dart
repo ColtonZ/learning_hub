@@ -62,7 +62,7 @@ class _CustomScaffoldState extends State<_CustomScaffold> {
     String name = widget.name;
     CustomUser user = widget.user;
     return new Scaffold(
-      //TODO: Implement setings page
+      //TODO: Implement tannoy page
         //returns the custom app bar with the tannoy page title
         appBar: CustomAppBar(title: "Tannoy Notices", reload: false),
         //builds the body

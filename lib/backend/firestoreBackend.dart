@@ -400,12 +400,14 @@ Future<String> firestoreToDoAdd(
       .doc(firebaseUser.uid)
       .collection("toDo")
       .add({
+    "url": assignment.url,
     "platform": assignment.platform,
     "courseId": assignment.courseId,
     "courseName": assignment.courseName,
     "title": assignment.title,
     "description": assignment.description,
     "id": assignment.id,
+    "submissionId": assignment.submissionId,
     "status": assignment.status,
     "type": assignment.type,
     "creationTime": assignment.creationTime,

@@ -2,6 +2,7 @@ import 'dart:async';
 import 'dart:convert';
 
 import 'package:http/http.dart' as http;
+import 'package:cloud_firestore/cloud_firestore.dart';
 
 import '../objects/course.dart';
 import '../objects/assignment.dart';
@@ -195,4 +196,31 @@ Future<List<Assignment>> tasksToDo(CustomUser user, bool reload) async {
     }
   }
   return await getFirestoreTasks(user.firebaseUser);
+}
+
+Future<Assignment> markAsDone(CustomUser user, Assignment assignment) async {
+  QuerySnapshot assignments = await databaseReference
+      .collection("users")
+      .doc(user.firebaseUser.uid)
+      .collection("toDo")
+      .where("id", isEqualTo: assignment.id)
+      .where("courseName", isEqualTo: assignment.courseName)
+      .where("platform", isEqualTo: assignment.platform)
+      .where("title", isEqualTo: assignment.title)
+      .where("creationTime", isEqualTo: assignment.creationTime)
+      .get();
+
+//create a list of these events
+  List<DocumentSnapshot> assignmentsList = assignments.docs;
+
+//loop through the list, deleting each event
+  assignmentsList.forEach((assignment) {
+    databaseReference
+        .collection("users")
+        .doc(user.firebaseUser.uid)
+        .collection("toDo")
+        .doc(assignment.id)
+        .delete();
+  });
+  return assignment;
 }
