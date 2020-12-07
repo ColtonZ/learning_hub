@@ -32,14 +32,27 @@ class CoursesListViewState extends State<CoursesListView> {
         }
         final index = item ~/ 2;
         //creates a list tile for the course
-        return _buildCustomListRow(context, user, courses[index]);
+        return _CustomListRow(user: user, course: courses[index]);
       },
     );
   }
+}
 
-  //builds the list tile for the course
-  static Widget _buildCustomListRow(
-      BuildContext context, CustomUser user, Course course) {
+class _CustomListRow extends StatefulWidget {
+  final Course course;
+  final CustomUser user;
+
+  _CustomListRow({this.course, this.user});
+
+  @override
+  _CustomListRowState createState() => _CustomListRowState();
+}
+
+//builds the list tile for the course
+class _CustomListRowState extends State<_CustomListRow> {
+  Widget build(BuildContext context) {
+    Course course = widget.course;
+    CustomUser user = widget.user;
     //checks if list tile should have subtitle
     return ListTile(
         leading: FutureBuilder(

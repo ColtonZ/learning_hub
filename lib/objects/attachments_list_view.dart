@@ -27,23 +27,35 @@ class AttachmentsListViewState extends State<AttachmentsListView> {
         //returns a divider if odd, or attachment details if even (i.e. returns a divider every other one)
         //however, the first and last tiles are different (see below)
         if (item == 0) {
-          return _buildFirstTile(context, description, attachments.isNotEmpty);
+          return _FirstTile(
+              description: description, attachments: attachments.isNotEmpty);
         }
-        if (item == attachments.length * 2 + 1) {
-          return _buildLastTile(context);
-        } else if (item.isOdd) {
+        if (item.isOdd) {
           return Divider();
         }
         final index = (item - 2) ~/ 2;
         //creates a list tile for the attachment
-        return _buildCustomListRow(context, attachments[index]);
+        return _CustomListRow(attachment: attachments[index]);
       },
     );
   }
+}
 
-//builds the first list tiles as the description of the task and then a header of the attachments section
-  static Widget _buildFirstTile(
-      BuildContext context, String description, bool attachments) {
+class _FirstTile extends StatefulWidget {
+  final String description;
+  final bool attachments;
+
+  _FirstTile({this.description, this.attachments});
+
+  @override
+  _FirstTileState createState() => _FirstTileState();
+}
+
+//builds the list tile for the course
+class _FirstTileState extends State<_FirstTile> {
+  Widget build(BuildContext context) {
+    String description = widget.description;
+    bool attachments = widget.attachments;
     return ListTile(
       title: Column(
         children: [
@@ -55,7 +67,7 @@ class AttachmentsListViewState extends State<AttachmentsListView> {
             height: MediaQuery.of(context).size.height / 52,
           ),
           //returns a header for attachments if there are any - no header otherwise
-          attachments 
+          attachments
               ? Row(children: [
                   Expanded(
                       child: Text(
@@ -68,19 +80,21 @@ class AttachmentsListViewState extends State<AttachmentsListView> {
       ),
     );
   }
+}
 
-//builds the last tile as just a blank container - to provide padding for the slide up panel
-  static Widget _buildLastTile(BuildContext context) {
-    return ListTile(
-      title: Container(
-        height: MediaQuery.of(context).size.height / 10,
-      ),
-    );
-  }
+class _CustomListRow extends StatefulWidget {
+  final Attachment attachment;
 
-//builds the list tile for the attachment if it's not the first or last tile
-  static Widget _buildCustomListRow(
-      BuildContext context, Attachment attachment) {
+  _CustomListRow({this.attachment});
+
+  @override
+  _CustomListRowState createState() => _CustomListRowState();
+}
+
+//builds the list tile for the course
+class _CustomListRowState extends State<_CustomListRow> {
+  Widget build(BuildContext context) {
+    Attachment attachment = widget.attachment;
     return ListTile(
         title: Row(
           children: <Widget>[

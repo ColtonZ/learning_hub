@@ -4,6 +4,7 @@ import 'package:learning_hub/theming.dart';
 import 'pages/account_page.dart';
 import 'pages/settings_page.dart';
 import 'pages/tannoy_page.dart';
+import 'pages/email_page.dart';
 import 'pages/timetable_page.dart';
 import 'pages/courses_page.dart';
 import 'pages/assignments_page.dart';
@@ -47,6 +48,10 @@ class MyApp extends StatelessWidget {
             return MaterialPageRoute(
                 builder: (_) =>
                     TannoyPage(user: arguments["user"], name: name));
+                    case "/email":
+            return MaterialPageRoute(
+                builder: (_) =>
+                    EmailPage(user: arguments["user"], name: name));
           //pushes the settings page, with arguments of the user's account and the page's name
           case "/settings":
             return MaterialPageRoute(

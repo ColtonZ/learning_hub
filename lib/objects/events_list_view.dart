@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import '../theming.dart';
 import 'customUser.dart';
 import 'event.dart';
+import 'showEventPopup.dart';
 
 class EventsListView extends StatefulWidget {
   final List<Event> events;
@@ -30,14 +31,27 @@ class EventsListViewState extends State<EventsListView> {
         }
         final index = item ~/ 2;
         //creates a list tile for the course
-        return _buildCustomListRow(context, user, events[index]);
+        return _CustomListRow(event: events[index], user: user);
       },
     );
   }
+}
 
-  //builds the list tile for the course
-  static Widget _buildCustomListRow(
-      BuildContext context, CustomUser user, Event event) {
+class _CustomListRow extends StatefulWidget {
+  final Event event;
+  final CustomUser user;
+
+  _CustomListRow({this.event, this.user});
+
+  @override
+  _CustomListRowState createState() => _CustomListRowState();
+}
+
+//builds the list tile for the course
+class _CustomListRowState extends State<_CustomListRow> {
+  Widget build(BuildContext context) {
+    Event event = widget.event;
+    CustomUser user = widget.user;
     return ListTile(
         //the leading value is the event start time, with its end time below
         leading: Text(
@@ -53,6 +67,14 @@ class EventsListViewState extends State<EventsListView> {
         ),
         //opens the assignments of the course when you click on it
         //TODO: Set up event deletion & viewing
-        onTap: () {});
+        onTap: () async {
+          showDialog(
+              context: context,
+              builder: (BuildContext context) {
+                return ShowEvent(user: user, id: event.id);
+              }).then((_) {
+            setState(() {});
+          });
+        });
   }
 }

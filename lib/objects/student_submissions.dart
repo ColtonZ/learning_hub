@@ -107,21 +107,46 @@ class StudentSubmissionsState extends State<StudentSubmissions> {
                   "Your work",
                   style: header3Style,
                 ),
+                if (assignment.answer != null) Container(height: 15),
                 Divider(),
-                Text(
-                  "It is not currently possible to submit short answer questions.",
-                  textAlign: TextAlign.center,
-                  style: TextStyle(color: Colors.red, fontSize: 12),
-                ),
-                Divider(),
+                if (assignment.answer == null)
+                  Text(
+                    "It is not currently possible to submit short answer questions.",
+                    textAlign: TextAlign.center,
+                    style: TextStyle(color: Colors.red, fontSize: 12),
+                  ),
+                if (assignment.answer == null) Divider(),
                 Row(
                   children: [
-                    Text(assignment.answer != null
-                        ? "Your response: ${assignment.answer}"
-                        : "You have not submitted this task."),
+                    Padding(
+                      padding: EdgeInsets.fromLTRB(5, 0,0, 0),
+                      child: Text(
+                        assignment.answer != null
+                            ? "Your Response: "
+                            : "You have not submitted this task.",
+                        style: Theme.of(context).textTheme.caption,
+                        textScaleFactor: 1.5,
+                      ),
+                    ),
+                    Text(
+                      assignment.answer ?? "",
+                      style: Theme.of(context).textTheme.caption,
+                      textScaleFactor: 1.5,
+                    ),
                   ],
-                )
+                ),
+                if (assignment.answer != null) Divider(),
               ],
+            ),
+          ),
+          Padding(
+            padding: EdgeInsets.fromLTRB(0, 25, 0, 25),
+            child: RaisedButton(
+              color: Theme.of(context).accentColor,
+              child: Text("View in Classroom"),
+              onPressed: () {
+                launch(assignment.url);
+              },
             ),
           ),
         ],

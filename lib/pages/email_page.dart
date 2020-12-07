@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:google_sign_in/google_sign_in.dart';
 
 import '../theming.dart';
 
@@ -9,20 +8,19 @@ import '../objects/customUser.dart';
 
 import '../backend/authBackend.dart';
 
-class SettingsPage extends StatefulWidget {
+class EmailPage extends StatefulWidget {
   //takes in the widget's arguments
-  final GoogleSignInAccount account;
   final String name;
   final CustomUser user;
 
-  SettingsPage({this.account, this.user, this.name});
+  EmailPage({this.user, this.name});
 
   @override
-  //initialises the settings page state
-  SettingsPageState createState() => SettingsPageState();
+  //initialises the tannoy page state
+  EmailPageState createState() => EmailPageState();
 }
 
-class SettingsPageState extends State<SettingsPage> {
+class EmailPageState extends State<EmailPage> {
   Widget build(BuildContext context) {
     String name = widget.name;
     CustomUser user = widget.user;
@@ -38,10 +36,10 @@ class SettingsPageState extends State<SettingsPage> {
               } else {
                 //whilst signing in, return a loading indicator
                 return Scaffold(
-                    appBar: CustomAppBar(title: "Settings", reload: false),
+                    appBar: CustomAppBar(title: "Email Notices", reload: false),
                     body: Center(child: CircularProgressIndicator()),
                     bottomNavigationBar:
-                        CustomNavigationBar(name: name, user: user, index: 4));
+                        CustomNavigationBar(name: name, user: user, index: 3));
               }
             })
         : _CustomScaffold(name: name, user: user);
@@ -64,14 +62,17 @@ class _CustomScaffoldState extends State<_CustomScaffold> {
     String name = widget.name;
     CustomUser user = widget.user;
     return new Scaffold(
-        //TODO: Set up page to allow for all data to be wiped
-        //returns the custom app bar with the settings page title
-        appBar: CustomAppBar(title: "Settings", reload: false),
+      //TODO: Implement email page
+        //returns the custom app bar with the tannoy page title
+        appBar: CustomAppBar(title: "Email Notices", reload: false),
         //builds the body
         body: Center(
-            child: Text(user.firebaseUser.displayName, style: titleStyle)),
+            child: Text(
+          user.firebaseUser.displayName,
+          style: titleStyle,
+        )),
         //builds the navigation bar for the given page
         bottomNavigationBar:
-            CustomNavigationBar(name: name, user: user, index: 4));
+            CustomNavigationBar(name: name, user: user, index: 3));
   }
 }

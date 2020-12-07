@@ -30,17 +30,30 @@ class AssignmentsListViewState extends State<AssignmentsListView> {
         }
         final index = item ~/ 2;
         //creates a list tile for the assignment
-        return _buildCustomListRow(context, user, assignments[index]);
+        return _CustomListRow(
+          user: user,
+          assignment: assignments[index],
+        );
       },
     );
   }
+}
 
-//builds the list tile for the assignment
-  static Widget _buildCustomListRow(
-    BuildContext context,
-    CustomUser user,
-    Assignment assignment,
-  ) {
+class _CustomListRow extends StatefulWidget {
+  final Assignment assignment;
+  final CustomUser user;
+
+  _CustomListRow({this.assignment, this.user});
+
+  @override
+  _CustomListRowState createState() => _CustomListRowState();
+}
+
+//builds the list tile for the course
+class _CustomListRowState extends State<_CustomListRow> {
+  Widget build(BuildContext context) {
+    Assignment assignment = widget.assignment;
+    CustomUser user = widget.user;
     return ListTile(
         //if the assignment has a title, return it. Otherwise, set the assignment title to "N/A"
         title: Text(
