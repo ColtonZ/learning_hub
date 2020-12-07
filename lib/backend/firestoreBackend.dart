@@ -296,7 +296,7 @@ This is to try and limit the amount of duplicate data, as well as to make queryi
   return "done";
 }
 
-Future<String> getCurrentWeek(User firebaseUser) async {
+Future<String> getCurrentWeek(User firebaseUser, DateTime date) async {
   //get the user's doc
   DocumentSnapshot userDoc =
       await databaseReference.collection("users").doc(firebaseUser.uid).get();
@@ -305,7 +305,7 @@ Future<String> getCurrentWeek(User firebaseUser) async {
   DateTime weekA = userDoc.data()["weekA"].toDate();
 
 //if that happened an even number of weeks ago, it must be week A, otherwise it'll be week B
-  return (-weekA.difference(DateTime.now()).inDays) ~/ 7 % 2 == 0 ? "A" : "B";
+  return (-weekA.difference(date).inDays) ~/ 7 % 2 == 0 ? "A" : "B";
 }
 
 Future<bool> checkedRecently(User firebaseUser, bool reload) async {

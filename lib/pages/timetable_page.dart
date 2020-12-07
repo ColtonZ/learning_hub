@@ -112,8 +112,9 @@ class _MainPage extends StatefulWidget {
   final CustomUser user;
   final String name;
   final DateTime time;
+  final String week;
 
-  _MainPage({this.user, this.name, this.time});
+  _MainPage({this.user, this.name, this.time, this.week});
 
   @override
   _MainPageState createState() => _MainPageState();
@@ -121,6 +122,7 @@ class _MainPage extends StatefulWidget {
 
 class _MainPageState extends State<_MainPage> {
   DateTime time = DateTime.now();
+  String week = "A";
   bool tasksReload = false;
 
   @override
@@ -199,10 +201,22 @@ class _MainPageState extends State<_MainPage> {
         Container(
           height: 5,
         ),
-        Text(
-          "${days[time.weekday - 1]} ${time.day} ${months[time.month - 1]} ${time.year}",
-          style: subtitleStyle,
-        ),
+        FutureBuilder(
+            future: getCurrentWeek(user.firebaseUser, time),
+            builder: (context, snapshot) {
+              if (snapshot.connectionState == ConnectionState.done) {
+                week = snapshot.data;
+                return Text(
+                  "${days[time.weekday - 1]} ${time.day} ${months[time.month - 1]} ${time.year} | Week ${snapshot.data}",
+                  style: subtitleStyle,
+                );
+              } else {
+                return Text(
+                  "${days[time.weekday - 1]} ${time.day} ${months[time.month - 1]} ${time.year} | Week $week",
+                  style: subtitleStyle,
+                );
+              }
+            }),
         Divider(),
         Expanded(
           child: FutureBuilder(
