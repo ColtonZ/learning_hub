@@ -6,6 +6,7 @@ import '../objects/assignments_list_view.dart';
 import '../objects/custom_app_bar.dart';
 import '../objects/custom_navigation_bar.dart';
 import '../objects/customUser.dart';
+import '../objects/offlineScaffold.dart';
 
 import '../backend/courseWorkBackend.dart';
 import '../backend/authBackend.dart';
@@ -39,12 +40,17 @@ class AssignmentsPageState extends State<AssignmentsPage> {
               if (snapshot.connectionState == ConnectionState.done) {
                 user = snapshot.data;
                 //once signed in, load the page
-                return _CustomScaffold(
-                    name: name, user: user, course: course, id: id);
+                if (user != null) {
+                  return _CustomScaffold(
+                      name: name, user: user, course: course, id: id);
+                } else {
+                  return OfflineScaffold();
+                }
               } else {
                 //whilst signing in, return a loading indicator
                 return Scaffold(
-                    appBar: CustomAppBar(title: "Account Details", reload: false),
+                    appBar:
+                        CustomAppBar(title: "Account Details", reload: false),
                     body: Center(child: CircularProgressIndicator()),
                     bottomNavigationBar:
                         CustomNavigationBar(name: name, user: user, index: 1));

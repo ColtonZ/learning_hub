@@ -11,6 +11,8 @@ import '../objects/events_list_view.dart';
 import '../objects/addEventPopup.dart';
 import '../objects/addPersonalTask.dart';
 
+import '../objects/offlineScaffold.dart';
+
 import '../backend/authBackend.dart';
 import '../backend/firestoreBackend.dart';
 import '../backend/eventsBackend.dart';
@@ -42,7 +44,11 @@ class TimetablePageState extends State<TimetablePage> {
               if (snapshot.connectionState == ConnectionState.done) {
                 user = snapshot.data;
                 //once the user has been signed in, load the page
-                return _CustomScaffold(user: user, name: name);
+                if (user != null) {
+                  return _CustomScaffold(user: user, name: name);
+                } else {
+                  return OfflineScaffold();
+                }
               } else {
                 //whilst signing in, return a loading indicator
                 return Scaffold(

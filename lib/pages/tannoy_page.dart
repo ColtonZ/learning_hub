@@ -1,13 +1,12 @@
 import 'package:flutter/material.dart';
 import 'package:learning_hub/pages/portal_web_view.dart';
 
-import '../theming.dart';
-
 import '../objects/custom_navigation_bar.dart';
 import '../objects/custom_app_bar.dart';
 import '../objects/customUser.dart';
 import '../objects/tannoy_list_view.dart';
 import '../objects/notice.dart';
+import '../objects/offlineScaffold.dart';
 
 import '../backend/authBackend.dart';
 import '../backend/firestoreBackend.dart';
@@ -36,7 +35,11 @@ class TannoyPageState extends State<TannoyPage> {
               if (snapshot.connectionState == ConnectionState.done) {
                 user = snapshot.data;
                 //once the user has been signed in, load the page
-                return _CustomScaffold(user: user, name: name);
+                if (user != null) {
+                  return _CustomScaffold(user: user, name: name);
+                } else {
+                  return OfflineScaffold();
+                }
               } else {
                 //whilst signing in, return a loading indicator
                 return Scaffold(
@@ -79,8 +82,8 @@ class _CustomScaffoldState extends State<_CustomScaffold> {
             builder: (context, snapshot) {
               if (snapshot.connectionState == ConnectionState.done) {
                 if ((snapshot.data == null) &&
-                        DateTime.now().hour > 7 &&
-                        DateTime.now().weekday < 5) {
+                    DateTime.now().hour > 7 &&
+                    DateTime.now().weekday < 5) {
                   //if they have no events, return a web view body so the user can login to Firefly
                   //https://stackoverflow.com/questions/54691767/navigation-inside-nested-future
                   return PortalWebView(
@@ -93,8 +96,14 @@ class _CustomScaffoldState extends State<_CustomScaffold> {
                   List<Notice> notices = snapshot.data;
                   //checks if the user has assignments. If they do, return the assignments as a list view, otherwise return an error message
                   try {
-                    //creates a list view of the assignments
-                    return TannoysListView(user: user, notices: notices);
+                    if (notices.length != 0) {
+                      //creates a list view of the assignments
+                      return TannoysListView(notices: notices);
+                    } else {
+                      return Center(
+                        child: Text("There are no tannoy notices to display."),
+                      );
+                    }
                   } catch (error) {
                     return Center(
                       child: Text("There are no tannoy notices to display."),

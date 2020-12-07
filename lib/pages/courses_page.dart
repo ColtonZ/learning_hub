@@ -6,6 +6,7 @@ import '../objects/custom_navigation_bar.dart';
 import '../objects/course.dart';
 import '../objects/courses_list_view.dart';
 import '../objects/customUser.dart';
+import '../objects/offlineScaffold.dart';
 
 import '../backend/courseWorkBackend.dart';
 import '../backend/authBackend.dart';
@@ -35,7 +36,11 @@ class CoursesPageState extends State<CoursesPage> {
               if (snapshot.connectionState == ConnectionState.done) {
                 user = snapshot.data;
                 //once signed in, the page is loaded
-                return _CustomScaffold(name: name, user: user);
+                if (user != null) {
+                  return _CustomScaffold(name: name, user: user);
+                } else {
+                  return OfflineScaffold();
+                }
               } else {
                 //whilst signing in, return a loading indicator
                 return Scaffold(

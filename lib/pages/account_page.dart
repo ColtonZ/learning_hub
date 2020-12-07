@@ -8,6 +8,7 @@ import '../backend/firestoreBackend.dart';
 import '../objects/custom_app_bar.dart';
 import '../objects/custom_navigation_bar.dart';
 import '../objects/customUser.dart';
+import '../objects/offlineScaffold.dart';
 
 class AccountPage extends StatefulWidget {
   //takes in the widget's arguments
@@ -36,14 +37,18 @@ class AccountPageState extends State<AccountPage> {
               if (snapshot.connectionState == ConnectionState.done) {
                 user = snapshot.data;
                 //once signed in, load the page
-                return _CustomScaffold(name: name, user: user);
+                if (user != null) {
+                  return _CustomScaffold(name: name, user: user);
+                } else {
+                  return OfflineScaffold();
+                }
               } else {
                 //whilst signing in, return a loading indicator
                 return Scaffold(
                     appBar: CustomAppBar(title: "Your Account", reload: false),
                     body: Center(child: CircularProgressIndicator()),
                     bottomNavigationBar:
-                        CustomNavigationBar(name: name, user: user, index:3));
+                        CustomNavigationBar(name: name, user: user, index: 3));
               }
             })
         : _CustomScaffold(name: name, user: user);

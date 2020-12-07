@@ -2,13 +2,11 @@ import 'package:flutter/material.dart';
 
 import '../theming.dart';
 import 'notice.dart';
-import 'customUser.dart';
 
 class TannoysListView extends StatefulWidget {
   final List<Notice> notices;
-  final CustomUser user;
 
-  TannoysListView({this.notices, this.user});
+  TannoysListView({this.notices});
 
   @override
   TannoysListViewState createState() => TannoysListViewState();
@@ -18,7 +16,6 @@ class TannoysListView extends StatefulWidget {
 class TannoysListViewState extends State<TannoysListView> {
   Widget build(BuildContext context) {
     List<Notice> notices = widget.notices;
-    CustomUser user = widget.user;
     return ListView.builder(
       itemCount: (notices.length * 2),
       //half the items will be dividers, the other will be list tiles
@@ -31,7 +28,6 @@ class TannoysListViewState extends State<TannoysListView> {
         final index = item ~/ 2;
         //creates a list tile for the assignment
         return _CustomListRow(
-          user: user,
           notice: notices[index],
         );
       },
@@ -41,19 +37,18 @@ class TannoysListViewState extends State<TannoysListView> {
 
 class _CustomListRow extends StatefulWidget {
   final Notice notice;
-  final CustomUser user;
 
-  _CustomListRow({this.notice, this.user});
+  _CustomListRow({this.notice});
 
   @override
   _CustomListRowState createState() => _CustomListRowState();
 }
 
+//TODO: Set up tannoy page
 //builds the list tile for the course
 class _CustomListRowState extends State<_CustomListRow> {
   Widget build(BuildContext context) {
     Notice notice = widget.notice;
-    CustomUser user = widget.user;
     return ListTile(
       //if the assignment has a title, return it. Otherwise, set the assignment title to "N/A"
       title: Text(

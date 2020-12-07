@@ -31,6 +31,7 @@ class MyApp extends StatelessWidget {
                 return TimetablePage(user: null);
               }
             });
+            case "/offline":
           //pushes the timetable page, with arguments of the user's account and the page's name
           case "/timetable":
             return MaterialPageRoute(
