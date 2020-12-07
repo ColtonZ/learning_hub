@@ -570,3 +570,25 @@ Future<String> addCustomEvent(
   }
   return "done";
 }
+
+Future<Event> getEvent(User user, String id) async {
+  DocumentSnapshot eventSnapshot = await databaseReference
+      .collection("users")
+      .doc(user.uid)
+      .collection("events")
+      .doc(id)
+      .get();
+
+  return Event.fromFirestore(eventSnapshot);
+}
+
+Future<String> deleteEvent(User user, String id) async {
+  databaseReference
+      .collection("users")
+      .doc(user.uid)
+      .collection("events")
+      .doc(id)
+      .delete();
+
+  return "done";
+}

@@ -66,8 +66,7 @@ class _CustomListRowState extends State<_CustomListRow> {
           style: header3Style,
         ),
         //opens the assignments of the course when you click on it
-        //TODO: Set up event deletion & viewing
-        onTap: () async {
+        onTap: () {
           showDialog(
               context: context,
               builder: (BuildContext context) {

@@ -207,12 +207,12 @@ class _MainPageState extends State<_MainPage> {
               if (snapshot.connectionState == ConnectionState.done) {
                 week = snapshot.data;
                 return Text(
-                  "${days[time.weekday - 1]} ${time.day} ${months[time.month - 1]} ${time.year} | Week ${snapshot.data}",
+                  "${days[time.weekday - 1]} ${time.day} ${months[time.month - 1]} ${time.year} • Week ${snapshot.data}",
                   style: subtitleStyle,
                 );
               } else {
                 return Text(
-                  "${days[time.weekday - 1]} ${time.day} ${months[time.month - 1]} ${time.year} | Week $week",
+                  "${days[time.weekday - 1]} ${time.day} ${months[time.month - 1]} ${time.year} • Week $week",
                   style: subtitleStyle,
                 );
               }
