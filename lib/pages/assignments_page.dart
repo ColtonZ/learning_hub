@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:google_sign_in/google_sign_in.dart';
 
+import '../theming.dart';
+
 import '../objects/assignment.dart';
 import '../objects/assignments_list_view.dart';
 import '../objects/custom_app_bar.dart';
@@ -89,13 +91,33 @@ class _CustomScaffoldState extends State<_CustomScaffold> {
               if (snapshot.connectionState == ConnectionState.done) {
                 List<Assignment> assignments = snapshot.data;
                 //checks if the user has assignments. If they do, return the assignments as a list view, otherwise return an error message
-                try {
-                  //creates a list view of the assignments
-                  return AssignmentsListView(
-                      user: user, assignments: assignments);
-                } catch (error) {
+                if (assignments != null) {
+                  try {
+                    //creates a list view of the assignments
+                    return AssignmentsListView(
+                        user: user, assignments: assignments);
+                  } catch (error) {
+                    return Center(
+                      child: Padding(
+                        padding: EdgeInsets.fromLTRB(15, 0, 15, 0),
+                        child: Text(
+                          "This course has no assignments to display.",
+                          textAlign: TextAlign.center,
+                          style: header3Style,
+                        ),
+                      ),
+                    );
+                  }
+                } else {
                   return Center(
-                    child: Text("You have no assignments to display."),
+                    child: Padding(
+                      padding: EdgeInsets.fromLTRB(15, 0, 15, 0),
+                      child: Text(
+                        "This course has no assignments to display. If this is an error, please ensure you are online, and try again.",
+                        textAlign: TextAlign.center,
+                        style: header3Style,
+                      ),
+                    ),
                   );
                 }
               } else {

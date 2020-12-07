@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:google_sign_in/google_sign_in.dart';
 
+import '../theming.dart';
+
 import '../objects/custom_app_bar.dart';
 import '../objects/custom_navigation_bar.dart';
 import '../objects/course.dart';
@@ -79,12 +81,32 @@ class _CustomScaffoldState extends State<_CustomScaffold> {
               if (snapshot.connectionState == ConnectionState.done) {
                 List<Course> courses = snapshot.data;
                 //checks if the user has courses. If they do, return the courses, otherwise return an error message
-                try {
-                  //creates a list view of the courses
-                  return CoursesListView(user: user, courses: courses);
-                } catch (Exception) {
+                if (courses != null) {
+                  try {
+                    //creates a list view of the courses
+                    return CoursesListView(user: user, courses: courses);
+                  } catch (Exception) {
+                    return Center(
+                      child: Padding(
+                        padding: EdgeInsets.fromLTRB(15, 0, 15, 0),
+                        child: Text(
+                          "You have no courses to display.",
+                          textAlign: TextAlign.center,
+                          style: header3Style,
+                        ),
+                      ),
+                    );
+                  }
+                } else {
                   return Center(
-                    child: Text("You have no courses to display."),
+                    child: Padding(
+                      padding: EdgeInsets.fromLTRB(15, 0, 15, 0),
+                      child: Text(
+                        "Your courses could not be fetched. Please ensure you are online, and try again.",
+                        textAlign: TextAlign.center,
+                        style: header3Style,
+                      ),
+                    ),
                   );
                 }
               } else {
