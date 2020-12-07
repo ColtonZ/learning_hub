@@ -2,7 +2,6 @@ import 'package:flutter/material.dart';
 import 'package:learning_hub/theming.dart';
 
 import 'pages/account_page.dart';
-import 'pages/settings_page.dart';
 import 'pages/tannoy_page.dart';
 import 'pages/email_page.dart';
 import 'pages/timetable_page.dart';
@@ -53,11 +52,7 @@ class MyApp extends StatelessWidget {
                 builder: (_) =>
                     EmailPage(user: arguments["user"], name: name));
           //pushes the settings page, with arguments of the user's account and the page's name
-          case "/settings":
-            return MaterialPageRoute(
-                builder: (_) =>
-                    SettingsPage(user: arguments["user"], name: name));
-          //pushes the account page, with arguments of the user's account and the page's name, as well as a boolean value dictating whether or not the user should be signed out before the page is loaded
+                    //pushes the account page, with arguments of the user's account and the page's name, as well as a boolean value dictating whether or not the user should be signed out before the page is loaded
           case "/account":
             return MaterialPageRoute(
                 builder: (_) => AccountPage(

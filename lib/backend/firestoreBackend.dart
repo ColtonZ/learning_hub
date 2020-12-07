@@ -592,3 +592,61 @@ Future<String> deleteEvent(User user, String id) async {
 
   return "done";
 }
+
+Future<String> deleteData(User user, int type) async {
+  switch (type) {
+    case 0:
+      databaseReference
+          .collection("users")
+          .doc(user.uid)
+          .update({"weekA": null});
+
+      QuerySnapshot toDelete = await databaseReference
+          .collection("users")
+          .doc(user.uid)
+          .collection("events")
+          .get();
+
+      List<DocumentSnapshot> events = toDelete.docs.toList();
+
+      for (DocumentSnapshot event in events) {
+        databaseReference
+            .collection("users")
+            .doc(user.uid)
+            .collection("events")
+            .doc(event.id)
+            .delete();
+      }
+      break;
+    case 1:
+      databaseReference.collection("users").doc(user.uid).update({
+        "lastChecked": DateTime.utc(DateTime.now().year, DateTime.now().month,
+            DateTime.now().day, DateTime.now().hour, DateTime.now().minute)
+      });
+
+      QuerySnapshot toDelete = await databaseReference
+          .collection("users")
+          .doc(user.uid)
+          .collection("toDo")
+          .get();
+
+      List<DocumentSnapshot> tasks = toDelete.docs.toList();
+
+      for (DocumentSnapshot task in tasks) {
+        databaseReference
+            .collection("users")
+            .doc(user.uid)
+            .collection("toDo")
+            .doc(task.id)
+            .delete();
+      }
+
+      break;
+    case 2:
+      databaseReference.collection("users").doc(user.uid).delete();
+      break;
+    default:
+      break;
+  }
+  return "done";
+}

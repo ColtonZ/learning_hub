@@ -43,19 +43,6 @@ class CustomNavigationBarState extends State<CustomNavigationBar> {
     Navigator.of(context).pushReplacementNamed('/courses', arguments: args);
   }
 
-  static void _pushSettingsPage(
-      BuildContext context, String name, CustomUser user) {
-    Map args = {"user": user};
-    if (name == "/assignments") {
-      Navigator.pop(context);
-    }
-    if (name == "/assignment") {
-      Navigator.canPop(context);
-      Navigator.pop(context);
-    }
-    Navigator.of(context).pushReplacementNamed('/settings', arguments: args);
-  }
-
   static void _pushTannoyPage(
       BuildContext context, String name, CustomUser user) {
     Map args = {"user": user};
@@ -123,10 +110,7 @@ class CustomNavigationBarState extends State<CustomNavigationBar> {
           icon: Icon(Icons.mail),
           label: "Email",
         ),
-        BottomNavigationBarItem(
-          icon: Icon(Icons.settings),
-          label: "Settings",
-        ),
+
         BottomNavigationBarItem(
           icon: Icon(Icons.account_box),
           label: "Profile",
@@ -157,9 +141,6 @@ class CustomNavigationBarState extends State<CustomNavigationBar> {
             _pushEmailPage(context, name, user);
             break;
           case 4:
-            _pushSettingsPage(context, name, user);
-            break;
-          case 5:
             _pushAccountPage(context, name, user);
             break;
           default:

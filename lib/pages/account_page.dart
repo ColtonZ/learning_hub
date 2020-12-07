@@ -3,6 +3,7 @@ import 'package:google_sign_in/google_sign_in.dart';
 
 import '../theming.dart';
 import '../backend/authBackend.dart';
+import '../backend/firestoreBackend.dart';
 
 import '../objects/custom_app_bar.dart';
 import '../objects/custom_navigation_bar.dart';
@@ -39,11 +40,10 @@ class AccountPageState extends State<AccountPage> {
               } else {
                 //whilst signing in, return a loading indicator
                 return Scaffold(
-                    appBar:
-                        CustomAppBar(title: "Account Details", reload: false),
+                    appBar: CustomAppBar(title: "Your Account", reload: false),
                     body: Center(child: CircularProgressIndicator()),
                     bottomNavigationBar:
-                        CustomNavigationBar(name: name, user: user, index: 5));
+                        CustomNavigationBar(name: name, user: user, index: 4));
               }
             })
         : _CustomScaffold(name: name, user: user);
@@ -60,8 +60,12 @@ class _CustomScaffold extends StatefulWidget {
   _CustomScaffoldState createState() => _CustomScaffoldState();
 }
 
+//TODO: Allow for data to be wiped
 //details the looks of the page
 class _CustomScaffoldState extends State<_CustomScaffold> {
+  bool showEventConfirm = false;
+  bool showTasksConfirm = false;
+  bool showAllConfirm = false;
   Widget build(BuildContext context) {
     CustomUser user = widget.user;
     String name = widget.name;
@@ -119,13 +123,175 @@ class _CustomScaffoldState extends State<_CustomScaffold> {
                   //when pressed, call the sign out method
                   onPressed: () {
                     _pushSignOut(context, user);
-                  })
+                  }),
+              Container(
+                height: 10,
+              ),
+              Divider(),
+
+              Text("Delete Your Data", style: titleStyle),
+              Divider(),
+              Container(
+                height: 10,
+              ),
+              showEventConfirm
+                  ? Column(children: [
+                      Text(
+                        "Are you sure you wish to delete all event data?\n\nThis action cannot be undone.",
+                        textAlign: TextAlign.center,
+                        style: TextStyle(color: Colors.red),
+                      ),
+                      Container(height: 5),
+                    ])
+                  : Container(),
+              showEventConfirm
+                  ? Row(mainAxisAlignment: MainAxisAlignment.center, children: [
+                      FlatButton(
+                          child: Text(
+                            "Delete",
+                            style: header3Style,
+                          ),
+                          onPressed: () {
+                            deleteData(user.firebaseUser, 0).then((_) {
+                              setState(() {
+                                showEventConfirm = false;
+                              });
+                            });
+                          }),
+                      Container(
+                        width: 15,
+                      ),
+                      FlatButton(
+                          child: Text(
+                            "Cancel",
+                            style: header3Style,
+                          ),
+                          onPressed: () {
+                            setState(() {
+                              showEventConfirm = false;
+                            });
+                          }),
+                    ])
+                  : !showTasksConfirm && !showAllConfirm
+                      ? FlatButton(
+                          child:
+                              Text("Delete Your Events", style: header3Style),
+                          onPressed: () {
+                            setState(() {
+                              showTasksConfirm = false;
+                              showEventConfirm = true;
+                              showAllConfirm = false;
+                            });
+                          })
+                      : Container(),
+              showTasksConfirm
+                  ? Column(children: [
+                      Text(
+                        "Are you sure you wish to delete all task data?\n\nThis action cannot be undone.",
+                        textAlign: TextAlign.center,
+                        style: TextStyle(color: Colors.red),
+                      ),
+                      Container(height: 5),
+                    ])
+                  : Container(),
+              showTasksConfirm
+                  ? Row(mainAxisAlignment: MainAxisAlignment.center, children: [
+                      FlatButton(
+                          child: Text(
+                            "Delete",
+                            style: header3Style,
+                          ),
+                          onPressed: () {
+                            deleteData(user.firebaseUser, 1).then((_) {
+                              setState(() {
+                                showTasksConfirm = false;
+                              });
+                            });
+                          }),
+                      Container(
+                        width: 15,
+                      ),
+                      FlatButton(
+                          child: Text(
+                            "Cancel",
+                            style: header3Style,
+                          ),
+                          onPressed: () {
+                            setState(() {
+                              showTasksConfirm = false;
+                            });
+                          }),
+                    ])
+                  : !showEventConfirm && !showAllConfirm
+                      ? FlatButton(
+                          child: Text("Delete Your Tasks", style: header3Style),
+                          onPressed: () {
+                            setState(() {
+                              showTasksConfirm = true;
+                              showEventConfirm = false;
+                              showAllConfirm = false;
+                            });
+                          })
+                      : Container(),
+              showAllConfirm
+                  ? Column(children: [
+                      Text(
+                        "Are you sure you wish to delete all data associated with your account and logout?\n\nThis action cannot be undone.",
+                        textAlign: TextAlign.center,
+                        style: TextStyle(color: Colors.red),
+                      ),
+                      Container(height: 5),
+                    ])
+                  : Container(),
+              showAllConfirm
+                  ? Row(mainAxisAlignment: MainAxisAlignment.center, children: [
+                      FlatButton(
+                          child: Text(
+                            "Delete",
+                            style: header3Style,
+                          ),
+                          onPressed: () {
+                            deleteData(user.firebaseUser, 2).then((_) {
+                              setState(() {
+                                showAllConfirm = false;
+                              });
+                              _pushSignOut(context, user);
+                            });
+                          }),
+                      Container(
+                        width: 15,
+                      ),
+                      FlatButton(
+                          child: Text(
+                            "Cancel",
+                            style: header3Style,
+                          ),
+                          onPressed: () {
+                            setState(() {
+                              showAllConfirm = false;
+                            });
+                          }),
+                    ])
+                  : !showTasksConfirm && !showEventConfirm
+                      ? FlatButton(
+                          child: Text(
+                            "Delete Your Data",
+                            style: header3Style,
+                          ),
+                          onPressed: () {
+                            setState(() {
+                              showTasksConfirm = false;
+                              showEventConfirm = false;
+                              showAllConfirm = true;
+                            });
+                          })
+                      : Container(),
             ],
           ),
         ),
         //creates the bottom navigation bar
         bottomNavigationBar:
-            CustomNavigationBar(name: name, user: user, index: 5));
+            CustomNavigationBar(name: name, user: user, index: 4));
   }
 
   //to sign out, push the account page again, but without any user data, and with an argument telling the page to sign out first
