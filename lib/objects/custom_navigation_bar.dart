@@ -56,19 +56,6 @@ class CustomNavigationBarState extends State<CustomNavigationBar> {
     Navigator.of(context).pushReplacementNamed('/tannoy', arguments: args);
   }
 
-  static void _pushEmailPage(
-      BuildContext context, String name, CustomUser user) {
-    Map args = {"user": user};
-    if (name == "/assignments") {
-      Navigator.pop(context);
-    }
-    if (name == "/assignment") {
-      Navigator.canPop(context);
-      Navigator.pop(context);
-    }
-    Navigator.of(context).pushReplacementNamed('/email', arguments: args);
-  }
-
   static void _pushTimetablePage(
       BuildContext context, String name, CustomUser user) {
     Map args = {"user": user};
@@ -107,11 +94,6 @@ class CustomNavigationBarState extends State<CustomNavigationBar> {
           label: "Tannoy",
         ),
         BottomNavigationBarItem(
-          icon: Icon(Icons.mail),
-          label: "Email",
-        ),
-
-        BottomNavigationBarItem(
           icon: Icon(Icons.account_box),
           label: "Profile",
         ),
@@ -138,9 +120,6 @@ class CustomNavigationBarState extends State<CustomNavigationBar> {
             _pushTannoyPage(context, name, user);
             break;
           case 3:
-            _pushEmailPage(context, name, user);
-            break;
-          case 4:
             _pushAccountPage(context, name, user);
             break;
           default:

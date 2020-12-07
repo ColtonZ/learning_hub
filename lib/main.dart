@@ -3,7 +3,6 @@ import 'package:learning_hub/theming.dart';
 
 import 'pages/account_page.dart';
 import 'pages/tannoy_page.dart';
-import 'pages/email_page.dart';
 import 'pages/timetable_page.dart';
 import 'pages/courses_page.dart';
 import 'pages/assignments_page.dart';
@@ -48,9 +47,6 @@ class MyApp extends StatelessWidget {
                 builder: (_) =>
                     TannoyPage(user: arguments["user"], name: name));
                     case "/email":
-            return MaterialPageRoute(
-                builder: (_) =>
-                    EmailPage(user: arguments["user"], name: name));
           //pushes the settings page, with arguments of the user's account and the page's name
                     //pushes the account page, with arguments of the user's account and the page's name, as well as a boolean value dictating whether or not the user should be signed out before the page is loaded
           case "/account":

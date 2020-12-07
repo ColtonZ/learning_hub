@@ -43,7 +43,7 @@ class AccountPageState extends State<AccountPage> {
                     appBar: CustomAppBar(title: "Your Account", reload: false),
                     body: Center(child: CircularProgressIndicator()),
                     bottomNavigationBar:
-                        CustomNavigationBar(name: name, user: user, index: 4));
+                        CustomNavigationBar(name: name, user: user, index:3));
               }
             })
         : _CustomScaffold(name: name, user: user);
@@ -290,7 +290,7 @@ class _CustomScaffoldState extends State<_CustomScaffold> {
         ),
         //creates the bottom navigation bar
         bottomNavigationBar:
-            CustomNavigationBar(name: name, user: user, index: 4));
+            CustomNavigationBar(name: name, user: user, index: 3));
   }
 
   //to sign out, push the account page again, but without any user data, and with an argument telling the page to sign out first
