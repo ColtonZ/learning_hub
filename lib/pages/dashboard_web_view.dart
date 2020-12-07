@@ -5,19 +5,19 @@ import '../objects/customUser.dart';
 
 import '../backend/firestoreBackend.dart';
 
-class WebViewPage extends StatefulWidget {
+class DashboardWebView extends StatefulWidget {
   //takes in the widget's arguments
   final CustomUser user;
   final String url;
 
-  WebViewPage({this.user, this.url});
+  DashboardWebView({this.user, this.url});
 
   @override
   //initialises the tannoy page state
-  WebViewPageState createState() => WebViewPageState();
+  DashboardWebViewState createState() => DashboardWebViewState();
 }
 
-class WebViewPageState extends State<WebViewPage> {
+class DashboardWebViewState extends State<DashboardWebView> {
   Widget build(BuildContext context) {
     CustomUser user = widget.user;
     String url = widget.url;
@@ -49,8 +49,14 @@ class _CustomBodyState extends State<_CustomBody> {
         //https://medium.com/flutter/the-power-of-webviews-in-flutter-a56234b57df2
         //https://medium.com/flutter-community/inappwebview-the-real-power-of-webviews-in-flutter-c6d52374209d
         String currentPage = await controller.getUrl();
+        if (currentPage.startsWith(
+            "https://intranet.stpaulsschool.org.uk/login/login.aspx")) {
+          await controller.evaluateJavascript(
+              source:
+                  "document.getElementById('username').value = \"${user.firebaseUser.email.replaceAll("@stpaulsschool.org.uk", "")}\"");
+        }
         //checks if the url ends with the same url that was passed (i.e. we are not on the login page)
-        if (currentPage.endsWith(url)) {
+        if (currentPage.endsWith("dashboard")) {
           //evaluates two pieces of JavaScript. The first gets a list of events as a string, with each event split by a semicolon, having been scraped from the page's html.
           String eventsText = await controller.evaluateJavascript(
               source:

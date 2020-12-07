@@ -16,7 +16,7 @@ import '../backend/firestoreBackend.dart';
 import '../backend/eventsBackend.dart';
 import '../backend/courseWorkBackend.dart';
 
-import '../pages/web_view_page.dart';
+import 'dashboard_web_view.dart';
 
 class TimetablePage extends StatefulWidget {
   //takes in the widget's arguments
@@ -88,7 +88,7 @@ class _CustomScaffoldState extends State<_CustomScaffold> {
                 if (snapshot.data == null || snapshot.data.length == 0) {
                   //if they have no events, return a web view body so the user can login to Firefly
                   //https://stackoverflow.com/questions/54691767/navigation-inside-nested-future
-                  return WebViewPage(
+                  return DashboardWebView(
                     user: user,
                     //this url is the page on the site https://intranet.stpaulsschool.org.uk to access
                     url: "/dashboard",

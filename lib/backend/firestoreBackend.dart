@@ -5,6 +5,7 @@ import 'dart:core';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:learning_hub/objects/event.dart';
 import 'package:learning_hub/objects/assignment.dart';
+import '../objects/notice.dart';
 
 //initialzes an instance of the Firestore database
 final databaseReference = FirebaseFirestore.instance;
@@ -643,10 +644,62 @@ Future<String> deleteData(User user, int type) async {
 
       break;
     case 2:
+      databaseReference
+          .collection("users")
+          .doc(user.uid)
+          .update({"weekA": null});
+
+      QuerySnapshot eventsToDelete = await databaseReference
+          .collection("users")
+          .doc(user.uid)
+          .collection("events")
+          .get();
+
+      List<DocumentSnapshot> events = eventsToDelete.docs.toList();
+
+      for (DocumentSnapshot event in events) {
+        databaseReference
+            .collection("users")
+            .doc(user.uid)
+            .collection("events")
+            .doc(event.id)
+            .delete();
+      }
+
+      databaseReference.collection("users").doc(user.uid).update({
+        "lastChecked": DateTime.utc(DateTime.now().year, DateTime.now().month,
+            DateTime.now().day, DateTime.now().hour, DateTime.now().minute)
+      });
+
+      QuerySnapshot tasksToDelete = await databaseReference
+          .collection("users")
+          .doc(user.uid)
+          .collection("toDo")
+          .get();
+
+      List<DocumentSnapshot> tasks = tasksToDelete.docs.toList();
+
+      for (DocumentSnapshot task in tasks) {
+        databaseReference
+            .collection("users")
+            .doc(user.uid)
+            .collection("toDo")
+            .doc(task.id)
+            .delete();
+      }
+
       databaseReference.collection("users").doc(user.uid).delete();
       break;
     default:
       break;
   }
   return "done";
+}
+
+Future<String> addTannoy(User user, String tannoyText) async {
+  return "done";
+}
+
+Future<List<Notice>> getTannoy(User user) async {
+  return new List<Notice>();
 }

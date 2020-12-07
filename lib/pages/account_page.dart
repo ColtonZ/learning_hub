@@ -60,7 +60,6 @@ class _CustomScaffold extends StatefulWidget {
   _CustomScaffoldState createState() => _CustomScaffoldState();
 }
 
-//TODO: Allow for data to be wiped
 //details the looks of the page
 class _CustomScaffoldState extends State<_CustomScaffold> {
   bool showEventConfirm = false;
