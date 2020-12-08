@@ -16,6 +16,7 @@ class MyApp extends StatelessWidget {
   Widget build(BuildContext context) {
     return MaterialApp(
       //deals with passing arguments when a new page is pushed onto the navigator
+      debugShowCheckedModeBanner: false,
       onGenerateRoute: (route) {
         final Map arguments = route.arguments;
         final String name = route.name;

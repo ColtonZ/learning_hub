@@ -63,7 +63,7 @@ class _FirstTileState extends State<_FirstTile> {
             description,
           ),
           Container(
-            height: attachments ? MediaQuery.of(context).size.height / 52 : 0,
+            height: attachments ? 15 : 0,
           ),
           //returns a header for attachments if there are any - no header otherwise
           attachments

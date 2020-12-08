@@ -97,7 +97,7 @@ class StudentSubmissionsState extends State<StudentSubmissions> {
           child: Column(
         children: [
           Container(
-            height: MediaQuery.of(context).size.height / 50,
+            height: 15,
           ),
           Container(
             child: Column(
@@ -158,7 +158,7 @@ class StudentSubmissionsState extends State<StudentSubmissions> {
           child: Column(
         children: [
           Container(
-            height: MediaQuery.of(context).size.height / 50,
+            height: 15,
           ),
           Container(
             child: Column(
@@ -205,7 +205,7 @@ class StudentSubmissionsState extends State<StudentSubmissions> {
           child: Column(
         children: [
           Container(
-            height: MediaQuery.of(context).size.height / 50,
+            height: 15,
           ),
           Container(
             child: Column(
