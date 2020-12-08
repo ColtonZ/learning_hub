@@ -17,8 +17,8 @@ TextStyle header3Style =
     TextStyle(fontFamily: "Jost", fontWeight: FontWeight.w300, fontSize: 16);
 TextStyle header4Style =
     TextStyle(fontFamily: "Jost", fontWeight: FontWeight.w100, fontSize: 16);
-TextStyle paragraph1Style = TextStyle();
-
+TextStyle captionStyle =
+    TextStyle(fontFamily: "Jost", fontWeight: FontWeight.w300, fontSize: 12);
 //defines the app's dark theme
 ThemeData darkTheme = ThemeData(
     accentColor: Color.fromARGB(255, 37, 147, 130),

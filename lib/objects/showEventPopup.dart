@@ -52,7 +52,7 @@ class ShowEventState extends State<ShowEvent> {
                     Divider(),
                     Text(
                       "Timings",
-                      style: Theme.of(context).textTheme.caption,
+                      style: captionStyle,
                       textScaleFactor: 1.5,
                     ),
                     Divider(),

@@ -3,6 +3,7 @@ import 'package:learning_hub/backend/firestoreBackend.dart';
 import 'package:learning_hub/objects/assignment.dart';
 import 'package:learning_hub/objects/customUser.dart';
 import 'package:learning_hub/constants.dart';
+import '../theming.dart';
 
 class AddPersonalTask extends StatefulWidget {
   final CustomUser user;
@@ -98,7 +99,7 @@ class AddPersonalTaskState extends State<AddPersonalTask> {
                 Divider(),
                 Text(
                   "Due Date",
-                  style: Theme.of(context).textTheme.caption,
+                  style: captionStyle,
                   textScaleFactor: 1.5,
                 ),
                 Divider(),

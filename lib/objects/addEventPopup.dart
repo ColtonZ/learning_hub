@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:learning_hub/backend/firestoreBackend.dart';
 import 'package:learning_hub/objects/customUser.dart';
+import '../theming.dart';
 
 class AddEvent extends StatefulWidget {
   final CustomUser user;
@@ -113,7 +114,7 @@ class AddEventState extends State<AddEvent> {
                 Divider(),
                 Text(
                   "Days",
-                  style: Theme.of(context).textTheme.caption,
+                  style: captionStyle,
                   textScaleFactor: 1.5,
                 ),
                 Container(
@@ -121,7 +122,7 @@ class AddEventState extends State<AddEvent> {
                 ),
                 Text(
                   "Scroll horizontally to view all days",
-                  style: Theme.of(context).textTheme.caption,
+                  style: captionStyle,
                 ),
                 Divider(),
                 Padding(
@@ -226,7 +227,7 @@ class AddEventState extends State<AddEvent> {
                 Divider(),
                 Text(
                   "Repeats",
-                  style: Theme.of(context).textTheme.caption,
+                  style: captionStyle,
                   textScaleFactor: 1.5,
                 ),
                 Divider(),
@@ -275,7 +276,7 @@ class AddEventState extends State<AddEvent> {
                 Divider(),
                 Text(
                   "Time",
-                  style: Theme.of(context).textTheme.caption,
+                  style: captionStyle,
                   textScaleFactor: 1.5,
                 ),
                 Container(
@@ -283,7 +284,7 @@ class AddEventState extends State<AddEvent> {
                 ),
                 Text(
                   "Tap on a time to modify it",
-                  style: Theme.of(context).textTheme.caption,
+                  style: captionStyle,
                 ),
                 Divider(),
                 Padding(

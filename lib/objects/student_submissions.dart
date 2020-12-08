@@ -50,7 +50,7 @@ class StudentSubmissionsState extends State<StudentSubmissions> {
                 //https://material.io/develop/flutter/components/radio-buttons
                 //creates a series of radio buttons, each with one of the options that you can select as an answer to the multiple choice question
                 Container(
-                  height: 275,
+                  height: 100,
                   child: SingleChildScrollView(
                     scrollDirection: Axis.vertical,
                     child: Column(
@@ -117,32 +117,31 @@ class StudentSubmissionsState extends State<StudentSubmissions> {
                   ),
                 if (assignment.answer == null) Divider(),
                 //show the user's response
-                Row(
-                  children: [
-                    Padding(
-                      padding: EdgeInsets.fromLTRB(5, 0, 0, 0),
-                      child: Text(
-                        assignment.answer != null
-                            ? "Your Response: "
-                            : "You have not submitted this task.",
-                        style: Theme.of(context).textTheme.caption,
-                        textScaleFactor: 1.5,
-                      ),
-                    ),
-                    Text(
+                Padding(
+                  padding: EdgeInsets.fromLTRB(5, 0, 0, 0),
+                  child: Text(
+                    assignment.answer != null
+                        ? "Your Response: "
+                        : "You have not submitted this task.",
+                    style: captionStyle,
+                    textScaleFactor: 1.5,
+                  ),
+                ),
+                if (assignment.answer != null)
+                  Padding(
+                    padding: EdgeInsets.fromLTRB(0, 5, 0, 0),
+                    child: Text(
                       assignment.answer ?? "",
-                      style: Theme.of(context).textTheme.caption,
                       textScaleFactor: 1.5,
                     ),
-                  ],
-                ),
+                  ),
                 if (assignment.answer != null) Divider(),
               ],
             ),
           ),
 //allow the user to view the task in Classroom
           Padding(
-            padding: EdgeInsets.fromLTRB(0, 25, 0, 25),
+            padding: EdgeInsets.fromLTRB(0, 15, 0, 15),
             child: RaisedButton(
               color: Theme.of(context).accentColor,
               child: Text("View in Classroom"),
