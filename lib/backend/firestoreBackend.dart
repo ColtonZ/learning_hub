@@ -316,12 +316,12 @@ Future<bool> checkedRecently(User firebaseUser, bool reload) async {
     DocumentSnapshot userDoc =
         await databaseReference.collection("users").doc(firebaseUser.uid).get();
     DateTime lastChecked = userDoc.data()["lastChecked"].toDate();
-    //if the times were checked within 5 hours, return true (i.e. it was checked recently)
+    //if the times were checked within 24 hours (and we are not forcing a reload), return true (i.e. it was checked recently)
     if (lastChecked.difference(DateTime.now()).inMinutes.toInt() > -1440 &&
         !reload) {
       return true;
     } else {
-      //if the times were not within the past 5 hours, update the time that it was last checked to the current time, and return false
+      //if the times were not within the past 24 hours (or we are forcing the tasks to be reloaded), update the time that it was last checked to the current time, and return false
       databaseReference.collection("users").doc(firebaseUser.uid).update({
         "lastChecked": DateTime.utc(DateTime.now().year, DateTime.now().month,
             DateTime.now().day, DateTime.now().hour, DateTime.now().minute)
@@ -339,7 +339,7 @@ Future<bool> checkedRecently(User firebaseUser, bool reload) async {
 }
 
 Future<List<Assignment>> getFirestoreTasks(User firebaseUser) async {
-  //gets all events from the database which were added automatically from the pupil dashboard
+  //gets all assignments from the Firestore db
   try {
     QuerySnapshot tasksSnapshot = await databaseReference
         .collection("users")
@@ -352,7 +352,7 @@ Future<List<Assignment>> getFirestoreTasks(User firebaseUser) async {
 
     List<Assignment> assignmentsList = new List<Assignment>();
 
-//foreach assignment in the list, convert it into an Assignment object, and add it to the list
+//for each assignment in the list, convert it into an Assignment object, and add it to the list
     assignments.forEach((assignment) {
       Assignment current = new Assignment.fromFirestore(assignment);
       assignmentsList.add(current);
@@ -462,9 +462,11 @@ Future<String> addCustomEvent(
     String end) async {
   List<int> weekDays = new List<int>();
 
+//if the location or teacher are blank, set their values to null
   location = location == "" ? null : location;
   teacher = teacher == "" ? null : teacher;
 
+//get the days that the event occurs, and add it to the list of days
   for (int i = 0; i < 7; i++) {
     if (days[i]) {
       weekDays.add(i);
@@ -525,6 +527,7 @@ Future<String> addCustomEvent(
 
           String weeksToAdd;
 
+//if the event occurs on both weeks, set the end of the times to be AB, otherwise set it to A or B respectively
           if ((weekA && (weekB || times[i].split(", ")[3] == "B")) ||
               (weekB && (weekA || times[i].split(", ")[3] == "A"))) {
             weeksToAdd = "AB";
@@ -573,6 +576,7 @@ Future<String> addCustomEvent(
 }
 
 Future<Event> getEvent(User user, String id) async {
+  //get an event object from its Firestore id
   DocumentSnapshot eventSnapshot = await databaseReference
       .collection("users")
       .doc(user.uid)
@@ -584,6 +588,7 @@ Future<Event> getEvent(User user, String id) async {
 }
 
 Future<String> deleteEvent(User user, String id) async {
+  //delete an event with the matching id
   databaseReference
       .collection("users")
       .doc(user.uid)
@@ -595,104 +600,62 @@ Future<String> deleteEvent(User user, String id) async {
 }
 
 Future<String> deleteData(User user, int type) async {
-  switch (type) {
-    case 0:
+  //delete a user's data. If the type is 0, delete their event data. If it is 1, delete their tasks data, and if it is 2 delete all their data.
+//if the type is 2, we have to delete events and tasks data as well so those two sections run too
+  if (type == 0 || type == 2) {
+    //set the last recorded weekA to null (as we have now got no events to fetch)
+    databaseReference.collection("users").doc(user.uid).update({"weekA": null});
+
+//create a list of the events in the user's events collection
+    QuerySnapshot toDelete = await databaseReference
+        .collection("users")
+        .doc(user.uid)
+        .collection("events")
+        .get();
+
+    List<DocumentSnapshot> events = toDelete.docs.toList();
+
+//loop through the list of events, deleting each one.
+    for (DocumentSnapshot event in events) {
       databaseReference
           .collection("users")
           .doc(user.uid)
-          .update({"weekA": null});
-
-      QuerySnapshot toDelete = await databaseReference
-          .collection("users")
-          .doc(user.uid)
           .collection("events")
-          .get();
-
-      List<DocumentSnapshot> events = toDelete.docs.toList();
-
-      for (DocumentSnapshot event in events) {
-        databaseReference
-            .collection("users")
-            .doc(user.uid)
-            .collection("events")
-            .doc(event.id)
-            .delete();
-      }
-      break;
-    case 1:
-      databaseReference.collection("users").doc(user.uid).update({
-        "lastChecked": DateTime.utc(DateTime.now().year, DateTime.now().month,
-            DateTime.now().day, DateTime.now().hour, DateTime.now().minute)
-      });
-
-      QuerySnapshot toDelete = await databaseReference
-          .collection("users")
-          .doc(user.uid)
-          .collection("toDo")
-          .get();
-
-      List<DocumentSnapshot> tasks = toDelete.docs.toList();
-
-      for (DocumentSnapshot task in tasks) {
-        databaseReference
-            .collection("users")
-            .doc(user.uid)
-            .collection("toDo")
-            .doc(task.id)
-            .delete();
-      }
-
-      break;
-    case 2:
-      databaseReference
-          .collection("users")
-          .doc(user.uid)
-          .update({"weekA": null});
-
-      QuerySnapshot eventsToDelete = await databaseReference
-          .collection("users")
-          .doc(user.uid)
-          .collection("events")
-          .get();
-
-      List<DocumentSnapshot> events = eventsToDelete.docs.toList();
-
-      for (DocumentSnapshot event in events) {
-        databaseReference
-            .collection("users")
-            .doc(user.uid)
-            .collection("events")
-            .doc(event.id)
-            .delete();
-      }
-
-      databaseReference.collection("users").doc(user.uid).update({
-        "lastChecked": DateTime.utc(DateTime.now().year, DateTime.now().month,
-            DateTime.now().day, DateTime.now().hour, DateTime.now().minute)
-      });
-
-      QuerySnapshot tasksToDelete = await databaseReference
-          .collection("users")
-          .doc(user.uid)
-          .collection("toDo")
-          .get();
-
-      List<DocumentSnapshot> tasks = tasksToDelete.docs.toList();
-
-      for (DocumentSnapshot task in tasks) {
-        databaseReference
-            .collection("users")
-            .doc(user.uid)
-            .collection("toDo")
-            .doc(task.id)
-            .delete();
-      }
-
-      databaseReference.collection("users").doc(user.uid).delete();
-      break;
-    default:
-      break;
+          .doc(event.id)
+          .delete();
+    }
   }
+  if (type == 1 || type == 2) {
+    //set the last updated time to now, as we don't want the tasks to be automatically refreshed (thus undoing the delete)
+    databaseReference.collection("users").doc(user.uid).update({
+      "lastChecked": DateTime.utc(DateTime.now().year, DateTime.now().month,
+          DateTime.now().day, DateTime.now().hour, DateTime.now().minute)
+    });
+
+//get a list of the user's tasks in the Firestore db
+    QuerySnapshot toDelete = await databaseReference
+        .collection("users")
+        .doc(user.uid)
+        .collection("toDo")
+        .get();
+
+    List<DocumentSnapshot> tasks = toDelete.docs.toList();
+
+//loop through each task, deleting it.
+    for (DocumentSnapshot task in tasks) {
+      databaseReference
+          .collection("users")
+          .doc(user.uid)
+          .collection("toDo")
+          .doc(task.id)
+          .delete();
+    }
+  }
+  if (type == 2) {
+    //delete the user's doc
+    databaseReference.collection("users").doc(user.uid).delete();
+  }
+
   return "done";
 }
 

@@ -9,6 +9,7 @@ class CustomAppBar extends StatefulWidget implements PreferredSizeWidget {
   //https://stackoverflow.com/questions/52678469/the-appbardesign-cant-be-assigned-to-the-parameter-type-preferredsizewidget
 
   @override
+  //this ensures that the size of the app bat is normal - and not disproportionate to the rest of the page
   Size get preferredSize => const Size.fromHeight(56);
 
   CustomAppBar({this.title, this.reload});
@@ -17,7 +18,7 @@ class CustomAppBar extends StatefulWidget implements PreferredSizeWidget {
   CustomAppBarState createState() => CustomAppBarState();
 }
 
-//details the looks of the page
+//details the looks of the appbar
 class CustomAppBarState extends State<CustomAppBar> {
   AppBar build(BuildContext context) {
     String title = widget.title;

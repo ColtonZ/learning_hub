@@ -51,6 +51,7 @@ class _CustomBodyState extends State<_CustomBody> {
         String currentPage = await controller.getUrl();
         if (currentPage.startsWith(
             "https://intranet.stpaulsschool.org.uk/login/login.aspx")) {
+          //automatically fill the username box on the page
           await controller.evaluateJavascript(
               source:
                   "document.getElementById('username').value = \"${user.firebaseUser.email.replaceAll("@stpaulsschool.org.uk", "")}\"");

@@ -1,3 +1,4 @@
+//defines constants that are used across multiple pages in the app
 List<String> months = [
     'January',
     'February',

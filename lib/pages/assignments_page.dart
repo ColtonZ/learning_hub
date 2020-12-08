@@ -41,7 +41,7 @@ class AssignmentsPageState extends State<AssignmentsPage> {
             builder: (context, snapshot) {
               if (snapshot.connectionState == ConnectionState.done) {
                 user = snapshot.data;
-                //once signed in, load the page
+                //once signed in, load the page, although if the user is offline, show the offline page
                 if (user != null) {
                   return _CustomScaffold(
                       name: name, user: user, course: course, id: id);
@@ -109,6 +109,7 @@ class _CustomScaffoldState extends State<_CustomScaffold> {
                     );
                   }
                 } else {
+                  //if there are no assignments, return a message saying so
                   return Center(
                     child: Padding(
                       padding: EdgeInsets.fromLTRB(15, 0, 15, 0),

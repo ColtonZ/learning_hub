@@ -8,6 +8,7 @@ TextStyle navigationBarStyle = TextStyle(
   fontWeight: FontWeight.w300,
   fontSize: 10,
 );
+//defines a series of text themes
 TextStyle titleStyle = TextStyle(
     fontFamily: "Montserrat", fontWeight: FontWeight.w500, fontSize: 22);
 TextStyle subtitleStyle = TextStyle(
@@ -18,6 +19,7 @@ TextStyle header4Style =
     TextStyle(fontFamily: "Jost", fontWeight: FontWeight.w100, fontSize: 16);
 TextStyle paragraph1Style = TextStyle();
 
+//defines the app's dark theme
 ThemeData darkTheme = ThemeData(
     accentColor: Color.fromARGB(255, 37, 147, 130),
     brightness: Brightness.dark,
@@ -26,6 +28,7 @@ ThemeData darkTheme = ThemeData(
     backgroundColor: Color.fromARGB(255, 41, 41, 41),
     bottomAppBarTheme:
         BottomAppBarTheme(color: Color.fromARGB(255, 171, 146, 191)));
+//defines the app's light theme
 ThemeData lightTheme = ThemeData(
     accentColor: Colors.purple,
     brightness: Brightness.light,

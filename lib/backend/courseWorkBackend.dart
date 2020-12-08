@@ -198,7 +198,8 @@ Future<List<Assignment>> tasksToDo(CustomUser user, bool reload) async {
   return await getFirestoreTasks(user.firebaseUser);
 }
 
-Future<Assignment> markAsDone(CustomUser user, Assignment assignment) async {
+Future<String> markAsDone(CustomUser user, Assignment assignment) async {
+  //get the matching task from the db
   QuerySnapshot assignments = await databaseReference
       .collection("users")
       .doc(user.firebaseUser.uid)
@@ -210,17 +211,13 @@ Future<Assignment> markAsDone(CustomUser user, Assignment assignment) async {
       .where("creationTime", isEqualTo: assignment.creationTime)
       .get();
 
-//create a list of these events
-  List<DocumentSnapshot> assignmentsList = assignments.docs;
-
-//loop through the list, deleting each event
-  assignmentsList.forEach((assignment) {
+//delete the assignment
     databaseReference
         .collection("users")
         .doc(user.firebaseUser.uid)
         .collection("toDo")
-        .doc(assignment.id)
+        .doc(assignments.docs.first.id)
         .delete();
-  });
-  return assignment;
+
+  return "done";
 }

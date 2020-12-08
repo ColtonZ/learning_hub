@@ -49,7 +49,7 @@ class _CustomListRow extends StatefulWidget {
   _CustomListRowState createState() => _CustomListRowState();
 }
 
-//builds the list tile for the course
+//builds the list tile for the assignment
 class _CustomListRowState extends State<_CustomListRow> {
   Widget build(BuildContext context) {
     Assignment assignment = widget.assignment;
@@ -103,7 +103,7 @@ class _CustomListRowState extends State<_CustomListRow> {
         });
   }
 
-//defines that when you tap on the list tile, it will push the assignment page for that assignment.#
+//defines that when you tap on the list tile, it will push the assignment page for that assignment.
 //the objects being passed are put into a Map to be passed between pages
   static void _pushAssignmentPage(
     BuildContext context,

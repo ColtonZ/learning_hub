@@ -5,8 +5,7 @@ import '../theming.dart';
 import 'custom_app_bar.dart';
 
 class OfflineScaffold extends StatefulWidget {
-  //takes in the widget's arguments
-
+  //this is what the scaffold of the page will look like if the user is offline
   OfflineScaffold();
 
   @override
@@ -16,9 +15,9 @@ class OfflineScaffold extends StatefulWidget {
 class OfflineScaffoldState extends State<OfflineScaffold> {
   Widget build(BuildContext context) {
     return new Scaffold(
-      //returns the custom app bar with the account page title
+      //returns the custom app bar with a message telling the user they are offline
       appBar: CustomAppBar(title: "You Are Offline", reload: false),
-      //designs the account page
+      //designs the offline page
       body: Center(
           child: Padding(
               padding: EdgeInsets.fromLTRB(15, 0, 15, 0),

@@ -45,24 +45,21 @@ class _CustomListRow extends StatefulWidget {
 }
 
 //TODO: Set up tannoy page
-//builds the list tile for the course
+//builds the list tile for the tannoy notice
 class _CustomListRowState extends State<_CustomListRow> {
   Widget build(BuildContext context) {
     Notice notice = widget.notice;
     return ListTile(
-      //if the assignment has a title, return it. Otherwise, set the assignment title to "N/A"
+      //return the notice's title
       title: Text(
         notice.title,
         style: subtitleStyle,
       ),
-      //trims the tile's subtitle accordingly, and adds a name depending on the type of the assignment
+      //show the notice's body
       subtitle: Text(
-        //checks if the description is null. If it is, return "this task has no description". Otherwise, return the first line of the description, and if it's too long, cut it after 40 characters and add "..."
         notice.body,
         style: header3Style,
       ),
     );
-    //applies an icon to the tile, dependent on the type of assignment
-    //if the assignment has been turned in or returned, set the icon to say that it has been done. Otherwise, set the icon to an exclamation mark to show it needs doing.
   }
 }

@@ -9,7 +9,7 @@ class Attachment {
 
   Attachment({this.id, this.title, this.link, this.thumbnail, this.type});
 
-//checks the type of assignment. Dependent on the type, it returns different things, but will always return a title and link (unless there is an error)
+//checks the type of attachment. Dependent on the type, it returns different things, but will always return a title and link (unless there is an error)
   factory Attachment.fromJson(Map<String, dynamic> json) {
     if (json["driveFile"] != null) {
       //for student submissions, they do not have the second "driveFile", so account for the fact of the different JSONs
@@ -63,6 +63,7 @@ class Attachment {
     }
   }
   factory Attachment.fromList(List<String> list) {
+    //builds an attachment from a list of the attachment's properties
     return Attachment(
       id: list[0] == "null" ? null : list[0],
       title: list[1] == "null" ? null : list[1],

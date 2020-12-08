@@ -14,7 +14,7 @@ class AttachmentsListView extends StatefulWidget {
   AttachmentsListViewState createState() => AttachmentsListViewState();
 }
 
-//details the looks of the page
+//details the look of the attachment list view
 class AttachmentsListViewState extends State<AttachmentsListView> {
   Widget build(BuildContext context) {
     List<Attachment> attachments = widget.attachments;
@@ -51,7 +51,7 @@ class _FirstTile extends StatefulWidget {
   _FirstTileState createState() => _FirstTileState();
 }
 
-//builds the list tile for the course
+//builds the list tile for the attachment
 class _FirstTileState extends State<_FirstTile> {
   Widget build(BuildContext context) {
     String description = widget.description;
@@ -91,7 +91,7 @@ class _CustomListRow extends StatefulWidget {
   _CustomListRowState createState() => _CustomListRowState();
 }
 
-//builds the list tile for the course
+//builds the list tile for the attachment
 class _CustomListRowState extends State<_CustomListRow> {
   Widget build(BuildContext context) {
     Attachment attachment = widget.attachment;

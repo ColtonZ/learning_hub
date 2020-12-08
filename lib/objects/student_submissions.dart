@@ -23,7 +23,7 @@ class StudentSubmissionsState extends State<StudentSubmissions> {
   Widget build(BuildContext context) {
     CustomUser user = widget.user;
     Assignment assignment = widget.assignment;
-    //if it is a multiple choice question, retur"Your work" page as a series of radio buttons to select from for multiple choice
+    //if it is a multiple choice question, return "Your work" page as a series of radio buttons to select from for multiple choice
     if (assignment.type == "MULTIPLE_CHOICE_QUESTION") {
       answer = answer ?? assignment.question.options[0];
       return Center(
@@ -75,7 +75,7 @@ class StudentSubmissionsState extends State<StudentSubmissions> {
                     ),
                   ),
                 ),
-
+//allow the user to view the task in Google Classroom
                 Padding(
                   padding: EdgeInsets.fromLTRB(0, 25, 0, 0),
                   child: RaisedButton(
@@ -91,7 +91,7 @@ class StudentSubmissionsState extends State<StudentSubmissions> {
           ),
         ],
       ));
-      //if it is a short answer question, return "Your work", and then a text box to enter your response
+      //if it is a short answer question, return "Your work", and then details about the user's response
     } else if (assignment.type == "SHORT_ANSWER_QUESTION") {
       return Center(
           child: Column(
@@ -116,6 +116,7 @@ class StudentSubmissionsState extends State<StudentSubmissions> {
                     style: TextStyle(color: Colors.red, fontSize: 12),
                   ),
                 if (assignment.answer == null) Divider(),
+                //show the user's response
                 Row(
                   children: [
                     Padding(
@@ -139,6 +140,7 @@ class StudentSubmissionsState extends State<StudentSubmissions> {
               ],
             ),
           ),
+//allow the user to view the task in Classroom
           Padding(
             padding: EdgeInsets.fromLTRB(0, 25, 0, 25),
             child: RaisedButton(
@@ -185,6 +187,7 @@ class StudentSubmissionsState extends State<StudentSubmissions> {
                       description: "",
                       attachments: assignment.submissionAttachments))
               : Container(),
+          //allow the user to view the task in classroom
           Padding(
             padding: EdgeInsets.fromLTRB(0, 25, 0, 25),
             child: RaisedButton(
@@ -198,6 +201,7 @@ class StudentSubmissionsState extends State<StudentSubmissions> {
         ],
       ));
     } else {
+      //if the task is a personal task, just allow the user to mark it as done
       return Center(
           child: Column(
         children: [
@@ -216,6 +220,7 @@ class StudentSubmissionsState extends State<StudentSubmissions> {
               ],
             ),
           ),
+          //allow the user to mark the personal task as done
           Padding(
             padding: EdgeInsets.fromLTRB(0, 0, 0, 25),
             child: RaisedButton(
@@ -223,9 +228,8 @@ class StudentSubmissionsState extends State<StudentSubmissions> {
               child: Text("Mark task as done"),
               onPressed: () {
                 setState(() {
-                  markAsDone(user, assignment).then((refreshedAssignment) {
-                    assignment = refreshedAssignment;
-                  });
+                  //delete the task from the database when marked as done
+                  markAsDone(user, assignment).then((refreshedAssignment) {});
                 });
               },
             ),

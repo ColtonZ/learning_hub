@@ -1,4 +1,4 @@
-//this is a question class for if a question is part of an assignment
+//this is a notice class for each tannoy notice
 class Notice {
   final String title;
   final String body;

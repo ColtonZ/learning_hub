@@ -15,7 +15,7 @@ class EventsListView extends StatefulWidget {
   EventsListViewState createState() => EventsListViewState();
 }
 
-//details the looks of the page
+//details the looks of the events list view
 class EventsListViewState extends State<EventsListView> {
   Widget build(BuildContext context) {
     List<Event> events = widget.events;
@@ -47,7 +47,7 @@ class _CustomListRow extends StatefulWidget {
   _CustomListRowState createState() => _CustomListRowState();
 }
 
-//builds the list tile for the course
+//builds the list tile for the event
 class _CustomListRowState extends State<_CustomListRow> {
   Widget build(BuildContext context) {
     Event event = widget.event;

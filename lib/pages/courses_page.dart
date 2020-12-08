@@ -37,7 +37,7 @@ class CoursesPageState extends State<CoursesPage> {
             builder: (context, snapshot) {
               if (snapshot.connectionState == ConnectionState.done) {
                 user = snapshot.data;
-                //once signed in, the page is loaded
+                //once signed in, load the page, although if the user is offline, show the offline page
                 if (user != null) {
                   return _CustomScaffold(name: name, user: user);
                 } else {
@@ -98,6 +98,7 @@ class _CustomScaffoldState extends State<_CustomScaffold> {
                     );
                   }
                 } else {
+                  //if there are no courses to be shown (or the user is offline), tell them as much
                   return Center(
                     child: Padding(
                       padding: EdgeInsets.fromLTRB(15, 0, 15, 0),

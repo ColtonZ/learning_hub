@@ -15,12 +15,14 @@ class AddEventState extends State<AddEvent> {
   final _formKey = GlobalKey<FormState>();
   List<bool> days = [false, false, false, false, false, false, false];
 
+//initialise the details of the event.
   String title;
   String location;
   String teacher;
   String start = "0900";
   String end = "0940";
 
+//these are used for validation of the user input later.
   bool boxValueA = false;
   bool boxValueB = false;
   bool daysFilled = true;
@@ -29,7 +31,7 @@ class AddEventState extends State<AddEvent> {
   @override
   Widget build(BuildContext context) {
     CustomUser user = widget.user;
-    //returns the details of the course
+    //returns the add event popup
     return AlertDialog(
       content: Form(
         key: _formKey,
@@ -42,11 +44,13 @@ class AddEventState extends State<AddEvent> {
               children: <Widget>[
                 Padding(
                   padding: EdgeInsets.fromLTRB(5, 10, 5, 10),
+                  //the text input box for the event's name
                   child: TextFormField(
                     decoration: const InputDecoration(
                       hintText: 'Event Name',
                     ),
                     validator: (value) {
+                      //ensures that a title is entered and that it is not too long
                       if (value.isEmpty) {
                         return 'Please enter the event\'s name';
                       }
@@ -65,11 +69,13 @@ class AddEventState extends State<AddEvent> {
                   child: Row(
                     children: [
                       Expanded(
+                        //the text input box (optional) for the event's teacher
                         child: TextFormField(
                           decoration: const InputDecoration(
                             hintText: 'Teacher',
                           ),
                           validator: (value) {
+                            //ensures that if a value is given, its not too long
                             if (value.length > 30) {
                               return "Please ensure the teacher's name is under 30 characters in length.";
                             }
@@ -84,11 +90,13 @@ class AddEventState extends State<AddEvent> {
                         width: 25,
                       ),
                       Expanded(
+                        //the input box for the (optional) event location details
                         child: TextFormField(
                           decoration: const InputDecoration(
                             hintText: 'Location',
                           ),
                           validator: (value) {
+                            //ensures that, if a location is given, it's not too long
                             if (value.length > 30) {
                               return "Please ensure the post's location is under 30 characters in length.";
                             }
@@ -120,11 +128,13 @@ class AddEventState extends State<AddEvent> {
                   padding: EdgeInsets.fromLTRB(5, 10, 5, 10),
                   child: FormField(
                     builder: (_) {
+                      //creates a horizontally scrolling list of checkboxes, one for each day.
                       return SingleChildScrollView(
                         scrollDirection: Axis.horizontal,
                         child: Row(
                           mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                           children: [
+                            //for each checkbox, it has the initial of the day above it. If it is selected, the list of selected days initialised at the beginning of the popup is modified to reflect the addition of the selected day.
                             Column(children: [
                               Text("M"),
                               Checkbox(
@@ -208,6 +218,7 @@ class AddEventState extends State<AddEvent> {
                     },
                   ),
                 ),
+                //if no days have been selected, an error message is returned.
                 Text(
                   "${!daysFilled ? "You must select at least one day for this event." : ""}",
                   style: TextStyle(color: Colors.red, fontSize: 12),
@@ -223,6 +234,7 @@ class AddEventState extends State<AddEvent> {
                   padding: EdgeInsets.fromLTRB(5, 10, 5, 10),
                   child: FormField(
                     builder: (_) {
+                      //creates two checkboxes, allowing for the event to repeat on week As or Bs. When selected, the respective variable for that week is updated.
                       return Expanded(
                         child: Row(
                           mainAxisAlignment: MainAxisAlignment.spaceEvenly,
@@ -255,6 +267,7 @@ class AddEventState extends State<AddEvent> {
                     },
                   ),
                 ),
+                //returns an error if no week has been selected.
                 Text(
                   "${!weeksFilled ? "You must select at least one week for this event." : ""}",
                   style: TextStyle(color: Colors.red, fontSize: 12),
@@ -278,6 +291,8 @@ class AddEventState extends State<AddEvent> {
                   child: Row(
                     mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                     children: [
+                      //creates two flat buttons, one for the event's start time and one for the event's end time.
+                      //when one of these buttons is tapped, the corresponding time is changed, and the text on the button is updated to reflect that.
                       FlatButton(
                         child: Text(
                             "${start.substring(0, 2)}:${start.substring(2)}"),
@@ -315,6 +330,7 @@ class AddEventState extends State<AddEvent> {
                     ],
                   ),
                 ),
+                //if the event ends before it starts, an error is returned
                 Text(
                   "${!timesValid ? "Your event must end after it starts." : ""}",
                   style: TextStyle(color: Colors.red, fontSize: 12),
@@ -322,11 +338,11 @@ class AddEventState extends State<AddEvent> {
                 Container(
                   width: MediaQuery.of(context).size.width - 10,
                   padding: const EdgeInsets.symmetric(vertical: 8.0),
+                  //a raised button allowing for the event to be added. It ensures that the requirements for a valid event are fulfilled, and then it is added to the db.
                   child: RaisedButton(
                     color: Theme.of(context).accentColor,
                     onPressed: () async {
-                      // Validate will return true if the form is valid, or false if
-                      // the form is invalid.
+                      // this ensures that the event timings and repeats are valid
                       if (_formKey.currentState.validate() &&
                           days.contains(true) &&
                           (boxValueA || boxValueB) &&
@@ -336,6 +352,7 @@ class AddEventState extends State<AddEvent> {
                             location, days, boxValueA, boxValueB, start, end);
                         Navigator.of(context).pop();
                       }
+                      //if no day has been selected return that error
                       if (!days.contains(true)) {
                         setState(() {
                           daysFilled = false;
@@ -345,6 +362,7 @@ class AddEventState extends State<AddEvent> {
                           daysFilled = true;
                         });
                       }
+                      //if neither week A or B have been selected, return that error
                       if (!boxValueA && !boxValueB) {
                         setState(() {
                           weeksFilled = false;
@@ -354,6 +372,7 @@ class AddEventState extends State<AddEvent> {
                           weeksFilled = true;
                         });
                       }
+                      //if the event ends before (or at the same time as) it starts, return that error
                       if (int.parse(end) <= int.parse(start)) {
                         setState(() {
                           timesValid = false;

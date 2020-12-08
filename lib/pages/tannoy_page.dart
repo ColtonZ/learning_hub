@@ -19,7 +19,7 @@ class TannoyPage extends StatefulWidget {
   TannoyPage({this.user, this.name});
 
   @override
-  //initialises the timetable page state
+  //initialises the tannoy page state
   TannoyPageState createState() => TannoyPageState();
 }
 
@@ -34,7 +34,7 @@ class TannoyPageState extends State<TannoyPage> {
             builder: (context, snapshot) {
               if (snapshot.connectionState == ConnectionState.done) {
                 user = snapshot.data;
-                //once the user has been signed in, load the page
+                //once signed in, load the page, although if the user is offline, show the offline page
                 if (user != null) {
                   return _CustomScaffold(user: user, name: name);
                 } else {
@@ -73,10 +73,10 @@ class _CustomScaffoldState extends State<_CustomScaffold> {
         //returns the custom app bar with the timetable page title
         appBar: CustomAppBar(title: "Tannoy Notices", reload: true),
         //builds the body
-        //checks if the user has at least one event in the Firestore database added automatically from Firefly. If they do, load the timetable page.
-        //Otherwise, display a web view, which will allow the user to login to Firefly and then will scrape the dashboard for the user's timetable data.
+        //checks if the user has at least one tannoy notice in the Firestore database added automatically from the pupil portal. If they do, load the tannoy page.
+        //Otherwise, display a web view, which will allow the user to login to the portal and then will scrape the dashboard for the user's tannoy data.
         body: FutureBuilder(
-            //counts how many Firefly events the user has
+            //gets the user's tannoy notices
             future: getTannoy(user.firebaseUser),
             //https://flutter.dev/docs/development/ui/interactive
             builder: (context, snapshot) {
@@ -84,20 +84,20 @@ class _CustomScaffoldState extends State<_CustomScaffold> {
                 if ((snapshot.data == null) &&
                     DateTime.now().hour > 7 &&
                     DateTime.now().weekday < 5) {
-                  //if they have no events, return a web view body so the user can login to Firefly
+                  //if they have no tannoy notices, return a web view body so the user can login to the portal
                   //https://stackoverflow.com/questions/54691767/navigation-inside-nested-future
                   return PortalWebView(
                     user: user,
-                    //this url is the page on the site https://intranet.stpaulsschool.org.uk to access
+                    //this url is the page on the site https://pupils.stpaulsschool.org.uk to access
                     url: "/api/homepage/",
                   );
                 } else {
                   //otherwise build the page
                   List<Notice> notices = snapshot.data;
-                  //checks if the user has assignments. If they do, return the assignments as a list view, otherwise return an error message
+                  //checks if the user has any notices. If they do, return the notices as a list view, otherwise return an error message
                   try {
                     if (notices.length != 0) {
-                      //creates a list view of the assignments
+                      //creates a list view of the tannoy notices
                       return TannoysListView(notices: notices);
                     } else {
                       return Center(
@@ -111,7 +111,7 @@ class _CustomScaffoldState extends State<_CustomScaffold> {
                   }
                 }
               } else {
-                //whilst getting courses, return a loading indicator
+                //whilst getting notices, return a loading indicator
                 return Center(child: CircularProgressIndicator());
               }
             }),

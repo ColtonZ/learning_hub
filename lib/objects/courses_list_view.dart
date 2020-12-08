@@ -15,7 +15,7 @@ class CoursesListView extends StatefulWidget {
   CoursesListViewState createState() => CoursesListViewState();
 }
 
-//details the looks of the page
+//details the looks of the courses list
 class CoursesListViewState extends State<CoursesListView> {
   Widget build(BuildContext context) {
     List<Course> courses = widget.courses;

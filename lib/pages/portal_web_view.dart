@@ -45,10 +45,11 @@ class _CustomBodyState extends State<_CustomBody> {
       //load the webview according to the specific page which was passed
       initialUrl: "https://pupils.stpaulsschool.org.uk$url",
       onLoadStop: (InAppWebViewController controller, String url) async {
-        //this checks if, when a page is loaded, it is the correct one. If it is, the data is scraped and the timetable page returned.
+        //this checks if, when a page is loaded, it is the correct one. If it is, the data is scraped and the tannoy page returned.
         //https://medium.com/flutter/the-power-of-webviews-in-flutter-a56234b57df2
         //https://medium.com/flutter-community/inappwebview-the-real-power-of-webviews-in-flutter-c6d52374209d
         String currentPage = await controller.getUrl();
+        //automatically fill the username box of the page
         if (currentPage.startsWith("https://isams.stpaulsschool.org.uk/auth")) {
           await controller.evaluateJavascript(
               source:
@@ -56,11 +57,11 @@ class _CustomBodyState extends State<_CustomBody> {
         }
         //checks if the url ends with the same url that was passed (i.e. we are not on the login page)
         if (currentPage.endsWith("/api/homepage/")) {
-          //evaluates two pieces of JavaScript. The first gets a list of events as a string, with each event split by a semicolon, having been scraped from the page's html.
+          //evaluates the JavaScript, which gets a list of tannoy notices as a string, with each notice split by a semicolon, having been scraped from the page's html.
           String tannoyText = await controller.evaluateJavascript(
               source:
                   "output = \"\";var list = document.getElementsByClassName(\"ff-timetable-block ff-timetable-lesson\");for(var i =0; i<list.length;i++){output+=`\${list[i].childNodes[1].childNodes[0].lastChild.textContent}, \${list[i].childNodes[1].childNodes[2].lastChild.textContent}, \${list[i].firstElementChild.attributes[1].textContent}; `;}output.substring(0, output.length-2);");
-          //this adds the events to the Firestore database, before pushing the timetable page again
+          //this adds the tannoy notices to the Firestore database, before pushing the tannoy page again
           addTannoy(user.firebaseUser, tannoyText).then((_) {
             _pushTannoyPage(context, user);
           });

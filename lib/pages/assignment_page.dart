@@ -5,6 +5,7 @@ import 'package:flutter/material.dart';
 import 'package:google_sign_in/google_sign_in.dart';
 
 import '../theming.dart';
+import '../constants.dart';
 
 import '../objects/assignment.dart';
 import '../objects/attachments_list_view.dart';
@@ -27,7 +28,7 @@ class AssignmentPage extends StatefulWidget {
   AssignmentPage({this.account, this.user, this.name, this.assignment});
 
   @override
-  //initialises the courses page state
+  //initialises the assignment page state
   AssignmentPageState createState() => AssignmentPageState();
 }
 
@@ -43,7 +44,7 @@ class AssignmentPageState extends State<AssignmentPage> {
             builder: (context, snapshot) {
               if (snapshot.connectionState == ConnectionState.done) {
                 user = snapshot.data;
-                //once signed in, load the page
+                //once signed in, load the page, although if the user is offline, show the offline page
                 if (user != null) {
                   return _CustomScaffold(
                       name: name, user: user, assignment: assignment);
@@ -75,28 +76,13 @@ class _CustomScaffold extends StatefulWidget {
   _CustomScaffoldState createState() => _CustomScaffoldState();
 }
 
-//details the looks of the page
+//details the look of the page
 class _CustomScaffoldState extends State<_CustomScaffold> {
   Widget build(BuildContext context) {
     String name = widget.name;
     CustomUser user = widget.user;
     Assignment assignment = widget.assignment;
-    List<String> months = [
-      "Jan",
-      "Feb",
-      "Mar",
-      "Apr",
-      "May",
-      "Jun",
-      "Jul",
-      "Aug",
-      "Sep",
-      "Oct",
-      "Nov",
-      "Dec"
-    ];
     return new Scaffold(
-
         //returns the custom app bar with the assignments page title
         appBar: CustomAppBar(title: assignment.courseName, reload: false),
         //builds the body
@@ -264,6 +250,7 @@ class _CustomScaffoldState extends State<_CustomScaffold> {
                       padding: EdgeInsets.fromLTRB(15, 0, 15, 0),
                       backdropTapClosesPanel: true,
                       minHeight: 85,
+                      //dependent on the type of assignment and any files the student has uploaded, the size of the sliding up panel changes.
                       maxHeight: assignment.type == "PERSONAL"
                           ? 170
                           : assignment.type == "SHORT_ANSWER_QUESTION"

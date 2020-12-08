@@ -43,7 +43,7 @@ class TimetablePageState extends State<TimetablePage> {
             builder: (context, snapshot) {
               if (snapshot.connectionState == ConnectionState.done) {
                 user = snapshot.data;
-                //once the user has been signed in, load the page
+                //once signed in, load the page, although if the user is offline, show the offline page
                 if (user != null) {
                   return _CustomScaffold(user: user, name: name);
                 } else {
@@ -144,6 +144,7 @@ class _MainPageState extends State<_MainPage> {
           children: [
             Padding(
               padding: EdgeInsets.fromLTRB(14, 0, 0, 0),
+              //show an icon allowing for the user to select a day to view the events for
               child: IconButton(
                 icon: Icon(Icons.calendar_today),
                 onPressed: () async {
@@ -164,6 +165,7 @@ class _MainPageState extends State<_MainPage> {
               child: Row(
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: [
+                  //show an arrow allowing for a user to go back a day
                   IconButton(
                     icon: Icon(Icons.arrow_left),
                     onPressed: () {
@@ -176,6 +178,7 @@ class _MainPageState extends State<_MainPage> {
                     "Your Events",
                     style: titleStyle,
                   ),
+                  //show an arrow allowing for a user to go forward a day
                   IconButton(
                     icon: Icon(Icons.arrow_right),
                     onPressed: () {
@@ -189,6 +192,7 @@ class _MainPageState extends State<_MainPage> {
             ),
             Padding(
               padding: EdgeInsets.fromLTRB(0, 0, 14, 0),
+              //allow the user to add a new event to their calendar
               child: IconButton(
                 icon: Icon(Icons.add),
                 onPressed: () async {
@@ -208,6 +212,7 @@ class _MainPageState extends State<_MainPage> {
           height: 5,
         ),
         FutureBuilder(
+            //show the day's date of the selected date, followed by the week (A or B)
             future: getCurrentWeek(user.firebaseUser, time),
             builder: (context, snapshot) {
               if (snapshot.connectionState == ConnectionState.done) {
@@ -257,6 +262,7 @@ class _MainPageState extends State<_MainPage> {
               child: IconButton(
                 icon: Icon(Icons.refresh),
                 onPressed: () {
+                  //refresh today's events
                   setState(() {
                     tasksReload = true;
                   });
@@ -273,11 +279,13 @@ class _MainPageState extends State<_MainPage> {
             Padding(
               padding: EdgeInsets.fromLTRB(0, 0, 14, 0),
               child: IconButton(
+                //add a new personal task
                 icon: Icon(Icons.add),
                 onPressed: () async {
                   showDialog(
                       context: context,
                       builder: (BuildContext context) {
+                        //show the dialogue to add a new task
                         return AddPersonalTask(user: user);
                       }).then((_) {
                     setState(() {});

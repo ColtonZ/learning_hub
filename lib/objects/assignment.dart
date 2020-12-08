@@ -264,6 +264,7 @@ class Assignment {
 
   factory Assignment.createCustom(
       String title, String description, String subject, DateTime dueDate) {
+    //allows for a user to create a custom assignment. If this happens, the assignment must be from Learning Hub.
     return Assignment(
         platform: "LH",
         title: title,
