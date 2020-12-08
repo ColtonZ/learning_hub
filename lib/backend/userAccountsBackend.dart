@@ -14,7 +14,7 @@ Future<String> getGoogleUserName(String userId, CustomUser user) async {
 
   http.Response response = await http.get(
       Uri.encodeFull(
-          "https://classroom.googleapis.com/v1/userProfiles/$userId"),
+          "https://classroom.googleapis.com/v1/userProfiles/$userId?fields=name"),
       headers: headers);
 
   var data = json.decode(response.body);

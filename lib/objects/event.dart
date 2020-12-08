@@ -41,12 +41,6 @@ class Event implements Comparable<Event> {
     );
   }
 
-//outputs the event's details
-  void output() {
-    print(
-        "classSet: $classSet | location: $location | name: $name | platform: $platform | teacher: $teacher | times: $times");
-  }
-
 //https://www.woolha.com/tutorials/dart-sorting-list-with-comparator-and-comparable
 
 //defines how to compare to events to each other (for sorting a list of events)

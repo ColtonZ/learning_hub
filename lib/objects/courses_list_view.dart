@@ -62,7 +62,7 @@ class _CustomListRowState extends State<_CustomListRow> {
               //once the http request has been sent, show an icon saying if the course has work to be done or not. If an error is returned, return an error icon. Whilst loading, return a loading indicator.
               if (snapshot.connectionState == ConnectionState.done) {
                 try {
-                  return Icon(snapshot.data
+                  return Icon(snapshot.data["done"]
                       ? Icons.check
                       : Icons.notification_important);
                 } catch (error) {

@@ -86,7 +86,8 @@ class _CustomScaffoldState extends State<_CustomScaffold> {
         appBar: CustomAppBar(title: course, reload: false),
         //builds the body
         body: FutureBuilder(
-            future: getAssignments(id, user),
+            future: sendAssignmentsRequest(id, user).then(
+                (assignments) => getAssignments(assignments, id, course, user)),
             builder: (context, snapshot) {
               if (snapshot.connectionState == ConnectionState.done) {
                 List<Assignment> assignments = snapshot.data;
