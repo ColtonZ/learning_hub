@@ -119,7 +119,7 @@ class StudentSubmissionsState extends State<StudentSubmissions> {
                 Row(
                   children: [
                     Padding(
-                      padding: EdgeInsets.fromLTRB(5, 0,0, 0),
+                      padding: EdgeInsets.fromLTRB(5, 0, 0, 0),
                       child: Text(
                         assignment.answer != null
                             ? "Your Response: "
@@ -178,11 +178,13 @@ class StudentSubmissionsState extends State<StudentSubmissions> {
             style: TextStyle(color: Colors.red, fontSize: 12),
           ),
           Divider(),
-          Expanded(
-              //creates the list view of the attachments, with no 'description' (as it should only say **Attachments:**)
-              child: AttachmentsListView(
-                  description: "",
-                  attachments: assignment.submissionAttachments)),
+          assignment.submissionAttachments.length != 0
+              ? Expanded(
+                  //creates the list view of the attachments, with no 'description' (as it should only say **Attachments:**)
+                  child: AttachmentsListView(
+                      description: "",
+                      attachments: assignment.submissionAttachments))
+              : Container(),
           Padding(
             padding: EdgeInsets.fromLTRB(0, 25, 0, 25),
             child: RaisedButton(

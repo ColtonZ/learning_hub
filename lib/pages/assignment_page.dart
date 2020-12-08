@@ -268,7 +268,9 @@ class _CustomScaffoldState extends State<_CustomScaffold> {
                           ? 170
                           : assignment.type == "SHORT_ANSWER_QUESTION"
                               ? 250
-                              : 500,
+                              : assignment.submissionAttachments.length == 0
+                                  ? 250
+                                  : 500,
                       borderRadius: BorderRadius.only(
                           topLeft: Radius.circular(
                               MediaQuery.of(context).size.width / 20),
