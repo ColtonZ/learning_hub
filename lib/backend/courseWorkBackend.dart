@@ -79,17 +79,20 @@ Future<Assignment> sendAssignmentRequest(String courseId, String courseName,
   //sends an http request for the assignment, as well as a second for the student's submissions (if any)
 
 //get the assignment details
-//TODO:FIELDS
   http.Response assignmentResponse = await http.get(
       Uri.encodeFull(
           "https://classroom.googleapis.com//v1/courses/$courseId/courseWork/$assignmentId"),
       headers: headers);
+
+  print("got assignment");
 
 //get the student's submission details
   http.Response submissionResponse = await http.get(
       Uri.encodeFull(
           "https://classroom.googleapis.com//v1/courses/$courseId/courseWork/$assignmentId/studentSubmissions?fields=studentSubmissions(assignmentSubmission,assignedGrade,late,state,id,shortAnswerSubmission,multipleChoiceSubmission)"),
       headers: headers);
+
+  print("got submission");
 
 //parse the details
   final assignmentResponseBody = assignmentResponse.body;

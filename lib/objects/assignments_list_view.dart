@@ -1,14 +1,18 @@
 import 'package:flutter/material.dart';
 
+import '../backend/courseWorkBackend.dart';
 import '../theming.dart';
 import 'assignment.dart';
 import 'customUser.dart';
 
 class AssignmentsListView extends StatefulWidget {
-  final List<Assignment> assignments;
+  final List<dynamic> assignments;
   final CustomUser user;
+  final String courseName;
+  final String courseId;
 
-  AssignmentsListView({this.assignments, this.user});
+  AssignmentsListView(
+      {this.assignments, this.user, this.courseName, this.courseId});
 
   @override
   AssignmentsListViewState createState() => AssignmentsListViewState();
@@ -17,8 +21,10 @@ class AssignmentsListView extends StatefulWidget {
 //details the looks of the page
 class AssignmentsListViewState extends State<AssignmentsListView> {
   Widget build(BuildContext context) {
-    List<Assignment> assignments = widget.assignments;
+    List<dynamic> assignments = widget.assignments;
     CustomUser user = widget.user;
+    String courseName = widget.courseName;
+    String courseId = widget.courseId;
     return ListView.builder(
       itemCount: (assignments.length * 2),
       //half the items will be dividers, the other will be list tiles
@@ -30,9 +36,32 @@ class AssignmentsListViewState extends State<AssignmentsListView> {
         }
         final index = item ~/ 2;
         //creates a list tile for the assignment
-        return _CustomListRow(
-          user: user,
-          assignment: assignments[index],
+        return FutureBuilder(
+          future: sendAssignmentRequest(
+              courseId, courseName, assignments[index]["id"], user.authHeaders),
+          builder: (context, snapshot) {
+            if (snapshot.connectionState == ConnectionState.done) {
+              return _CustomListRow(
+                user: user,
+                assignment: snapshot.data,
+              );
+            } else {
+              return ListTile(
+                title: Text(
+                  "Loading Assignment...",
+                  style: subtitleStyle,
+                ),
+                subtitle: Text(
+                  "Loading...",
+                  style: header3Style,
+                ),
+                //applies an icon to the tile, dependent on the type of assignment
+                isThreeLine: true,
+                //if the assignment has been turned in or returned, set the icon to say that it has been done. Otherwise, set the icon to an exclamation mark to show it needs doing.
+                leading: CircularProgressIndicator(),
+              );
+            }
+          },
         );
       },
     );

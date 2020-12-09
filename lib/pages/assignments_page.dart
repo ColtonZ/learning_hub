@@ -3,7 +3,6 @@ import 'package:google_sign_in/google_sign_in.dart';
 
 import '../theming.dart';
 
-import '../objects/assignment.dart';
 import '../objects/assignments_list_view.dart';
 import '../objects/custom_app_bar.dart';
 import '../objects/custom_navigation_bar.dart';
@@ -86,17 +85,19 @@ class _CustomScaffoldState extends State<_CustomScaffold> {
         appBar: CustomAppBar(title: course, reload: false),
         //builds the body
         body: FutureBuilder(
-            future: sendAssignmentsRequest(id, user).then(
-                (assignments) => getAssignments(assignments, id, course, user)),
+            future: sendAssignmentsRequest(id, user),
             builder: (context, snapshot) {
               if (snapshot.connectionState == ConnectionState.done) {
-                List<Assignment> assignments = snapshot.data;
+                List<dynamic> assignments = snapshot.data;
                 //checks if the user has assignments. If they do, return the assignments as a list view, otherwise return an error message
                 if (assignments != null) {
                   try {
                     //creates a list view of the assignments
                     return AssignmentsListView(
-                        user: user, assignments: assignments);
+                        user: user,
+                        assignments: assignments,
+                        courseId: id,
+                        courseName: course);
                   } catch (error) {
                     return Center(
                       child: Padding(
