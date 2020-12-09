@@ -43,7 +43,7 @@ class TannoyPageState extends State<TannoyPage> {
               } else {
                 //whilst signing in, return a loading indicator
                 return Scaffold(
-                    appBar: CustomAppBar(title: "Tannoy Notices", reload: true),
+                    appBar: CustomAppBar(title: "Tannoy Notices", reload: false),
                     body: Center(child: CircularProgressIndicator()),
                     bottomNavigationBar:
                         CustomNavigationBar(name: name, user: user, index: 0));
@@ -71,7 +71,7 @@ class _CustomScaffoldState extends State<_CustomScaffold> {
     String name = widget.name;
     return Scaffold(
         //returns the custom app bar with the timetable page title
-        appBar: CustomAppBar(title: "Tannoy Notices", reload: true),
+        appBar: CustomAppBar(title: "Tannoy Notices", reload: false),
         //builds the body
         //checks if the user has at least one tannoy notice in the Firestore database added automatically from the pupil portal. If they do, load the tannoy page.
         //Otherwise, display a web view, which will allow the user to login to the portal and then will scrape the dashboard for the user's tannoy data.

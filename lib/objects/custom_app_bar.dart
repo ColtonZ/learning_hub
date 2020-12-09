@@ -22,7 +22,21 @@ class CustomAppBar extends StatefulWidget implements PreferredSizeWidget {
 class CustomAppBarState extends State<CustomAppBar> {
   AppBar build(BuildContext context) {
     String title = widget.title;
+    bool reload = widget.reload;
     return new AppBar(
+      actions: [
+        reload
+            ? Padding(
+                padding: EdgeInsets.fromLTRB(0, 0, 5, 0),
+                child: IconButton(
+                  icon: Icon(Icons.refresh),
+                  onPressed: () {
+                    Navigator.of(context).pushReplacementNamed("/");
+                  },
+                ),
+              )
+            : Container(),
+      ],
       title: Text(title, style: pageTitleStyle),
       backgroundColor: Theme.of(context).accentColor,
     );

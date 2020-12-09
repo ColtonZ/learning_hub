@@ -52,7 +52,7 @@ class TimetablePageState extends State<TimetablePage> {
               } else {
                 //whilst signing in, return a loading indicator
                 return Scaffold(
-                    appBar: CustomAppBar(title: "Your Timetable", reload: true),
+                    appBar: CustomAppBar(title: "Your Timetable", reload: false),
                     body: Center(child: CircularProgressIndicator()),
                     bottomNavigationBar:
                         CustomNavigationBar(name: name, user: user, index: 0));
@@ -81,7 +81,7 @@ class _CustomScaffoldState extends State<_CustomScaffold> {
     DateTime time = DateTime.now();
     return Scaffold(
         //returns the custom app bar with the timetable page title
-        appBar: CustomAppBar(title: "Your Timetable", reload: true),
+        appBar: CustomAppBar(title: "Your Timetable", reload: false),
         //builds the body
         //checks if the user has at least one event in the Firestore database added automatically from Firefly. If they do, load the timetable page.
         //Otherwise, display a web view, which will allow the user to login to Firefly and then will scrape the dashboard for the user's timetable data.
@@ -230,27 +230,44 @@ class _MainPageState extends State<_MainPage> {
             }),
         Divider(),
         Expanded(
-          child: FutureBuilder(
-            //get a list of today's events
-            future: getEventsList(user.firebaseUser)
-                .then((events) => getEvents(time, user.firebaseUser, events)),
-            builder: (context, eventsSnaphsot) {
-              if (eventsSnaphsot.connectionState == ConnectionState.done) {
-                if (eventsSnaphsot.data.length > 0) {
-                  //if there's more than one event today, create a list view of today's events
-                  return EventsListView(
-                      user: user, events: eventsSnaphsot.data);
-                } else {
-                  //if there are no events in the calendar today, tell the user as much
-                  return Center(
-                    child:
-                        Text("You have no events in the calendar on this day."),
-                  );
+          child: GestureDetector(
+            behavior: HitTestBehavior.translucent,
+            onHorizontalDragEnd: (details) {
+              setState(() {
+                print(details.primaryVelocity);
+                if (details.primaryVelocity > 0) {
+                  time = time.subtract(Duration(days: 1));
+                } else if (details.primaryVelocity < 0) {
+                  time = time.add(Duration(days: 1));
                 }
-              } else {
-                return Center(child: CircularProgressIndicator());
-              }
+              });
             },
+            child: FutureBuilder(
+              //get a list of today's events
+              future: getEventsList(user.firebaseUser)
+                  .then((events) => getEvents(time, user.firebaseUser, events)),
+              builder: (context, eventsSnaphsot) {
+                if (eventsSnaphsot.connectionState == ConnectionState.done) {
+                  if (eventsSnaphsot.data.length > 0) {
+                    //if there's more than one event today, create a list view of today's events
+                    return EventsListView(
+                        user: user, events: eventsSnaphsot.data);
+                  } else {
+                    //if there are no events in the calendar today, tell the user as much
+                    return Center(
+                      child: Expanded(
+                        child: Container(
+                          child: Text(
+                              "You have no events in the calendar on this day."),
+                        ),
+                      ),
+                    );
+                  }
+                } else {
+                  return Center(child: CircularProgressIndicator());
+                }
+              },
+            ),
           ),
         ),
         Divider(),
@@ -306,7 +323,9 @@ class _MainPageState extends State<_MainPage> {
                 if (tasksSnapshot.data.length > 0) {
                   //if the user has tasks to do, return a list view of their tasks
                   return AssignmentsListView(
-                      user: user, assignments: tasksSnapshot.data, timetable:true);
+                      user: user,
+                      assignments: tasksSnapshot.data,
+                      timetable: true);
                 } else {
                   //if a user has no tasks to do, tell them as much.
                   return Center(
