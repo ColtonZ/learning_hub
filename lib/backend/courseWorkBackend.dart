@@ -84,15 +84,11 @@ Future<Assignment> sendAssignmentRequest(String courseId, String courseName,
           "https://classroom.googleapis.com//v1/courses/$courseId/courseWork/$assignmentId"),
       headers: headers);
 
-  print("got assignment");
-
 //get the student's submission details
   http.Response submissionResponse = await http.get(
       Uri.encodeFull(
           "https://classroom.googleapis.com//v1/courses/$courseId/courseWork/$assignmentId/studentSubmissions?fields=studentSubmissions(assignmentSubmission,assignedGrade,late,state,id,shortAnswerSubmission,multipleChoiceSubmission)"),
       headers: headers);
-
-  print("got submission");
 
 //parse the details
   final assignmentResponseBody = assignmentResponse.body;
@@ -122,7 +118,7 @@ Future<Map<String, dynamic>> isCourseDone(String id, CustomUser user) async {
     //requests the course assignments with an http request
     http.Response response = await http.get(
         Uri.encodeFull(
-            "https://classroom.googleapis.com/v1/courses/$id/courseWork?fields=courseWork(dueDate)"),
+            "https://classroom.googleapis.com/v1/courses/$id/courseWork?fields=courseWork(dueDate,id)"),
         headers: headers);
 
 //converts the courseWork details into JSON
@@ -143,7 +139,7 @@ Future<Map<String, dynamic>> isCourseDone(String id, CustomUser user) async {
 //get the assignment's details
         http.Response submissionResponse = await http.get(
             Uri.encodeFull(
-                "https://classroom.googleapis.com//v1/courses/$id/courseWork/${assignments[index]["id"]}/studentSubmissions?fields=state"),
+                "https://classroom.googleapis.com//v1/courses/$id/courseWork/${assignments[index]["id"]}/studentSubmissions?fields=studentSubmissions(state)"),
             headers: headers);
 
 //decode the assignment details
@@ -152,6 +148,7 @@ Future<Map<String, dynamic>> isCourseDone(String id, CustomUser user) async {
         var submissions = submissionData["studentSubmissions"] as List;
 
 //check each assignment, and if it has not been submitted or marked, and is not late, then check its due date. If it has a due date, mark the task as needing to be done);
+
         if (submissions[0]["state"] != "TURNED_IN" &&
             submissions[0]["state"] != "RETURNED") {
           //if the task is not done, return false, and break to save time.

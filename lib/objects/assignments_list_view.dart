@@ -29,6 +29,7 @@ class AssignmentsListViewState extends State<AssignmentsListView> {
       itemCount: (assignments.length * 2),
       //half the items will be dividers, the other will be list tiles
       padding: const EdgeInsets.all(8.0),
+      addAutomaticKeepAlives: true,
       itemBuilder: (context, item) {
         //returns a divider if odd, or assignment details if even (i.e. returns a divider every other one)
         if (item.isOdd) {
