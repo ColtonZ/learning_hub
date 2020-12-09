@@ -94,10 +94,12 @@ class _CustomScaffoldState extends State<_CustomScaffold> {
                   try {
                     //creates a list view of the assignments
                     return AssignmentsListView(
-                        user: user,
-                        assignments: assignments,
-                        courseId: id,
-                        courseName: course);
+                      user: user,
+                      assignments: assignments,
+                      courseId: id,
+                      courseName: course,
+                      timetable: false,
+                    );
                   } catch (error) {
                     return Center(
                       child: Padding(

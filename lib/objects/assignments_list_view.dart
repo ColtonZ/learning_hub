@@ -10,9 +10,14 @@ class AssignmentsListView extends StatefulWidget {
   final CustomUser user;
   final String courseName;
   final String courseId;
+  final bool timetable;
 
   AssignmentsListView(
-      {this.assignments, this.user, this.courseName, this.courseId});
+      {this.assignments,
+      this.user,
+      this.courseName,
+      this.courseId,
+      this.timetable});
 
   @override
   AssignmentsListViewState createState() => AssignmentsListViewState();
@@ -25,6 +30,7 @@ class AssignmentsListViewState extends State<AssignmentsListView> {
     CustomUser user = widget.user;
     String courseName = widget.courseName;
     String courseId = widget.courseId;
+    bool timetable = widget.timetable;
     return ListView.builder(
       itemCount: (assignments.length * 2),
       //half the items will be dividers, the other will be list tiles
@@ -37,33 +43,38 @@ class AssignmentsListViewState extends State<AssignmentsListView> {
         }
         final index = item ~/ 2;
         //creates a list tile for the assignment
-        return FutureBuilder(
-          future: sendAssignmentRequest(
-              courseId, courseName, assignments[index]["id"], user.authHeaders),
-          builder: (context, snapshot) {
-            if (snapshot.connectionState == ConnectionState.done) {
-              return _CustomListRow(
+        return !timetable
+            ? FutureBuilder(
+                future: sendAssignmentRequest(courseId, courseName,
+                    assignments[index]["id"], user.authHeaders),
+                builder: (context, snapshot) {
+                  if (snapshot.connectionState == ConnectionState.done) {
+                    return _CustomListRow(
+                      user: user,
+                      assignment: snapshot.data,
+                    );
+                  } else {
+                    return ListTile(
+                      title: Text(
+                        "Loading Assignment...",
+                        style: subtitleStyle,
+                      ),
+                      subtitle: Text(
+                        "Loading...",
+                        style: header3Style,
+                      ),
+                      //applies an icon to the tile, dependent on the type of assignment
+                      isThreeLine: true,
+                      //if the assignment has been turned in or returned, set the icon to say that it has been done. Otherwise, set the icon to an exclamation mark to show it needs doing.
+                      leading: CircularProgressIndicator(),
+                    );
+                  }
+                },
+              )
+            : _CustomListRow(
                 user: user,
-                assignment: snapshot.data,
+                assignment: assignments[index],
               );
-            } else {
-              return ListTile(
-                title: Text(
-                  "Loading Assignment...",
-                  style: subtitleStyle,
-                ),
-                subtitle: Text(
-                  "Loading...",
-                  style: header3Style,
-                ),
-                //applies an icon to the tile, dependent on the type of assignment
-                isThreeLine: true,
-                //if the assignment has been turned in or returned, set the icon to say that it has been done. Otherwise, set the icon to an exclamation mark to show it needs doing.
-                leading: CircularProgressIndicator(),
-              );
-            }
-          },
-        );
       },
     );
   }

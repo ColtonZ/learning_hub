@@ -306,7 +306,7 @@ class _MainPageState extends State<_MainPage> {
                 if (tasksSnapshot.data.length > 0) {
                   //if the user has tasks to do, return a list view of their tasks
                   return AssignmentsListView(
-                      user: user, assignments: tasksSnapshot.data);
+                      user: user, assignments: tasksSnapshot.data, timetable:true);
                 } else {
                   //if a user has no tasks to do, tell them as much.
                   return Center(
