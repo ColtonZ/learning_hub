@@ -35,17 +35,49 @@ class StudentSubmissionsState extends State<StudentSubmissions> {
           Container(
             child: Column(
               children: [
-                Icon(Icons.expand_more),
+                Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                  children: [
+                    Container(
+                        width: MediaQuery.of(context).size.width / 2 - 3,
+                        alignment: Alignment.centerRight,
+                        child: Icon(Icons.expand_more)),
+                    Container(
+                      width: MediaQuery.of(context).size.width / 2 - 27,
+                      alignment: Alignment.centerRight,
+                      child: Text(
+                        assignment.state == "RETURNED"
+                            ? "Grade: ${assignment.grade}/${assignment.points}"
+                            : assignment.state == "TURNED_IN"
+                                ? "Turned In"
+                                : assignment.isLate != null
+                                    ? "Late"
+                                    : "Assigned",
+                        style: assignment.isLate == null
+                            ? header3Style
+                            : TextStyle(
+                                fontFamily: header3Style.fontFamily,
+                                fontWeight: header3Style.fontWeight,
+                                fontSize: header3Style.fontSize,
+                                color: Colors.red),
+                      ),
+                    ),
+                  ],
+                ),
                 Text(
                   "Your work",
                   style: header3Style,
                 ),
-                Divider(),
-                Text(
-                  "It is not currently possible to submit multiple choice questions.",
-                  textAlign: TextAlign.center,
-                  style: TextStyle(color: Colors.red, fontSize: 12),
-                ),
+                if (assignment.state != "TURNED_IN" &&
+                    assignment.state != "RETURNED")
+                  Divider(),
+                if (assignment.state != "TURNED_IN" &&
+                    assignment.state != "RETURNED")
+                  Text(
+                    "It is not currently possible to submit multiple choice questions.",
+                    textAlign: TextAlign.center,
+                    style: TextStyle(color: Colors.red, fontSize: 12),
+                  ),
                 Divider(),
                 //https://material.io/develop/flutter/components/radio-buttons
                 //creates a series of radio buttons, each with one of the options that you can select as an answer to the multiple choice question
@@ -102,20 +134,53 @@ class StudentSubmissionsState extends State<StudentSubmissions> {
           Container(
             child: Column(
               children: [
-                Icon(Icons.expand_more),
+                Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                  children: [
+                    Container(
+                        width: MediaQuery.of(context).size.width / 2 - 3,
+                        alignment: Alignment.centerRight,
+                        child: Icon(Icons.expand_more)),
+                    Container(
+                      width: MediaQuery.of(context).size.width / 2 - 27,
+                      alignment: Alignment.centerRight,
+                      child: Text(
+                        assignment.state == "RETURNED"
+                            ? "Grade: ${assignment.grade}/${assignment.points}"
+                            : assignment.state == "TURNED_IN"
+                                ? "Turned In"
+                                : assignment.isLate != null
+                                    ? "Late"
+                                    : "Assigned",
+                        style: assignment.isLate == null
+                            ? header3Style
+                            : TextStyle(
+                                fontFamily: header3Style.fontFamily,
+                                fontWeight: header3Style.fontWeight,
+                                fontSize: header3Style.fontSize,
+                                color: Colors.red),
+                      ),
+                    ),
+                  ],
+                ),
                 Text(
                   "Your work",
                   style: header3Style,
                 ),
-                if (assignment.answer != null) Container(height: 15),
+                if (assignment.state != "TURNED_IN" &&
+                    assignment.state != "RETURNED")
+                  Container(height: 15),
                 Divider(),
-                if (assignment.answer == null)
+                if (assignment.state != "TURNED_IN" &&
+                    assignment.state != "RETURNED")
                   Text(
                     "It is not currently possible to submit short answer questions.",
                     textAlign: TextAlign.center,
                     style: TextStyle(color: Colors.red, fontSize: 12),
                   ),
-                if (assignment.answer == null) Divider(),
+                if (assignment.state != "TURNED_IN" &&
+                    assignment.state != "RETURNED")
+                  Divider(),
                 //show the user's response
                 Padding(
                   padding: EdgeInsets.fromLTRB(5, 0, 0, 0),
@@ -135,7 +200,9 @@ class StudentSubmissionsState extends State<StudentSubmissions> {
                       textScaleFactor: 1.5,
                     ),
                   ),
-                if (assignment.answer != null) Divider(),
+                if (assignment.state != "TURNED_IN" &&
+                    assignment.state != "RETURNED")
+                  Divider(),
               ],
             ),
           ),
@@ -163,21 +230,53 @@ class StudentSubmissionsState extends State<StudentSubmissions> {
           Container(
             child: Column(
               children: [
-                Icon(Icons.expand_more),
+                Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                  children: [
+                    Container(
+                        width: MediaQuery.of(context).size.width / 2 - 3,
+                        alignment: Alignment.centerRight,
+                        child: Icon(Icons.expand_more)),
+                    Container(
+                      width: MediaQuery.of(context).size.width / 2 - 27,
+                      alignment: Alignment.centerRight,
+                      child: Text(
+                        assignment.state == "RETURNED"
+                            ? "Grade: ${assignment.grade}/${assignment.points}"
+                            : assignment.state == "TURNED_IN"
+                                ? "Turned In"
+                                : assignment.isLate != null
+                                    ? "Late"
+                                    : "Assigned",
+                        style: assignment.isLate == null
+                            ? header3Style
+                            : TextStyle(
+                                fontFamily: header3Style.fontFamily,
+                                fontWeight: header3Style.fontWeight,
+                                fontSize: header3Style.fontSize,
+                                color: Colors.red),
+                      ),
+                    ),
+                  ],
+                ),
                 Text(
                   "Your work",
                   style: header3Style,
                 ),
-                Container(height: 25),
+                if (assignment.state != "TURNED_IN" &&
+                    assignment.state != "RETURNED")
+                  Container(height: 25),
               ],
             ),
           ),
-          Divider(),
-          Text(
-            "It is not currently possible to submit assignments.",
-            textAlign: TextAlign.center,
-            style: TextStyle(color: Colors.red, fontSize: 12),
-          ),
+          if (assignment.state != "TURNED_IN" && assignment.state != "RETURNED")
+            Divider(),
+          if (assignment.state != "TURNED_IN" && assignment.state != "RETURNED")
+            Text(
+              "It is not currently possible to submit assignments.",
+              textAlign: TextAlign.center,
+              style: TextStyle(color: Colors.red, fontSize: 12),
+            ),
           Divider(),
           assignment.submissionAttachments.length != 0
               ? Expanded(
