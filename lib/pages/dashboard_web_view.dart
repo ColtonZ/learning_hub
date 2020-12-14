@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_inappwebview/flutter_inappwebview.dart';
+import 'package:learning_hub/theming.dart';
 
 import '../objects/customUser.dart';
 
@@ -57,7 +58,20 @@ class _CustomBodyState extends State<_CustomBody> {
                   "document.getElementById('username').value = \"${user.firebaseUser.email.replaceAll("@stpaulsschool.org.uk", "")}\"");
         }
         //checks if the url ends with the same url that was passed (i.e. we are not on the login page)
-        if (currentPage.endsWith("dashboard")) {
+        if (currentPage.endsWith("/dashboard")) {
+          showDialog(
+              context: context,
+              builder: (BuildContext context) {
+                return WillPopScope(
+                    child: AlertDialog(
+                      content: Text(
+                        "Your events are being fetched from Firefly, please wait.\n\nDo not close this page.",
+                        style: header3Style,
+                        textAlign: TextAlign.center,
+                      ),
+                    ),
+                    onWillPop: () async => false);
+              });
           //evaluates two pieces of JavaScript. The first gets a list of events as a string, with each event split by a semicolon, having been scraped from the page's html.
           String eventsText = await controller.evaluateJavascript(
               source:
@@ -72,6 +86,7 @@ class _CustomBodyState extends State<_CustomBody> {
             eventsText,
             week,
           ).then((_) {
+            Navigator.of(context).canPop();
             _pushTimetablePage(context, user);
           });
         }
