@@ -227,7 +227,6 @@ class _CustomScaffoldState extends State<_CustomScaffold> {
                             Container(
                               color: Theme.of(context).backgroundColor,
                               child: Column(
-                                //TODO: Think the overflow is here?
                                 mainAxisAlignment:
                                     MainAxisAlignment.spaceBetween,
                                 children: [
@@ -235,15 +234,6 @@ class _CustomScaffoldState extends State<_CustomScaffold> {
                                   Text(
                                     "Your work",
                                     style: header3Style,
-                                  ),
-                                  SizedBox(
-                                    width: MediaQuery.of(context).size.width,
-                                    height: 23,
-                                    child: DecoratedBox(
-                                      decoration: BoxDecoration(
-                                          color: Theme.of(context)
-                                              .backgroundColor),
-                                    ),
                                   ),
                                 ],
                               ),
@@ -270,7 +260,6 @@ class _CustomScaffoldState extends State<_CustomScaffold> {
                           topRight: Radius.circular(
                               MediaQuery.of(context).size.width / 20)),
                       //creates the list of the student's submissions
-                      //TODO: This still overflows on smaller(?) screen
                       panel: Center(
                         child: StudentSubmissions(
                           user: user,
