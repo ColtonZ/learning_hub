@@ -104,16 +104,7 @@ This is to try and limit the amount of duplicate data, as well as to make queryi
           ? ["B", "A"]
           : ["A", "B"];
 
-//update the last weekA in the Firestore db. I.e., if this week is a week A, add the date of this Monday to the database, otherwise add the date of the monday prior.
-  databaseReference.collection("users").doc(firebaseUser.uid).update({
-    "weekA": weeks[0] == "A"
-        ? DateTime.utc(
-                DateTime.now().year, DateTime.now().month, DateTime.now().day)
-            .subtract(Duration(days: DateTime.now().weekday - 1))
-        : DateTime.utc(
-                DateTime.now().year, DateTime.now().month, DateTime.now().day)
-            .subtract(Duration(days: DateTime.now().weekday + 6))
-  });
+  updateFirestoreWeek(firebaseUser, weeks[0]);
 
 //each event is in the format: "<class>, <teacher>, <start time> - <end time> in <room> (<set>)" (where the <> indicate a parameter)
 //first the string is split into a list of events (each being seperated by a semicolon and a space), and then each event is split into individual details accordingly.
@@ -304,6 +295,8 @@ Future<String> getCurrentWeek(User firebaseUser, DateTime date) async {
 
 //convert the last time it was week A to a date
   DateTime weekA = userDoc.data()["weekA"].toDate();
+
+  print((-weekA.difference(date).inDays) ~/ 7 % 2);
 
 //if that happened an even number of weeks ago, it must be week A, otherwise it'll be week B
   return (-weekA.difference(date).inDays) ~/ 7 % 2 == 0 ? "A" : "B";
@@ -636,4 +629,18 @@ Future<String> addTannoy(User user, String tannoyText) async {
 
 Future<List<Notice>> getTannoy(User user) async {
   return new List<Notice>();
+}
+
+Future<bool> updateFirestoreWeek(User user, String week) async {
+  //update the last weekA in the Firestore db. I.e., if this week is a week A, add the date of this Monday to the database, otherwise add the date of the monday prior.
+  databaseReference.collection("users").doc(user.uid).update({
+    "weekA": week == "A"
+        ? DateTime.utc(
+                DateTime.now().year, DateTime.now().month, DateTime.now().day)
+            .subtract(Duration(days: DateTime.now().weekday - 1))
+        : DateTime.utc(
+                DateTime.now().year, DateTime.now().month, DateTime.now().day)
+            .subtract(Duration(days: DateTime.now().weekday + 6))
+  });
+  return true;
 }

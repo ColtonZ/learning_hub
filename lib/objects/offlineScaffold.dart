@@ -21,7 +21,6 @@ class OfflineScaffoldState extends State<OfflineScaffold> {
       body: GestureDetector(
         behavior: HitTestBehavior.translucent,
         onVerticalDragEnd: (details) {
-          print(details.primaryVelocity);
           if (details.primaryVelocity > 0) {
             Navigator.of(context).pushReplacementNamed("/");
           }

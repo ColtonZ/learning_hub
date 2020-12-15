@@ -97,7 +97,7 @@ class _CustomScaffoldState extends State<_CustomScaffold> {
                   return DashboardWebView(
                     user: user,
                     //this url is the page on the site https://intranet.stpaulsschool.org.uk to access
-                    url: "/dashboard",
+                    url: "/dashboard", events: true,
                   );
                 } else {
                   //otherwise build the page
@@ -216,15 +216,88 @@ class _MainPageState extends State<_MainPage> {
             builder: (context, snapshot) {
               if (snapshot.connectionState == ConnectionState.done) {
                 week = snapshot.data;
-                return Text(
-                  "${days[time.weekday - 1]} ${time.day} ${months[time.month - 1]} ${time.year} • Week ${snapshot.data}",
-                  style: subtitleStyle,
-                );
+                return Row(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    children: [
+                      Text(
+                        "${days[time.weekday - 1]} ${time.day} ${months[time.month - 1]} ${time.year}",
+                        style: subtitleStyle,
+                      ),
+                      FlatButton(
+                        child: Text(
+                          " • Week ${snapshot.data}",
+                          style: subtitleStyle,
+                        ),
+                        padding: EdgeInsets.zero,
+                        onPressed: null,
+                        onLongPress: () {
+                          showDialog(
+                              context: context,
+                              builder: (BuildContext context) {
+                                //show the dialogue to add a new task
+                                return AlertDialog(
+                                  content: Expanded(
+                                    child: Column(
+                                      mainAxisSize: MainAxisSize.min,
+                                      children: [
+                                        Text(
+                                          "Would you like to refresh the current week?",
+                                          style: header3Style,
+                                          textAlign: TextAlign.center,
+                                        ),
+                                        Row(
+                                          mainAxisAlignment:
+                                              MainAxisAlignment.center,
+                                          children: [
+                                            FlatButton(
+                                              onPressed: () {
+                                                Navigator.of(context).pop();
+                                              },
+                                              child: Text("No"),
+                                            ),
+                                            FlatButton(
+                                              onPressed: () {
+                                                Navigator.of(context).pop();
+                                                Navigator.of(context).push(
+                                                  MaterialPageRoute(
+                                                    builder: ((BuildContext
+                                                            context) =>
+                                                        DashboardWebView(
+                                                          user: user,
+                                                          //this url is the page on the site https://intranet.stpaulsschool.org.uk to access
+                                                          url: "/dashboard",
+                                                          events: false,
+                                                        )),
+                                                  ),
+                                                );
+                                              },
+                                              child: Text("Yes"),
+                                            )
+                                          ],
+                                        ),
+                                      ],
+                                    ),
+                                  ),
+                                );
+                              }).then((_) {
+                            setState(() {});
+                          });
+                        },
+                      )
+                    ]);
               } else {
-                return Text(
-                  "${days[time.weekday - 1]} ${time.day} ${months[time.month - 1]} ${time.year} • Week $week",
-                  style: subtitleStyle,
-                );
+                return Row(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    children: [
+                      Text(
+                        "${days[time.weekday - 1]} ${time.day} ${months[time.month - 1]} ${time.year}",
+                        style: subtitleStyle,
+                      ),
+                      Text(
+                        " • Week $week",
+                        style: subtitleStyle,
+                      )
+                    ]);
               }
             }),
         Divider(),
@@ -233,7 +306,6 @@ class _MainPageState extends State<_MainPage> {
             behavior: HitTestBehavior.translucent,
             onHorizontalDragEnd: (details) {
               setState(() {
-                print(details.primaryVelocity);
                 if (details.primaryVelocity > 0) {
                   time = time.subtract(Duration(days: 1));
                 } else if (details.primaryVelocity < 0) {

@@ -103,8 +103,6 @@ Future<bool> isCourseDone(String id, CustomUser user) async {
             "https://classroom.googleapis.com/v1/courses/$id/courseWork?fields=courseWork(dueDate,id)"),
         headers: headers);
 
-    print("checking course $id");
-
 //converts the courseWork details into JSON
     var data = json.decode(response.body);
 
@@ -124,8 +122,6 @@ Future<bool> isCourseDone(String id, CustomUser user) async {
                 "https://classroom.googleapis.com//v1/courses/$id/courseWork/${assignments[index]["id"]}/studentSubmissions?fields=studentSubmissions(state)"),
             headers: headers);
 
-        print("checking assignment ${assignments[index]["id"]}");
-
 //decode the assignment details
         var submissionData = json.decode(submissionResponse.body);
 
@@ -137,13 +133,11 @@ Future<bool> isCourseDone(String id, CustomUser user) async {
             submissions[0]["state"] != "RETURNED") {
           //if the task is not done, return false, and break to save time.
           done = false;
-          print("course not done");
           break;
         }
       }
     }
   } catch (error) {
-    print("error");
     //if this error is called, it means that the course has no assignments. If this is the case, there are no assignments to be done, so return false.
   }
   return done;
