@@ -327,7 +327,11 @@ class StudentSubmissionsState extends State<StudentSubmissions> {
               onPressed: () {
                 setState(() {
                   //delete the task from the database when marked as done
-                  markAsDone(user, assignment).then((refreshedAssignment) {});
+                  markAsDone(user, assignment).then((_) {
+                    Navigator.of(context).pop();
+                    Navigator.of(context).pushReplacementNamed("/timetable",
+                        arguments: {"user": user});
+                  });
                 });
               },
             ),

@@ -309,35 +309,6 @@ Future<String> getCurrentWeek(User firebaseUser, DateTime date) async {
   return (-weekA.difference(date).inDays) ~/ 7 % 2 == 0 ? "A" : "B";
 }
 
-Future<bool> checkedRecently(User firebaseUser, bool reload) async {
-  //try to get the lastChecked time of the Classroom tasks. If it was never checked before, an exception is thrown
-  try {
-    //get the time the tasks were last checked
-    DocumentSnapshot userDoc =
-        await databaseReference.collection("users").doc(firebaseUser.uid).get();
-    DateTime lastChecked = userDoc.data()["lastChecked"].toDate();
-    //if the times were checked within 24 hours (and we are not forcing a reload), return true (i.e. it was checked recently)
-    if (lastChecked.difference(DateTime.now()).inMinutes.toInt() > -1440 &&
-        !reload) {
-      return true;
-    } else {
-      //if the times were not within the past 24 hours (or we are forcing the tasks to be reloaded), update the time that it was last checked to the current time, and return false
-      databaseReference.collection("users").doc(firebaseUser.uid).update({
-        "lastChecked": DateTime.utc(DateTime.now().year, DateTime.now().month,
-            DateTime.now().day, DateTime.now().hour, DateTime.now().minute)
-      });
-      return false;
-    }
-    //if it was never checked before, update the time it was last checked to now, and return false
-  } catch (e) {
-    databaseReference.collection("users").doc(firebaseUser.uid).update({
-      "lastChecked": DateTime.utc(DateTime.now().year, DateTime.now().month,
-          DateTime.now().day, DateTime.now().hour, DateTime.now().minute)
-    });
-    return false;
-  }
-}
-
 Future<List<Assignment>> getFirestoreTasks(User firebaseUser) async {
   //gets all assignments from the Firestore db
   try {

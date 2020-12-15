@@ -1,8 +1,6 @@
 import 'package:flutter/material.dart';
 
 import '../backend/courseWorkBackend.dart';
-import '../backend/firestoreBackend.dart';
-import 'package:cloud_firestore/cloud_firestore.dart';
 import '../theming.dart';
 import 'assignment.dart';
 import 'customUser.dart';
@@ -33,20 +31,6 @@ class AssignmentsListViewState extends State<AssignmentsListView> {
     String courseName = widget.courseName;
     String courseId = widget.courseId;
     bool timetable = widget.timetable;
-
-    List<DocumentSnapshot> firebaseAssignments = new List<DocumentSnapshot>();
-
-    if (timetable) {
-      databaseReference
-          .collection("users")
-          .doc(user.firebaseUser.uid)
-          .collection("toDo")
-          .get()
-          .then((tasksSnapshot) {
-        //create a list of the assignment docs
-        firebaseAssignments.addAll(tasksSnapshot.docs);
-      });
-    }
 
     return !timetable
         ? ListView.builder(
@@ -91,7 +75,7 @@ class AssignmentsListViewState extends State<AssignmentsListView> {
             },
           )
         : ListView.builder(
-            itemCount: ((assignments.length + firebaseAssignments.length) * 2),
+            itemCount: (assignments.length * 2),
             //half the items will be dividers, the other will be list tiles
             padding: const EdgeInsets.all(8.0),
             addAutomaticKeepAlives: true,
@@ -102,44 +86,10 @@ class AssignmentsListViewState extends State<AssignmentsListView> {
               }
               final index = item ~/ 2;
               //creates a list tile for the assignment
-              return index < firebaseAssignments.length
-                  ? _CustomListRow(
-                      user: user,
-                      assignment:
-                          Assignment.fromFirestore(firebaseAssignments[index]),
-                    )
-                  : FutureBuilder(
-                      future: sendAssignmentRequest(
-                          assignments[index - firebaseAssignments.length]
-                              ["courseId"],
-                          assignments[index - firebaseAssignments.length]
-                              ["courseName"],
-                          assignments[index - firebaseAssignments.length]["id"],
-                          user.authHeaders),
-                      builder: (context, snapshot) {
-                        if (snapshot.connectionState == ConnectionState.done) {
-                          return _CustomListRow(
-                            user: user,
-                            assignment: snapshot.data,
-                          );
-                        } else {
-                          return ListTile(
-                            title: Text(
-                              "Loading Assignment...",
-                              style: subtitleStyle,
-                            ),
-                            subtitle: Text(
-                              "Loading...",
-                              style: header3Style,
-                            ),
-                            //applies an icon to the tile, dependent on the type of assignment
-                            isThreeLine: true,
-                            //if the assignment has been turned in or returned, set the icon to say that it has been done. Otherwise, set the icon to an exclamation mark to show it needs doing.
-                            leading: CircularProgressIndicator(),
-                          );
-                        }
-                      },
-                    );
+              return _CustomListRow(
+                user: user,
+                assignment: assignments[index],
+              );
             },
           );
   }

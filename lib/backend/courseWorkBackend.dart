@@ -56,58 +56,6 @@ Future<List<dynamic>> sendAssignmentsRequest(
   return data["courseWork"] as List;
 }
 
-Future<List<dynamic>> getIncompleteAssignments(
-    String courseId, String courseName, CustomUser user) async {
-  //gets the user's auth headers
-  Map<String, String> headers = user.authHeaders;
-
-  List<dynamic> toDo = new List<dynamic>();
-
-  List<dynamic> all = await sendAssignmentsRequest(courseId, user);
-
-  for (int index = 0; index < all.length; index++) {
-//get the student's submission details
-    http.Response submissionResponse = await http.get(
-        Uri.encodeFull(
-            "https://classroom.googleapis.com//v1/courses/$courseId/courseWork/${all[index]["id"]}/studentSubmissions?fields=studentSubmissions(state)"),
-        headers: headers);
-
-    print("getting assignment");
-
-//parse the details
-    final submissionResponseBody = submissionResponse.body;
-
-    //converts the response into JSON
-    var submissionData = json.decode(submissionResponseBody);
-
-//create a list of the student submissions (there should be one item - the student's submission)
-    var submissions = submissionData["studentSubmissions"] as List;
-
-    if (submissions[0]["state"] != "TURNED_IN" &&
-        submissions[0]["state"] != "RETURNED") {
-      //get the assignment details
-      http.Response assignmentResponse = await http.get(
-          Uri.encodeFull(
-              "https://classroom.googleapis.com//v1/courses/$courseId/courseWork/${all[index]["id"]}?fields=id,dueDate,courseId"),
-          headers: headers);
-
-      print("getting response");
-
-      //parse the details
-      final assignmentResponseBody = assignmentResponse.body;
-
-      //converts the responses into JSON
-      Map<String, dynamic> assignmentData = json.decode(assignmentResponseBody);
-
-      if (assignmentData["dueDate"] != null) {
-        assignmentData.addAll({"courseName": courseName});
-        toDo.add(assignmentData);
-      } //TODO: Try multithreading
-    }
-  }
-  return toDo;
-}
-
 Future<Assignment> sendAssignmentRequest(String courseId, String courseName,
     String assignmentId, Map<String, String> headers) async {
   //sends an http request for the assignment, as well as a second for the student's submissions (if any)
@@ -199,36 +147,6 @@ Future<bool> isCourseDone(String id, CustomUser user) async {
     //if this error is called, it means that the course has no assignments. If this is the case, there are no assignments to be done, so return false.
   }
   return done;
-}
-
-Future<List<dynamic>> tasksToDo(CustomUser user, bool reload) async {
-//see if the user's incomplete assignments were last checked recently
-  bool checked = await checkedRecently(user.firebaseUser, reload);
-
-  List<dynamic> assignments = new List<dynamic>();
-
-//if the tasks were checked recently, get the tasks from the Firestore database. Otherwise, fetch the tasks from Classroom.
-  if (!checked) {
-    //get a list of the user's courses
-    List<Course> allCourses = await getCourses(user);
-    //first remove the Classroom tasks from Firestore (as they will be out of date)
-    removeClassroomTasks(user.firebaseUser);
-
-    //loop through each of the user's courses
-    for (Course course in allCourses) {
-      try {
-        //if the course is not done, get the assignments for that course
-        bool done = await isCourseDone(course.id, user);
-        if (!done) {
-          //create a list of assignments for that course
-          List<dynamic> incomplete =
-              await getIncompleteAssignments(course.id, course.name, user);
-          assignments.addAll(incomplete);
-        }
-      } catch (e) {}
-    }
-  }
-  return assignments;
 }
 
 Future<String> markAsDone(CustomUser user, Assignment assignment) async {

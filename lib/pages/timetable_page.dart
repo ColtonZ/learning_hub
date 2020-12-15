@@ -16,7 +16,6 @@ import '../objects/offlineScaffold.dart';
 import '../backend/authBackend.dart';
 import '../backend/firestoreBackend.dart';
 import '../backend/eventsBackend.dart';
-import '../backend/courseWorkBackend.dart';
 
 import 'dashboard_web_view.dart';
 
@@ -52,7 +51,8 @@ class TimetablePageState extends State<TimetablePage> {
               } else {
                 //whilst signing in, return a loading indicator
                 return Scaffold(
-                    appBar: CustomAppBar(title: "Your Timetable", reload: false),
+                    appBar:
+                        CustomAppBar(title: "Your Timetable", reload: false),
                     body: Center(child: CircularProgressIndicator()),
                     bottomNavigationBar:
                         CustomNavigationBar(name: name, user: user, index: 0));
@@ -129,7 +129,6 @@ class _MainPage extends StatefulWidget {
 class _MainPageState extends State<_MainPage> {
   DateTime time = DateTime.now();
   String week = "A";
-  bool tasksReload = false;
 
   @override
   Widget build(BuildContext context) {
@@ -279,16 +278,14 @@ class _MainPageState extends State<_MainPage> {
               child: IconButton(
                 icon: Icon(Icons.refresh),
                 onPressed: () {
-                  //refresh today's events
-                  setState(() {
-                    tasksReload = true;
-                  });
+                  //refresh the user's personal tasks
+                  setState(() {});
                 },
               ),
             ),
             Expanded(
               child: Text(
-                "Tasks To-Do",
+                "Personal Tasks",
                 style: titleStyle,
                 textAlign: TextAlign.center,
               ),
@@ -316,10 +313,9 @@ class _MainPageState extends State<_MainPage> {
         Expanded(
           child: FutureBuilder(
             //get the user's tasks that need doing
-            future: tasksToDo(user, tasksReload),
+            future: getFirestoreTasks(user.firebaseUser),
             builder: (context, tasksSnapshot) {
               if (tasksSnapshot.connectionState == ConnectionState.done) {
-                tasksReload = false;
                 if (tasksSnapshot.data.length > 0) {
                   //if the user has tasks to do, return a list view of their tasks
                   return AssignmentsListView(
@@ -328,8 +324,7 @@ class _MainPageState extends State<_MainPage> {
                       timetable: true);
                 } else {
                   //if a user has no tasks to do, tell them as much.
-                  return Center(
-                      child: Text("You have no incomplete assignments."));
+                  return Center(child: Text("You have no personal tasks."));
                 }
               } else {
                 return Center(child: CircularProgressIndicator());
