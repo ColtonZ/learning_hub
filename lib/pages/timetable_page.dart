@@ -293,10 +293,13 @@ class _MainPageState extends State<_MainPage> {
                         "${days[time.weekday - 1]} ${time.day} ${months[time.month - 1]} ${time.year}",
                         style: subtitleStyle,
                       ),
-                      Text(
-                        " • Week $week",
-                        style: subtitleStyle,
-                      )
+                      FlatButton(
+                        child: Text(
+                          " • Week ${snapshot.data}",
+                          style: subtitleStyle,
+                        ),
+                        onPressed: () {},
+                      ),
                     ]);
               }
             }),
