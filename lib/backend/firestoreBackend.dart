@@ -296,8 +296,6 @@ Future<String> getCurrentWeek(User firebaseUser, DateTime date) async {
 //convert the last time it was week A to a date
   DateTime weekA = userDoc.data()["weekA"].toDate();
 
-  print((-weekA.difference(date).inDays) ~/ 7 % 2);
-
 //if that happened an even number of weeks ago, it must be week A, otherwise it'll be week B
   return (-weekA.difference(date).inDays) ~/ 7 % 2 == 0 ? "A" : "B";
 }
