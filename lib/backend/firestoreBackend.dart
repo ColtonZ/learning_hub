@@ -616,19 +616,133 @@ Future<String> deleteData(User user, int type) async {
     }
   }
   if (type == 2) {
+    //delete the user's tannoy data
+    //get a list of the user's tannoy notices in the Firestore db
+    QuerySnapshot toDelete = await databaseReference
+        .collection("users")
+        .doc(user.uid)
+        .collection("tannoy")
+        .get();
+
+    List<DocumentSnapshot> tannoy = toDelete.docs.toList();
+
+    //delete the tannoy data.
+    databaseReference
+        .collection("users")
+        .doc(user.uid)
+        .collection("tannoy")
+        .doc(tannoy[0].id)
+        .delete();
+
     //delete the user's doc
     databaseReference.collection("users").doc(user.uid).delete();
   }
-
   return "done";
 }
 
-Future<String> addTannoy(User user, String tannoyText) async {
-  return "done";
+Future<bool> addTannoy(User user, String tannoyText) async {
+  QuerySnapshot currentDoc = await databaseReference
+      .collection("users")
+      .doc(user.uid)
+      .collection("tannoy")
+      .get();
+  if (currentDoc.size == 1) {
+    databaseReference
+        .collection("users")
+        .doc(user.uid)
+        .collection("tannoy")
+        .doc(currentDoc.docs.first.id)
+        .set({
+      "modified": DateTime.now(),
+      "notices": tannoyText
+          .substring(0, tannoyText.length - 3)
+          .replaceAll("\t", "")
+          .replaceAll("    ", "")
+    });
+  } else {
+    databaseReference
+        .collection("users")
+        .doc(user.uid)
+        .collection("tannoy")
+        .add({
+      "modified": DateTime.now(),
+      "notices": tannoyText
+          .substring(0, tannoyText.length - 3)
+          .replaceAll("\t", "")
+          .replaceAll("    ", "")
+    });
+  }
+  if (tannoyText == "") {
+    return false;
+  } else {
+    return true;
+  }
 }
 
-Future<List<Notice>> getTannoy(User user) async {
-  return new List<Notice>();
+Future<bool> removeCurrentTannoy(User user) async {
+  QuerySnapshot tannoyDocs = await databaseReference
+      .collection("users")
+      .doc(user.uid)
+      .collection("tannoy")
+      .get();
+
+  databaseReference
+      .collection("users")
+      .doc(user.uid)
+      .collection("tannoy")
+      .doc(tannoyDocs.docs.first.id)
+      .delete();
+
+  return true;
+}
+
+Future<bool> tannoyRecentlyChecked(User user) async {
+  QuerySnapshot tannoyDocs = await databaseReference
+      .collection("users")
+      .doc(user.uid)
+      .collection("tannoy")
+      .get();
+
+  if (tannoyDocs.size == 0) {
+    return false;
+  }
+
+  DocumentSnapshot currentTannoy = tannoyDocs.docs.first;
+
+  DateTime lastChecked = currentTannoy["modified"].toDate();
+
+  if (lastChecked.isBefore(DateTime.utc(
+      DateTime.now().year, DateTime.now().month, DateTime.now().day))) {
+    return false;
+  } else {
+    return true;
+  }
+}
+
+Future<List<Notice>> getNotices(User user) async {
+  List<Notice> notices = new List<Notice>();
+
+  QuerySnapshot tannoyDocs = await databaseReference
+      .collection("users")
+      .doc(user.uid)
+      .collection("tannoy")
+      .get();
+
+  if (tannoyDocs.size == 0) {
+    return notices;
+  }
+
+  DocumentSnapshot currentTannoy = tannoyDocs.docs.first;
+
+  List<String> rawDetails = currentTannoy["notices"].toString().split(":-:");
+
+  for (int i = 0; i < rawDetails.length; i += 3) {
+    notices.add(new Notice(
+        title: rawDetails[i],
+        author: rawDetails[i + 1],
+        body: rawDetails[i + 2]));
+  }
+  return notices;
 }
 
 Future<bool> updateFirestoreWeek(User user, String week) async {

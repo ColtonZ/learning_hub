@@ -53,10 +53,27 @@ class _CustomBodyState extends State<_CustomBody> {
     return new InAppWebView(
       //load the webview according to the specific page which was passed
       initialUrl: "https://intranet.stpaulsschool.org.uk$url",
+      onLoadStart: (InAppWebViewController controller, String url) async {
+        showDialog(
+            context: context,
+            builder: (BuildContext context) {
+              return WillPopScope(
+                  child: AlertDialog(
+                    content: Text(
+                      "Page loading...",
+                      style: header3Style,
+                      textAlign: TextAlign.center,
+                    ),
+                  ),
+                  onWillPop: () async => false);
+            });
+      },
       onLoadStop: (InAppWebViewController controller, String url) async {
         //this checks if, when a page is loaded, it is the correct one. If it is, the data is scraped and the timetable page returned.
         //https://medium.com/flutter/the-power-of-webviews-in-flutter-a56234b57df2
         //https://medium.com/flutter-community/inappwebview-the-real-power-of-webviews-in-flutter-c6d52374209d
+        Navigator.of(context).canPop();
+
         String currentPage = await controller.getUrl();
         if (currentPage.startsWith(
             "https://intranet.stpaulsschool.org.uk/login/login.aspx")) {
@@ -121,6 +138,8 @@ class _CustomBodyState extends State<_CustomBody> {
 //defines the method for pushing the timetable page
   static void _pushTimetablePage(BuildContext context, CustomUser user) {
     Map args = {"user": user};
-    Navigator.of(context).pushReplacementNamed('/timetable', arguments: args);
+    Navigator.of(context).pushNamedAndRemoveUntil(
+        '/timetable', ModalRoute.withName("/"),
+        arguments: args);
   }
 }

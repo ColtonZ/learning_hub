@@ -44,21 +44,28 @@ class _CustomListRow extends StatefulWidget {
   _CustomListRowState createState() => _CustomListRowState();
 }
 
-//TODO: Set up tannoy page
 //builds the list tile for the tannoy notice
 class _CustomListRowState extends State<_CustomListRow> {
   Widget build(BuildContext context) {
     Notice notice = widget.notice;
     return ListTile(
+      isThreeLine: true,
       //return the notice's title
-      title: Text(
-        notice.title,
-        style: subtitleStyle,
-      ),
+      title: Column(crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+        Text(
+          "${notice.title}",
+          style: subtitleStyle,
+        ),
+        Text(
+          "${notice.author}",
+          style: header4Style,
+        ),
+      ]),
       //show the notice's body
       subtitle: Text(
-        notice.body,
-        style: header3Style,
+        "${notice.body.replaceAll("\n", "")}",
+        style: header3Style,textAlign: TextAlign.justify,
       ),
     );
   }

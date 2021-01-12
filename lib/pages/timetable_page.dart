@@ -220,14 +220,15 @@ class _MainPageState extends State<_MainPage> {
                     mainAxisAlignment: MainAxisAlignment.center,
                     children: [
                       Text(
-                        "${days[time.weekday - 1]} ${time.day} ${months[time.month - 1]} ${time.year}",
+                        "${days[time.weekday - 1]} ${time.day} ${months[time.month - 1]} ${time.year} • ",
                         style: subtitleStyle,
                       ),
                       FlatButton(
                         child: Text(
-                          " • Week ${snapshot.data}",
+                          "Week ${snapshot.data}",
                           style: subtitleStyle,
                         ),
+                        minWidth: 0,
                         padding: EdgeInsets.zero,
                         onPressed: null,
                         onLongPress: () {
@@ -290,14 +291,16 @@ class _MainPageState extends State<_MainPage> {
                     mainAxisAlignment: MainAxisAlignment.center,
                     children: [
                       Text(
-                        "${days[time.weekday - 1]} ${time.day} ${months[time.month - 1]} ${time.year}",
+                        "${days[time.weekday - 1]} ${time.day} ${months[time.month - 1]} ${time.year} • ",
                         style: subtitleStyle,
                       ),
                       FlatButton(
                         child: Text(
-                          " • Week ${snapshot.data}",
+                          "Week $week",
                           style: subtitleStyle,
                         ),
+                        minWidth: 0,
+                        padding: EdgeInsets.zero,
                         onPressed: () {},
                       ),
                     ]);

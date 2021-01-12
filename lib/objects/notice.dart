@@ -2,6 +2,7 @@
 class Notice {
   final String title;
   final String body;
+  final String author;
 
-  Notice({this.title, this.body});
+  Notice({this.title, this.body, this.author});
 }

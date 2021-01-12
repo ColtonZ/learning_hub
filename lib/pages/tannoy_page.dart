@@ -1,11 +1,12 @@
 import 'package:flutter/material.dart';
 import 'package:learning_hub/pages/portal_web_view.dart';
 
+import 'package:learning_hub/theming.dart';
+
 import '../objects/custom_navigation_bar.dart';
 import '../objects/custom_app_bar.dart';
 import '../objects/customUser.dart';
 import '../objects/tannoy_list_view.dart';
-import '../objects/notice.dart';
 import '../objects/offlineScaffold.dart';
 
 import '../backend/authBackend.dart';
@@ -43,7 +44,8 @@ class TannoyPageState extends State<TannoyPage> {
               } else {
                 //whilst signing in, return a loading indicator
                 return Scaffold(
-                    appBar: CustomAppBar(title: "Tannoy Notices", reload: false),
+                    appBar:
+                        CustomAppBar(title: "Tannoy Notices", reload: false),
                     body: Center(child: CircularProgressIndicator()),
                     bottomNavigationBar:
                         CustomNavigationBar(name: name, user: user, index: 0));
@@ -77,38 +79,60 @@ class _CustomScaffoldState extends State<_CustomScaffold> {
         //Otherwise, display a web view, which will allow the user to login to the portal and then will scrape the dashboard for the user's tannoy data.
         body: FutureBuilder(
             //gets the user's tannoy notices
-            future: getTannoy(user.firebaseUser),
+            future: tannoyRecentlyChecked(user.firebaseUser),
             //https://flutter.dev/docs/development/ui/interactive
             builder: (context, snapshot) {
               if (snapshot.connectionState == ConnectionState.done) {
-                if ((snapshot.data == null) &&
-                    DateTime.now().hour > 7 &&
-                    DateTime.now().weekday < 5) {
+                if (!snapshot.data) {
                   //if they have no tannoy notices, return a web view body so the user can login to the portal
                   //https://stackoverflow.com/questions/54691767/navigation-inside-nested-future
                   return PortalWebView(
                     user: user,
                     //this url is the page on the site https://pupils.stpaulsschool.org.uk to access
-                    url: "/api/homepage/",
+                    url: "/api/information/bulletin/?",
                   );
                 } else {
                   //otherwise build the page
-                  List<Notice> notices = snapshot.data;
-                  //checks if the user has any notices. If they do, return the notices as a list view, otherwise return an error message
-                  try {
-                    if (notices.length != 0) {
-                      //creates a list view of the tannoy notices
-                      return TannoysListView(notices: notices);
-                    } else {
-                      return Center(
-                        child: Text("There are no tannoy notices to display."),
-                      );
-                    }
-                  } catch (error) {
-                    return Center(
-                      child: Text("There are no tannoy notices to display."),
-                    );
-                  }
+                  return FutureBuilder(
+                      future: getNotices(user.firebaseUser),
+                      builder: (context, snapshot) {
+                        if (snapshot.connectionState == ConnectionState.done) {
+                          if (snapshot.data != null) {
+                            return TannoysListView(notices: snapshot.data);
+                          } else {
+                            return Center(
+                              child: Container(
+                                child: GestureDetector(
+                                  behavior: HitTestBehavior.translucent,
+                                  onVerticalDragEnd: (details) {
+                                    if (details.primaryVelocity > 0) {
+                                      removeCurrentTannoy(user.firebaseUser)
+                                          .then((_) {
+                                        _pushTannoyPage(context, user);
+                                      });
+                                    }
+                                  },
+                                  child: Center(
+                                    child: Padding(
+                                      padding:
+                                          EdgeInsets.fromLTRB(15, 0, 15, 0),
+                                      child: Text(
+                                        "You have no tannoy notices available to view at this time.\n\nSwipe down to refresh.",
+                                        style: header3Style,
+                                        textAlign: TextAlign.center,
+                                      ),
+                                    ),
+                                  ),
+                                ),
+                              ),
+                            );
+                          }
+                        } else {
+                          return Center(
+                            child: CircularProgressIndicator(),
+                          );
+                        }
+                      });
                 }
               } else {
                 //whilst getting notices, return a loading indicator
@@ -118,5 +142,13 @@ class _CustomScaffoldState extends State<_CustomScaffold> {
         //builds the navigation bar for the given page
         bottomNavigationBar:
             CustomNavigationBar(name: name, user: user, index: 2));
+  }
+
+//defines the method for pushing the tannoy page
+  static void _pushTannoyPage(BuildContext context, CustomUser user) {
+    Map args = {"user": user};
+    Navigator.of(context).pushNamedAndRemoveUntil(
+        '/tannoy', ModalRoute.withName("/"),
+        arguments: args);
   }
 }
