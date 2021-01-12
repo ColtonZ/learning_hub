@@ -32,7 +32,6 @@ class MyApp extends StatelessWidget {
                 return TimetablePage(user: null);
               }
             });
-            case "/offline":
           //pushes the timetable page, with arguments of the user's account and the page's name
           case "/timetable":
             return MaterialPageRoute(
@@ -48,9 +47,9 @@ class MyApp extends StatelessWidget {
             return MaterialPageRoute(
                 builder: (_) =>
                     TannoyPage(user: arguments["user"], name: name));
-                    case "/email":
+          case "/email":
           //pushes the settings page, with arguments of the user's account and the page's name
-                    //pushes the account page, with arguments of the user's account and the page's name, as well as a boolean value dictating whether or not the user should be signed out before the page is loaded
+          //pushes the account page, with arguments of the user's account and the page's name, as well as a boolean value dictating whether or not the user should be signed out before the page is loaded
           case "/account":
             return MaterialPageRoute(
                 builder: (_) => AccountPage(

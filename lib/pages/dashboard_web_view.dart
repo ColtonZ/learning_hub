@@ -53,6 +53,7 @@ class _CustomBodyState extends State<_CustomBody> {
     return new InAppWebView(
       //load the webview according to the specific page which was passed
       initialUrl: "https://intranet.stpaulsschool.org.uk$url",
+      //when loading begins, display a loading dialog box to the user
       onLoadStart: (InAppWebViewController controller, String url) async {
         showDialog(
             context: context,
@@ -72,6 +73,7 @@ class _CustomBodyState extends State<_CustomBody> {
         //this checks if, when a page is loaded, it is the correct one. If it is, the data is scraped and the timetable page returned.
         //https://medium.com/flutter/the-power-of-webviews-in-flutter-a56234b57df2
         //https://medium.com/flutter-community/inappwebview-the-real-power-of-webviews-in-flutter-c6d52374209d
+        //pop the loading dialog box
         Navigator.of(context).canPop();
 
         String currentPage = await controller.getUrl();
@@ -84,6 +86,7 @@ class _CustomBodyState extends State<_CustomBody> {
         }
         //checks if the url ends with the same url that was passed (i.e. we are not on the login page)
         if (currentPage.endsWith("/dashboard")) {
+          //shows a dialog box, telling the user that their events are currently being fetched (or that the week is updating, depending on the value of events)
           showDialog(
               context: context,
               builder: (BuildContext context) {
@@ -109,7 +112,7 @@ class _CustomBodyState extends State<_CustomBody> {
           String week = await controller.evaluateJavascript(
               source:
                   "output=\"\";var list = document.getElementsByClassName(\"ff-calendar-item\");for(var i =0; i<list.length;i++){if(list[i].textContent.includes(\"Monday\")){output=list[i].textContent[list[i].textContent.indexOf(\"WEEK \")+5];}};output;");
-          //this adds the events to the Firestore database, before pushing the timetable page again
+          //this adds the events to the Firestore database, before popping the dialog box & pushing the timetable page again
           events
               ? addFirestoreEvents(
                   user.firebaseUser,

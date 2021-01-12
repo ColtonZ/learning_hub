@@ -46,6 +46,7 @@ class _CustomBodyState extends State<_CustomBody> {
     return new InAppWebView(
       //load the webview according to the specific page which was passed
       initialUrl: "https://pupils.stpaulsschool.org.uk$url",
+      //when loading begins, show a loading box to the user
       onLoadStart: (InAppWebViewController controller, String url) async {
         showDialog(
             context: context,
@@ -65,6 +66,7 @@ class _CustomBodyState extends State<_CustomBody> {
         //this checks if, when a page is loaded, it is the correct one. If it is, the data is scraped and the tannoy page returned.
         //https://medium.com/flutter/the-power-of-webviews-in-flutter-a56234b57df2
         //https://medium.com/flutter-community/inappwebview-the-real-power-of-webviews-in-flutter-c6d52374209d
+        //when loading is complete, pop the loading box currently visible
         Navigator.of(context).canPop();
 
         String currentPage = await controller.getUrl();
@@ -76,6 +78,7 @@ class _CustomBodyState extends State<_CustomBody> {
         }
         //checks if the url ends with the same url that was passed (i.e. we are not on the login page)
         if (currentPage.contains("/api/information/bulletin/")) {
+          //shows a dialog box saying that the tannoy notices are being loaded
           showDialog(
               context: context,
               builder: (BuildContext context) {
@@ -89,11 +92,11 @@ class _CustomBodyState extends State<_CustomBody> {
                     ),
                     onWillPop: () async => false);
               });
-          //evaluates the JavaScript, which gets a list of tannoy notices as a string, with each notice split by a semicolon, having been scraped from the page's html.
+          //evaluates the JavaScript, which gets a list of tannoy notices as a string, with each notice split by :-:, having been scraped from the page's html.
           String tannoyText = await controller.evaluateJavascript(
               source:
                   "output = \"\"; var list = document.getElementsByTagName(\"td\");for(var i = 4; i<list.length; i++){if(i%4!=3){output += list[i].textContent;output+=\":-:\"}}");
-          //this adds the tannoy notices to the Firestore database, before pushing the tannoy page again
+          //this adds the tannoy notices to the Firestore database, before popping the loading message and pushing the tannoy page again
           addTannoy(user.firebaseUser, tannoyText).then((_) {
             Navigator.of(context).canPop();
             _pushTannoyPage(context, user);

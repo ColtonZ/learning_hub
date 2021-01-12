@@ -21,12 +21,12 @@ class TannoysListViewState extends State<TannoysListView> {
       //half the items will be dividers, the other will be list tiles
       padding: const EdgeInsets.all(8.0),
       itemBuilder: (context, item) {
-        //returns a divider if odd, or assignment details if even (i.e. returns a divider every other one)
+        //returns a divider if odd, or tannoy details if even (i.e. returns a divider every other one)
         if (item.isOdd) {
           return Divider();
         }
         final index = item ~/ 2;
-        //creates a list tile for the assignment
+        //creates a list tile for the tannoy notice
         return _CustomListRow(
           notice: notices[index],
         );
@@ -50,7 +50,7 @@ class _CustomListRowState extends State<_CustomListRow> {
     Notice notice = widget.notice;
     return ListTile(
       isThreeLine: true,
-      //return the notice's title
+      //return the notice's title & authour over two rows
       title: Column(crossAxisAlignment: CrossAxisAlignment.start,
         children: [
         Text(

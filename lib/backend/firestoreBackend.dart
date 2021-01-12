@@ -641,12 +641,16 @@ Future<String> deleteData(User user, int type) async {
 }
 
 Future<bool> addTannoy(User user, String tannoyText) async {
+//gets the tannoy docs for a given user
   QuerySnapshot currentDoc = await databaseReference
       .collection("users")
       .doc(user.uid)
       .collection("tannoy")
       .get();
+
+//checks if there is already tannoy data for that user
   if (currentDoc.size == 1) {
+    //modify the existing tannoy data, with the time the new tannoy data was added, and the new notices
     databaseReference
         .collection("users")
         .doc(user.uid)
@@ -654,24 +658,28 @@ Future<bool> addTannoy(User user, String tannoyText) async {
         .doc(currentDoc.docs.first.id)
         .set({
       "modified": DateTime.now(),
+      //replace extra tabs or 4 spaces from the tannoy text - these are a side effect of the web scraping
       "notices": tannoyText
           .substring(0, tannoyText.length - 3)
           .replaceAll("\t", "")
           .replaceAll("    ", "")
     });
   } else {
+    //create a new tannoy doc for that user, with the new time & new data
     databaseReference
         .collection("users")
         .doc(user.uid)
         .collection("tannoy")
         .add({
       "modified": DateTime.now(),
+      //replace extra tabs or 4 spaces from the tannoy text - these are a side effect of the web scraping
       "notices": tannoyText
           .substring(0, tannoyText.length - 3)
           .replaceAll("\t", "")
           .replaceAll("    ", "")
     });
   }
+  //check if the tannoy data is empty, and return true or false accordingly
   if (tannoyText == "") {
     return false;
   } else {
@@ -680,12 +688,14 @@ Future<bool> addTannoy(User user, String tannoyText) async {
 }
 
 Future<bool> removeCurrentTannoy(User user) async {
+  //remove the existing tannoy data for a given user
   QuerySnapshot tannoyDocs = await databaseReference
       .collection("users")
       .doc(user.uid)
       .collection("tannoy")
       .get();
 
+//the only item in the tannoy collection is the tannoy notice, so delete that
   databaseReference
       .collection("users")
       .doc(user.uid)
@@ -697,20 +707,25 @@ Future<bool> removeCurrentTannoy(User user) async {
 }
 
 Future<bool> tannoyRecentlyChecked(User user) async {
+  //see if the tannoy notices were checked today or not
   QuerySnapshot tannoyDocs = await databaseReference
       .collection("users")
       .doc(user.uid)
       .collection("tannoy")
       .get();
 
+//if there is no tannoy data, return false, meaning that the notices need to be checked again
   if (tannoyDocs.size == 0) {
     return false;
   }
 
+//get the tannoy data
   DocumentSnapshot currentTannoy = tannoyDocs.docs.first;
 
+//convert the day it was last checked to a date
   DateTime lastChecked = currentTannoy["modified"].toDate();
 
+//if it was checked yesterday or earlier, return false. If it was checked today, return true
   if (lastChecked.isBefore(DateTime.utc(
       DateTime.now().year, DateTime.now().month, DateTime.now().day))) {
     return false;
@@ -722,20 +737,25 @@ Future<bool> tannoyRecentlyChecked(User user) async {
 Future<List<Notice>> getNotices(User user) async {
   List<Notice> notices = new List<Notice>();
 
+//get the tannoy data for a given user
   QuerySnapshot tannoyDocs = await databaseReference
       .collection("users")
       .doc(user.uid)
       .collection("tannoy")
       .get();
 
+//if there is no tannoy data, return an empty list
   if (tannoyDocs.size == 0) {
     return notices;
   }
 
+//get the tannoy data
   DocumentSnapshot currentTannoy = tannoyDocs.docs.first;
 
+//split the tannoy data at ":-:", the placeholder between data items
   List<String> rawDetails = currentTannoy["notices"].toString().split(":-:");
 
+//loop through each tannoy notice & its three seperate parts. For each notice, create a notice object with the details given by the three parts
   for (int i = 0; i < rawDetails.length; i += 3) {
     notices.add(new Notice(
         title: rawDetails[i],

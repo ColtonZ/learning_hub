@@ -72,19 +72,19 @@ class _CustomScaffoldState extends State<_CustomScaffold> {
     CustomUser user = widget.user;
     String name = widget.name;
     return Scaffold(
-        //returns the custom app bar with the timetable page title
+        //returns the custom app bar with the tannoy page title
         appBar: CustomAppBar(title: "Tannoy Notices", reload: false),
         //builds the body
         //checks if the user has at least one tannoy notice in the Firestore database added automatically from the pupil portal. If they do, load the tannoy page.
         //Otherwise, display a web view, which will allow the user to login to the portal and then will scrape the dashboard for the user's tannoy data.
         body: FutureBuilder(
-            //gets the user's tannoy notices
+            //check when the tannoy notices were last updated
             future: tannoyRecentlyChecked(user.firebaseUser),
             //https://flutter.dev/docs/development/ui/interactive
             builder: (context, snapshot) {
               if (snapshot.connectionState == ConnectionState.done) {
                 if (!snapshot.data) {
-                  //if they have no tannoy notices, return a web view body so the user can login to the portal
+                  //if the tannoy notices were not updated recently, return a web view body so the user can login to the portal
                   //https://stackoverflow.com/questions/54691767/navigation-inside-nested-future
                   return PortalWebView(
                     user: user,
@@ -94,18 +94,23 @@ class _CustomScaffoldState extends State<_CustomScaffold> {
                 } else {
                   //otherwise build the page
                   return FutureBuilder(
+                      //get the tannoy notices from the user's firebase profile. If there are no tannoy notices, tell the user as such, and allow them to refresh the page.
                       future: getNotices(user.firebaseUser),
                       builder: (context, snapshot) {
                         if (snapshot.connectionState == ConnectionState.done) {
                           if (snapshot.data != null) {
+                            //return the user's tannoy notices
                             return TannoysListView(notices: snapshot.data);
                           } else {
+                            //if the user has no tannoy notices, return text telling them as such.
+                            //this text is inside a gesture detector, allowing them to swipe down to refresh.
                             return Center(
                               child: Container(
                                 child: GestureDetector(
                                   behavior: HitTestBehavior.translucent,
                                   onVerticalDragEnd: (details) {
                                     if (details.primaryVelocity > 0) {
+                                      //if the user swipes down, refresh the page, and search for tannoy notices again.
                                       removeCurrentTannoy(user.firebaseUser)
                                           .then((_) {
                                         _pushTannoyPage(context, user);
@@ -127,10 +132,9 @@ class _CustomScaffoldState extends State<_CustomScaffold> {
                               ),
                             );
                           }
+                          //while loading, return a loading indicator
                         } else {
-                          return Center(
-                            child: CircularProgressIndicator(),
-                          );
+                          return Center(child: CircularProgressIndicator());
                         }
                       });
                 }
