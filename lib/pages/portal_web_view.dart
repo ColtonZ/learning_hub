@@ -67,7 +67,7 @@ class _CustomBodyState extends State<_CustomBody> {
         //https://medium.com/flutter/the-power-of-webviews-in-flutter-a56234b57df2
         //https://medium.com/flutter-community/inappwebview-the-real-power-of-webviews-in-flutter-c6d52374209d
         //when loading is complete, pop the loading box currently visible
-        Navigator.of(context).canPop();
+        Navigator.of(context).pop();
 
         String currentPage = await controller.getUrl();
         //automatically fill the username box of the page

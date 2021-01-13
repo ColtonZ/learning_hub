@@ -337,7 +337,7 @@ class AddEventState extends State<AddEvent> {
                   style: TextStyle(color: Colors.red, fontSize: 12),
                 ),
                 Container(
-                  width: MediaQuery.of(context).size.width - 10,
+                  
                   padding: const EdgeInsets.symmetric(vertical: 8.0),
                   //a raised button allowing for the event to be added. It ensures that the requirements for a valid event are fulfilled, and then it is added to the db.
                   child: RaisedButton(

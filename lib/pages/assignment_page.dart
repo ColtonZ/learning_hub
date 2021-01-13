@@ -111,7 +111,7 @@ class _CustomScaffoldState extends State<_CustomScaffold> {
                                       ? Icons.person_outline
                                       : Icons.warning),
                     ),
-                    width: MediaQuery.of(context).size.width / 10,
+                    width: 50,
                   ),
                   Container(
                     width: 15,
@@ -243,7 +243,7 @@ class _CustomScaffoldState extends State<_CustomScaffold> {
                       ),
                       padding: EdgeInsets.fromLTRB(15, 0, 15, 0),
                       backdropTapClosesPanel: true,
-                      minHeight: 85,
+                      minHeight: 75,
                       //dependent on the type of assignment and any files the student has uploaded, the size of the sliding up panel changes.
                       maxHeight: assignment.type == "PERSONAL"
                           ? 170
@@ -255,10 +255,8 @@ class _CustomScaffoldState extends State<_CustomScaffold> {
                                       ? 250
                                       : 500,
                       borderRadius: BorderRadius.only(
-                          topLeft: Radius.circular(
-                              MediaQuery.of(context).size.width / 20),
-                          topRight: Radius.circular(
-                              MediaQuery.of(context).size.width / 20)),
+                          topLeft: Radius.circular(20),
+                          topRight: Radius.circular(20)),
                       //creates the list of the student's submissions
                       panel: Center(
                         child: StudentSubmissions(

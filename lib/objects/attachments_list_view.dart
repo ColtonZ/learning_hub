@@ -111,10 +111,10 @@ class _CustomListRowState extends State<_CustomListRow> {
                                 ? Icon(Icons.format_list_bulleted)
                                 : Icon(Icons.attach_file),
               ),
-              width: MediaQuery.of(context).size.width / 10,
+
             ),
             Container(
-              width: MediaQuery.of(context).size.width / 50,
+              width: 10,
             ),
             Expanded(
                 //returns the attachment title if it has one, otherwise it returns a message saying the attachment has no title

@@ -36,14 +36,12 @@ class StudentSubmissionsState extends State<StudentSubmissions> {
             child: Column(
               children: [
                 Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   children: [
+                    Container(width: 100),
+                    Icon(Icons.expand_more),
                     Container(
-                        width: MediaQuery.of(context).size.width / 2 - 3,
-                        alignment: Alignment.centerRight,
-                        child: Icon(Icons.expand_more)),
-                    Container(
-                      width: MediaQuery.of(context).size.width / 2 - 27,
+                      width: 100,
                       alignment: Alignment.centerRight,
                       child: Text(
                         assignment.state == "RETURNED"
@@ -135,14 +133,12 @@ class StudentSubmissionsState extends State<StudentSubmissions> {
             child: Column(
               children: [
                 Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   children: [
+                    Container(width: 100),
+                    Icon(Icons.expand_more),
                     Container(
-                        width: MediaQuery.of(context).size.width / 2 - 3,
-                        alignment: Alignment.centerRight,
-                        child: Icon(Icons.expand_more)),
-                    Container(
-                      width: MediaQuery.of(context).size.width / 2 - 27,
+                      width: 100,
                       alignment: Alignment.centerRight,
                       child: Text(
                         assignment.state == "RETURNED"
@@ -231,14 +227,12 @@ class StudentSubmissionsState extends State<StudentSubmissions> {
             child: Column(
               children: [
                 Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   children: [
+                    Container(width: 100),
+                    Icon(Icons.expand_more),
                     Container(
-                        width: MediaQuery.of(context).size.width / 2 - 3,
-                        alignment: Alignment.centerRight,
-                        child: Icon(Icons.expand_more)),
-                    Container(
-                      width: MediaQuery.of(context).size.width / 2 - 27,
+                      width: 100,
                       alignment: Alignment.centerRight,
                       child: Text(
                         assignment.state == "RETURNED"
