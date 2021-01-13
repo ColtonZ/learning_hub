@@ -68,11 +68,12 @@ class _FirstTileState extends State<_FirstTile> {
           //returns a header for attachments if there are any - no header otherwise
           attachments
               ? Row(children: [
-                  Expanded(
+                  Flexible(
+                      fit: FlexFit.loose,
                       child: Text(
-                    "Attachments:",
-                    style: subtitleStyle,
-                  ))
+                        "Attachments:",
+                        style: subtitleStyle,
+                      ))
                 ])
               : Text(""),
         ],
@@ -111,19 +112,19 @@ class _CustomListRowState extends State<_CustomListRow> {
                                 ? Icon(Icons.format_list_bulleted)
                                 : Icon(Icons.attach_file),
               ),
-
             ),
             Container(
               width: 10,
             ),
-            Expanded(
+            Flexible(
+                fit: FlexFit.loose,
                 //returns the attachment title if it has one, otherwise it returns a message saying the attachment has no title
                 child: Text(
-              attachment.title != null
-                  ? attachment.title
-                  : "This ${attachment.type} has no title",
-              style: header3Style,
-            ))
+                  attachment.title != null
+                      ? attachment.title
+                      : "This ${attachment.type} has no title",
+                  style: header3Style,
+                ))
           ],
         ),
         //opens a link to the attachment when you click on it

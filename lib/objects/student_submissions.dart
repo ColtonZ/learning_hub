@@ -47,7 +47,7 @@ class StudentSubmissionsState extends State<StudentSubmissions> {
                         assignment.state == "RETURNED"
                             ? "Grade: ${assignment.grade}/${assignment.points}"
                             : assignment.state == "TURNED_IN"
-                                ? "Turned In"
+                                ? "Turned In${assignment.isLate != null ? " Late" : ""}"
                                 : assignment.isLate != null
                                     ? "Late"
                                     : "Assigned",
@@ -144,7 +144,7 @@ class StudentSubmissionsState extends State<StudentSubmissions> {
                         assignment.state == "RETURNED"
                             ? "Grade: ${assignment.grade}/${assignment.points}"
                             : assignment.state == "TURNED_IN"
-                                ? "Turned In"
+                                ? "Turned In${assignment.isLate != null ? " Late" : ""}"
                                 : assignment.isLate != null
                                     ? "Late"
                                     : "Assigned",
@@ -238,7 +238,7 @@ class StudentSubmissionsState extends State<StudentSubmissions> {
                         assignment.state == "RETURNED"
                             ? "Grade: ${assignment.grade}/${assignment.points}"
                             : assignment.state == "TURNED_IN"
-                                ? "Turned In"
+                                ? "Turned In${assignment.isLate != null ? " Late" : ""}"
                                 : assignment.isLate != null
                                     ? "Late"
                                     : "Assigned",
@@ -273,7 +273,8 @@ class StudentSubmissionsState extends State<StudentSubmissions> {
             ),
           Divider(),
           assignment.submissionAttachments.length != 0
-              ? Expanded(
+              ? Flexible(
+                  fit: FlexFit.loose,
                   //creates the list view of the attachments, with no 'description' (as it should only say **Attachments:**)
                   child: AttachmentsListView(
                       description: "",

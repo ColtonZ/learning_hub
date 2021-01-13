@@ -114,7 +114,8 @@ class _CustomScaffoldState extends State<_CustomScaffold> {
                     width: 100,
                     child: Row(
                       children: <Widget>[
-                        Expanded(
+                        Flexible(
+                        fit:FlexFit.loose,
                           child: Text(
                             "Sign Out",
                             style: header3Style,

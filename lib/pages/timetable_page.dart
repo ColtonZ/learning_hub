@@ -160,7 +160,8 @@ class _MainPageState extends State<_MainPage> {
                 },
               ),
             ),
-            Expanded(
+            Flexible(
+              fit: FlexFit.loose,
               child: Row(
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: [
@@ -237,47 +238,45 @@ class _MainPageState extends State<_MainPage> {
                               builder: (BuildContext context) {
                                 //show the dialogue to add a new task
                                 return AlertDialog(
-                                  content: Expanded(
-                                    child: Column(
-                                      mainAxisSize: MainAxisSize.min,
-                                      children: [
-                                        Text(
-                                          "Would you like to refresh the current week?",
-                                          style: header3Style,
-                                          textAlign: TextAlign.center,
-                                        ),
-                                        Row(
-                                          mainAxisAlignment:
-                                              MainAxisAlignment.center,
-                                          children: [
-                                            FlatButton(
-                                              onPressed: () {
-                                                Navigator.of(context).pop();
-                                              },
-                                              child: Text("No"),
-                                            ),
-                                            FlatButton(
-                                              onPressed: () {
-                                                Navigator.of(context).pop();
-                                                Navigator.of(context).push(
-                                                  MaterialPageRoute(
-                                                    builder: ((BuildContext
-                                                            context) =>
-                                                        DashboardWebView(
-                                                          user: user,
-                                                          //this url is the page on the site https://intranet.stpaulsschool.org.uk to access
-                                                          url: "/dashboard",
-                                                          events: false,
-                                                        )),
-                                                  ),
-                                                );
-                                              },
-                                              child: Text("Yes"),
-                                            )
-                                          ],
-                                        ),
-                                      ],
-                                    ),
+                                  content: Column(
+                                    mainAxisSize: MainAxisSize.min,
+                                    children: [
+                                      Text(
+                                        "Would you like to refresh the current week?",
+                                        style: header3Style,
+                                        textAlign: TextAlign.center,
+                                      ),
+                                      Row(
+                                        mainAxisAlignment:
+                                            MainAxisAlignment.center,
+                                        children: [
+                                          FlatButton(
+                                            onPressed: () {
+                                              Navigator.of(context).pop();
+                                            },
+                                            child: Text("No"),
+                                          ),
+                                          FlatButton(
+                                            onPressed: () {
+                                              Navigator.of(context).pop();
+                                              Navigator.of(context).push(
+                                                MaterialPageRoute(
+                                                  builder:
+                                                      ((BuildContext context) =>
+                                                          DashboardWebView(
+                                                            user: user,
+                                                            //this url is the page on the site https://intranet.stpaulsschool.org.uk to access
+                                                            url: "/dashboard",
+                                                            events: false,
+                                                          )),
+                                                ),
+                                              );
+                                            },
+                                            child: Text("Yes"),
+                                          )
+                                        ],
+                                      ),
+                                    ],
                                   ),
                                 );
                               }).then((_) {
@@ -307,7 +306,8 @@ class _MainPageState extends State<_MainPage> {
               }
             }),
         Divider(),
-        Expanded(
+        Flexible(
+          fit: FlexFit.loose,
           child: GestureDetector(
             behavior: HitTestBehavior.translucent,
             onHorizontalDragEnd: (details) {
@@ -332,11 +332,9 @@ class _MainPageState extends State<_MainPage> {
                   } else {
                     //if there are no events in the calendar today, tell the user as much
                     return Center(
-                      child: Expanded(
-                        child: Container(
-                          child: Text(
-                              "You have no events in the calendar on this day."),
-                        ),
+                      child: Container(
+                        child: Text(
+                            "You have no events in the calendar on this day."),
                       ),
                     );
                   }
@@ -349,7 +347,7 @@ class _MainPageState extends State<_MainPage> {
         ),
         Divider(),
         Row(
-          mainAxisAlignment: MainAxisAlignment.center,
+          mainAxisAlignment: MainAxisAlignment.spaceBetween,
           children: [
             Padding(
               padding: EdgeInsets.fromLTRB(14, 0, 0, 0),
@@ -361,12 +359,10 @@ class _MainPageState extends State<_MainPage> {
                 },
               ),
             ),
-            Expanded(
-              child: Text(
-                "Personal Tasks",
-                style: titleStyle,
-                textAlign: TextAlign.center,
-              ),
+            Text(
+              "Personal Tasks",
+              style: titleStyle,
+              textAlign: TextAlign.center,
             ),
             Padding(
               padding: EdgeInsets.fromLTRB(0, 0, 14, 0),
@@ -388,7 +384,8 @@ class _MainPageState extends State<_MainPage> {
           ],
         ),
         Divider(),
-        Expanded(
+        Flexible(
+          fit: FlexFit.loose,
           child: FutureBuilder(
             //get the user's tasks that need doing
             future: getFirestoreTasks(user.firebaseUser),

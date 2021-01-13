@@ -117,7 +117,8 @@ class _CustomScaffoldState extends State<_CustomScaffold> {
                     width: 15,
                   ),
                   //returns the assignment title
-                  Expanded(
+                  Flexible(
+                    fit: FlexFit.loose,
                     child: Text(
                       "${assignment.title}",
                       style: titleStyle,
@@ -148,22 +149,12 @@ class _CustomScaffoldState extends State<_CustomScaffold> {
                             String name = snapshot.data;
                             //checks if the task was edited after creation
                             return Text(
-                              assignment.creationTime
-                                      .add(Duration(minutes: 5))
-                                      .isBefore(assignment.updateTime)
-                                  //returns the task's creator and its due date
-                                  ? "$name • ${assignment.creationTime.day.toString()} ${months[assignment.creationTime.month - 1]} (Edited ${assignment.updateTime.day.toString()} ${months[assignment.updateTime.month - 1]})"
-                                  : "$name • ${assignment.creationTime.day.toString()} ${months[assignment.creationTime.month - 1]}",
+                              "$name • ${assignment.creationTime.day.toString()} ${months[assignment.creationTime.month - 1]}",
                               style: header3Style,
                             );
                           } else {
                             return Text(
-                              assignment.creationTime
-                                      .add(Duration(minutes: 5))
-                                      .isBefore(assignment.updateTime)
-                                  //returns just the task's due date
-                                  ? "${assignment.creationTime.day.toString()} ${months[assignment.creationTime.month - 1]} (Edited ${assignment.updateTime.day.toString()} ${months[assignment.updateTime.month - 1]})"
-                                  : "${assignment.creationTime.day.toString()} ${months[assignment.creationTime.month - 1]}",
+                              "${assignment.creationTime.day.toString()} ${months[assignment.creationTime.month - 1]}",
                               style: header3Style,
                             );
                           }
@@ -206,7 +197,8 @@ class _CustomScaffoldState extends State<_CustomScaffold> {
               ),
 
               //Returns a list. The first object is is the task's description (if there is one), and the rest of the objects are any attachments that are attached to the task
-              Expanded(
+              Flexible(
+                fit: FlexFit.loose,
                 child: Stack(
                   children: [
                     AttachmentsListView(
