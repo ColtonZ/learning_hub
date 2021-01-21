@@ -1,19 +1,12 @@
 @startuml
 set namespaceSeparator ::
 
-class "learning_hub::main.dart::MyApp" {
-  +Widget build()
-}
-
-"flutter::src::widgets::framework.dart::StatelessWidget" <|-- "learning_hub::main.dart::MyApp"
-
 class "learning_hub::objects::addEventPopup.dart::AddEvent" {
   +CustomUser user
   +AddEventState createState()
 }
 
 "learning_hub::objects::addEventPopup.dart::AddEvent" o-- "learning_hub::objects::customUser.dart::CustomUser"
-"flutter::src::widgets::framework.dart::StatefulWidget" <|-- "learning_hub::objects::addEventPopup.dart::AddEvent"
 
 class "learning_hub::objects::addEventPopup.dart::AddEventState" {
   -GlobalKey<FormState> _formKey
@@ -31,16 +24,12 @@ class "learning_hub::objects::addEventPopup.dart::AddEventState" {
   +Widget build()
 }
 
-"learning_hub::objects::addEventPopup.dart::AddEventState" o-- "flutter::src::widgets::framework.dart::GlobalKey<FormState>"
-"flutter::src::widgets::framework.dart::State<T>" <|-- "learning_hub::objects::addEventPopup.dart::AddEventState"
-
 class "learning_hub::objects::addPersonalTask.dart::AddPersonalTask" {
   +CustomUser user
   +AddPersonalTaskState createState()
 }
 
 "learning_hub::objects::addPersonalTask.dart::AddPersonalTask" o-- "learning_hub::objects::customUser.dart::CustomUser"
-"flutter::src::widgets::framework.dart::StatefulWidget" <|-- "learning_hub::objects::addPersonalTask.dart::AddPersonalTask"
 
 class "learning_hub::objects::addPersonalTask.dart::AddPersonalTaskState" {
   -GlobalKey<FormState> _formKey
@@ -51,9 +40,6 @@ class "learning_hub::objects::addPersonalTask.dart::AddPersonalTaskState" {
   +bool dueDateSet
   +Widget build()
 }
-
-"learning_hub::objects::addPersonalTask.dart::AddPersonalTaskState" o-- "flutter::src::widgets::framework.dart::GlobalKey<FormState>"
-"flutter::src::widgets::framework.dart::State<T>" <|-- "learning_hub::objects::addPersonalTask.dart::AddPersonalTaskState"
 
 class "learning_hub::objects::assignment.dart::Assignment" {
   +String url
@@ -92,13 +78,6 @@ class "learning_hub::objects::assignments_list_view.dart::AssignmentsListView" {
 }
 
 "learning_hub::objects::assignments_list_view.dart::AssignmentsListView" o-- "learning_hub::objects::customUser.dart::CustomUser"
-"flutter::src::widgets::framework.dart::StatefulWidget" <|-- "learning_hub::objects::assignments_list_view.dart::AssignmentsListView"
-
-class "learning_hub::objects::assignments_list_view.dart::AssignmentsListViewState" {
-  +Widget build()
-}
-
-"flutter::src::widgets::framework.dart::State<T>" <|-- "learning_hub::objects::assignments_list_view.dart::AssignmentsListViewState"
 
 class "learning_hub::objects::assignments_list_view.dart::_CustomListRow" {
   +Assignment assignment
@@ -108,14 +87,11 @@ class "learning_hub::objects::assignments_list_view.dart::_CustomListRow" {
 
 "learning_hub::objects::assignments_list_view.dart::_CustomListRow" o-- "learning_hub::objects::assignment.dart::Assignment"
 "learning_hub::objects::assignments_list_view.dart::_CustomListRow" o-- "learning_hub::objects::customUser.dart::CustomUser"
-"flutter::src::widgets::framework.dart::StatefulWidget" <|-- "learning_hub::objects::assignments_list_view.dart::_CustomListRow"
 
 class "learning_hub::objects::assignments_list_view.dart::_CustomListRowState" {
   +Widget build()
   {static} -void _pushAssignmentPage()
 }
-
-"flutter::src::widgets::framework.dart::State<T>" <|-- "learning_hub::objects::assignments_list_view.dart::_CustomListRowState"
 
 class "learning_hub::objects::attachment.dart::Attachment" {
   +String title
@@ -131,27 +107,11 @@ class "learning_hub::objects::attachments_list_view.dart::AttachmentsListView" {
   +AttachmentsListViewState createState()
 }
 
-"flutter::src::widgets::framework.dart::StatefulWidget" <|-- "learning_hub::objects::attachments_list_view.dart::AttachmentsListView"
-
-class "learning_hub::objects::attachments_list_view.dart::AttachmentsListViewState" {
-  +Widget build()
-}
-
-"flutter::src::widgets::framework.dart::State<T>" <|-- "learning_hub::objects::attachments_list_view.dart::AttachmentsListViewState"
-
 class "learning_hub::objects::attachments_list_view.dart::_FirstTile" {
   +dynamic description
   +bool attachments
   +_FirstTileState createState()
 }
-
-"flutter::src::widgets::framework.dart::StatefulWidget" <|-- "learning_hub::objects::attachments_list_view.dart::_FirstTile"
-
-class "learning_hub::objects::attachments_list_view.dart::_FirstTileState" {
-  +Widget build()
-}
-
-"flutter::src::widgets::framework.dart::State<T>" <|-- "learning_hub::objects::attachments_list_view.dart::_FirstTileState"
 
 class "learning_hub::objects::attachments_list_view.dart::_CustomListRow" {
   +Attachment attachment
@@ -159,13 +119,6 @@ class "learning_hub::objects::attachments_list_view.dart::_CustomListRow" {
 }
 
 "learning_hub::objects::attachments_list_view.dart::_CustomListRow" o-- "learning_hub::objects::attachment.dart::Attachment"
-"flutter::src::widgets::framework.dart::StatefulWidget" <|-- "learning_hub::objects::attachments_list_view.dart::_CustomListRow"
-
-class "learning_hub::objects::attachments_list_view.dart::_CustomListRowState" {
-  +Widget build()
-}
-
-"flutter::src::widgets::framework.dart::State<T>" <|-- "learning_hub::objects::attachments_list_view.dart::_CustomListRowState"
 
 class "learning_hub::objects::course.dart::Course" {
   +String name
@@ -182,13 +135,6 @@ class "learning_hub::objects::courses_list_view.dart::CoursesListView" {
 }
 
 "learning_hub::objects::courses_list_view.dart::CoursesListView" o-- "learning_hub::objects::customUser.dart::CustomUser"
-"flutter::src::widgets::framework.dart::StatefulWidget" <|-- "learning_hub::objects::courses_list_view.dart::CoursesListView"
-
-class "learning_hub::objects::courses_list_view.dart::CoursesListViewState" {
-  +Widget build()
-}
-
-"flutter::src::widgets::framework.dart::State<T>" <|-- "learning_hub::objects::courses_list_view.dart::CoursesListViewState"
 
 class "learning_hub::objects::courses_list_view.dart::_CustomListRow" {
   +Course course
@@ -198,21 +144,11 @@ class "learning_hub::objects::courses_list_view.dart::_CustomListRow" {
 
 "learning_hub::objects::courses_list_view.dart::_CustomListRow" o-- "learning_hub::objects::course.dart::Course"
 "learning_hub::objects::courses_list_view.dart::_CustomListRow" o-- "learning_hub::objects::customUser.dart::CustomUser"
-"flutter::src::widgets::framework.dart::StatefulWidget" <|-- "learning_hub::objects::courses_list_view.dart::_CustomListRow"
-
-class "learning_hub::objects::courses_list_view.dart::_CustomListRowState" {
-  +Widget build()
-  {static} -void _pushAssignmentsPage()
-}
-
-"flutter::src::widgets::framework.dart::State<T>" <|-- "learning_hub::objects::courses_list_view.dart::_CustomListRowState"
 
 class "learning_hub::objects::customUser.dart::CustomUser" {
   +User firebaseUser
   +Map<String, dynamic> authHeaders
 }
-
-"learning_hub::objects::customUser.dart::CustomUser" o-- "firebase_auth::firebase_auth.dart::User"
 
 class "learning_hub::objects::custom_app_bar.dart::CustomAppBar" {
   +dynamic title
@@ -220,16 +156,6 @@ class "learning_hub::objects::custom_app_bar.dart::CustomAppBar" {
   +Size preferredSize
   +CustomAppBarState createState()
 }
-
-"learning_hub::objects::custom_app_bar.dart::CustomAppBar" o-- "dart::ui::Size"
-"flutter::src::widgets::framework.dart::StatefulWidget" <|-- "learning_hub::objects::custom_app_bar.dart::CustomAppBar"
-"flutter::src::widgets::preferred_size.dart::PreferredSizeWidget" <|-- "learning_hub::objects::custom_app_bar.dart::CustomAppBar"
-
-class "learning_hub::objects::custom_app_bar.dart::CustomAppBarState" {
-  +AppBar build()
-}
-
-"flutter::src::widgets::framework.dart::State<T>" <|-- "learning_hub::objects::custom_app_bar.dart::CustomAppBarState"
 
 class "learning_hub::objects::custom_navigation_bar.dart::CustomNavigationBar" {
   +dynamic name
@@ -239,7 +165,6 @@ class "learning_hub::objects::custom_navigation_bar.dart::CustomNavigationBar" {
 }
 
 "learning_hub::objects::custom_navigation_bar.dart::CustomNavigationBar" o-- "learning_hub::objects::customUser.dart::CustomUser"
-"flutter::src::widgets::framework.dart::StatefulWidget" <|-- "learning_hub::objects::custom_navigation_bar.dart::CustomNavigationBar"
 
 class "learning_hub::objects::custom_navigation_bar.dart::CustomNavigationBarState" {
   {static} -void _pushAccountPage()
@@ -248,8 +173,6 @@ class "learning_hub::objects::custom_navigation_bar.dart::CustomNavigationBarSta
   {static} -void _pushTimetablePage()
   +Widget build()
 }
-
-"flutter::src::widgets::framework.dart::State<T>" <|-- "learning_hub::objects::custom_navigation_bar.dart::CustomNavigationBarState"
 
 class "learning_hub::objects::event.dart::Event" {
   +String id
@@ -262,8 +185,6 @@ class "learning_hub::objects::event.dart::Event" {
   +int compareTo()
 }
 
-"dart::core::Comparable<T>" <|-- "learning_hub::objects::event.dart::Event"
-
 class "learning_hub::objects::events_list_view.dart::EventsListView" {
   +List<Event> events
   +CustomUser user
@@ -271,13 +192,6 @@ class "learning_hub::objects::events_list_view.dart::EventsListView" {
 }
 
 "learning_hub::objects::events_list_view.dart::EventsListView" o-- "learning_hub::objects::customUser.dart::CustomUser"
-"flutter::src::widgets::framework.dart::StatefulWidget" <|-- "learning_hub::objects::events_list_view.dart::EventsListView"
-
-class "learning_hub::objects::events_list_view.dart::EventsListViewState" {
-  +Widget build()
-}
-
-"flutter::src::widgets::framework.dart::State<T>" <|-- "learning_hub::objects::events_list_view.dart::EventsListViewState"
 
 class "learning_hub::objects::events_list_view.dart::_CustomListRow" {
   +Event event
@@ -287,30 +201,16 @@ class "learning_hub::objects::events_list_view.dart::_CustomListRow" {
 
 "learning_hub::objects::events_list_view.dart::_CustomListRow" o-- "learning_hub::objects::event.dart::Event"
 "learning_hub::objects::events_list_view.dart::_CustomListRow" o-- "learning_hub::objects::customUser.dart::CustomUser"
-"flutter::src::widgets::framework.dart::StatefulWidget" <|-- "learning_hub::objects::events_list_view.dart::_CustomListRow"
-
-class "learning_hub::objects::events_list_view.dart::_CustomListRowState" {
-  +Widget build()
-}
-
-"flutter::src::widgets::framework.dart::State<T>" <|-- "learning_hub::objects::events_list_view.dart::_CustomListRowState"
 
 class "learning_hub::objects::notice.dart::Notice" {
   +String title
   +String body
+  +String author
 }
 
 class "learning_hub::objects::offlineScaffold.dart::OfflineScaffold" {
   +OfflineScaffoldState createState()
 }
-
-"flutter::src::widgets::framework.dart::StatefulWidget" <|-- "learning_hub::objects::offlineScaffold.dart::OfflineScaffold"
-
-class "learning_hub::objects::offlineScaffold.dart::OfflineScaffoldState" {
-  +Widget build()
-}
-
-"flutter::src::widgets::framework.dart::State<T>" <|-- "learning_hub::objects::offlineScaffold.dart::OfflineScaffoldState"
 
 class "learning_hub::objects::question.dart::Question" {
   +String type
@@ -324,14 +224,11 @@ class "learning_hub::objects::showEventPopup.dart::ShowEvent" {
 }
 
 "learning_hub::objects::showEventPopup.dart::ShowEvent" o-- "learning_hub::objects::customUser.dart::CustomUser"
-"flutter::src::widgets::framework.dart::StatefulWidget" <|-- "learning_hub::objects::showEventPopup.dart::ShowEvent"
 
 class "learning_hub::objects::showEventPopup.dart::ShowEventState" {
   +bool showConfirm
   +Widget build()
 }
-
-"flutter::src::widgets::framework.dart::State<T>" <|-- "learning_hub::objects::showEventPopup.dart::ShowEventState"
 
 class "learning_hub::objects::student_submissions.dart::StudentSubmissions" {
   +Assignment assignment
@@ -341,27 +238,16 @@ class "learning_hub::objects::student_submissions.dart::StudentSubmissions" {
 
 "learning_hub::objects::student_submissions.dart::StudentSubmissions" o-- "learning_hub::objects::assignment.dart::Assignment"
 "learning_hub::objects::student_submissions.dart::StudentSubmissions" o-- "learning_hub::objects::customUser.dart::CustomUser"
-"flutter::src::widgets::framework.dart::StatefulWidget" <|-- "learning_hub::objects::student_submissions.dart::StudentSubmissions"
 
 class "learning_hub::objects::student_submissions.dart::StudentSubmissionsState" {
   +dynamic answer
   +Widget build()
 }
 
-"flutter::src::widgets::framework.dart::State<T>" <|-- "learning_hub::objects::student_submissions.dart::StudentSubmissionsState"
-
 class "learning_hub::objects::tannoy_list_view.dart::TannoysListView" {
   +List<Notice> notices
   +TannoysListViewState createState()
 }
-
-"flutter::src::widgets::framework.dart::StatefulWidget" <|-- "learning_hub::objects::tannoy_list_view.dart::TannoysListView"
-
-class "learning_hub::objects::tannoy_list_view.dart::TannoysListViewState" {
-  +Widget build()
-}
-
-"flutter::src::widgets::framework.dart::State<T>" <|-- "learning_hub::objects::tannoy_list_view.dart::TannoysListViewState"
 
 class "learning_hub::objects::tannoy_list_view.dart::_CustomListRow" {
   +Notice notice
@@ -369,13 +255,6 @@ class "learning_hub::objects::tannoy_list_view.dart::_CustomListRow" {
 }
 
 "learning_hub::objects::tannoy_list_view.dart::_CustomListRow" o-- "learning_hub::objects::notice.dart::Notice"
-"flutter::src::widgets::framework.dart::StatefulWidget" <|-- "learning_hub::objects::tannoy_list_view.dart::_CustomListRow"
-
-class "learning_hub::objects::tannoy_list_view.dart::_CustomListRowState" {
-  +Widget build()
-}
-
-"flutter::src::widgets::framework.dart::State<T>" <|-- "learning_hub::objects::tannoy_list_view.dart::_CustomListRowState"
 
 class "learning_hub::pages::account_page.dart::AccountPage" {
   +GoogleSignInAccount account
@@ -385,15 +264,7 @@ class "learning_hub::pages::account_page.dart::AccountPage" {
   +AccountPageState createState()
 }
 
-"learning_hub::pages::account_page.dart::AccountPage" o-- "google_sign_in::google_sign_in.dart::GoogleSignInAccount"
 "learning_hub::pages::account_page.dart::AccountPage" o-- "learning_hub::objects::customUser.dart::CustomUser"
-"flutter::src::widgets::framework.dart::StatefulWidget" <|-- "learning_hub::pages::account_page.dart::AccountPage"
-
-class "learning_hub::pages::account_page.dart::AccountPageState" {
-  +Widget build()
-}
-
-"flutter::src::widgets::framework.dart::State<T>" <|-- "learning_hub::pages::account_page.dart::AccountPageState"
 
 class "learning_hub::pages::account_page.dart::_CustomScaffold" {
   +dynamic name
@@ -402,7 +273,6 @@ class "learning_hub::pages::account_page.dart::_CustomScaffold" {
 }
 
 "learning_hub::pages::account_page.dart::_CustomScaffold" o-- "learning_hub::objects::customUser.dart::CustomUser"
-"flutter::src::widgets::framework.dart::StatefulWidget" <|-- "learning_hub::pages::account_page.dart::_CustomScaffold"
 
 class "learning_hub::pages::account_page.dart::_CustomScaffoldState" {
   +bool showEventConfirm
@@ -411,8 +281,6 @@ class "learning_hub::pages::account_page.dart::_CustomScaffoldState" {
   +Widget build()
   {static} -void _pushSignOut()
 }
-
-"flutter::src::widgets::framework.dart::State<T>" <|-- "learning_hub::pages::account_page.dart::_CustomScaffoldState"
 
 class "learning_hub::pages::assignments_page.dart::AssignmentsPage" {
   +GoogleSignInAccount account
@@ -423,15 +291,7 @@ class "learning_hub::pages::assignments_page.dart::AssignmentsPage" {
   +AssignmentsPageState createState()
 }
 
-"learning_hub::pages::assignments_page.dart::AssignmentsPage" o-- "google_sign_in::google_sign_in.dart::GoogleSignInAccount"
 "learning_hub::pages::assignments_page.dart::AssignmentsPage" o-- "learning_hub::objects::customUser.dart::CustomUser"
-"flutter::src::widgets::framework.dart::StatefulWidget" <|-- "learning_hub::pages::assignments_page.dart::AssignmentsPage"
-
-class "learning_hub::pages::assignments_page.dart::AssignmentsPageState" {
-  +Widget build()
-}
-
-"flutter::src::widgets::framework.dart::State<T>" <|-- "learning_hub::pages::assignments_page.dart::AssignmentsPageState"
 
 class "learning_hub::pages::assignments_page.dart::_CustomScaffold" {
   +dynamic name
@@ -442,13 +302,6 @@ class "learning_hub::pages::assignments_page.dart::_CustomScaffold" {
 }
 
 "learning_hub::pages::assignments_page.dart::_CustomScaffold" o-- "learning_hub::objects::customUser.dart::CustomUser"
-"flutter::src::widgets::framework.dart::StatefulWidget" <|-- "learning_hub::pages::assignments_page.dart::_CustomScaffold"
-
-class "learning_hub::pages::assignments_page.dart::_CustomScaffoldState" {
-  +Widget build()
-}
-
-"flutter::src::widgets::framework.dart::State<T>" <|-- "learning_hub::pages::assignments_page.dart::_CustomScaffoldState"
 
 class "learning_hub::pages::assignment_page.dart::AssignmentPage" {
   +GoogleSignInAccount account
@@ -458,16 +311,8 @@ class "learning_hub::pages::assignment_page.dart::AssignmentPage" {
   +AssignmentPageState createState()
 }
 
-"learning_hub::pages::assignment_page.dart::AssignmentPage" o-- "google_sign_in::google_sign_in.dart::GoogleSignInAccount"
 "learning_hub::pages::assignment_page.dart::AssignmentPage" o-- "learning_hub::objects::assignment.dart::Assignment"
 "learning_hub::pages::assignment_page.dart::AssignmentPage" o-- "learning_hub::objects::customUser.dart::CustomUser"
-"flutter::src::widgets::framework.dart::StatefulWidget" <|-- "learning_hub::pages::assignment_page.dart::AssignmentPage"
-
-class "learning_hub::pages::assignment_page.dart::AssignmentPageState" {
-  +Widget build()
-}
-
-"flutter::src::widgets::framework.dart::State<T>" <|-- "learning_hub::pages::assignment_page.dart::AssignmentPageState"
 
 class "learning_hub::pages::assignment_page.dart::_CustomScaffold" {
   +dynamic name
@@ -478,13 +323,6 @@ class "learning_hub::pages::assignment_page.dart::_CustomScaffold" {
 
 "learning_hub::pages::assignment_page.dart::_CustomScaffold" o-- "learning_hub::objects::customUser.dart::CustomUser"
 "learning_hub::pages::assignment_page.dart::_CustomScaffold" o-- "learning_hub::objects::assignment.dart::Assignment"
-"flutter::src::widgets::framework.dart::StatefulWidget" <|-- "learning_hub::pages::assignment_page.dart::_CustomScaffold"
-
-class "learning_hub::pages::assignment_page.dart::_CustomScaffoldState" {
-  +Widget build()
-}
-
-"flutter::src::widgets::framework.dart::State<T>" <|-- "learning_hub::pages::assignment_page.dart::_CustomScaffoldState"
 
 class "learning_hub::pages::courses_page.dart::CoursesPage" {
   +GoogleSignInAccount account
@@ -493,15 +331,7 @@ class "learning_hub::pages::courses_page.dart::CoursesPage" {
   +CoursesPageState createState()
 }
 
-"learning_hub::pages::courses_page.dart::CoursesPage" o-- "google_sign_in::google_sign_in.dart::GoogleSignInAccount"
 "learning_hub::pages::courses_page.dart::CoursesPage" o-- "learning_hub::objects::customUser.dart::CustomUser"
-"flutter::src::widgets::framework.dart::StatefulWidget" <|-- "learning_hub::pages::courses_page.dart::CoursesPage"
-
-class "learning_hub::pages::courses_page.dart::CoursesPageState" {
-  +Widget build()
-}
-
-"flutter::src::widgets::framework.dart::State<T>" <|-- "learning_hub::pages::courses_page.dart::CoursesPageState"
 
 class "learning_hub::pages::courses_page.dart::_CustomScaffold" {
   +dynamic name
@@ -510,13 +340,6 @@ class "learning_hub::pages::courses_page.dart::_CustomScaffold" {
 }
 
 "learning_hub::pages::courses_page.dart::_CustomScaffold" o-- "learning_hub::objects::customUser.dart::CustomUser"
-"flutter::src::widgets::framework.dart::StatefulWidget" <|-- "learning_hub::pages::courses_page.dart::_CustomScaffold"
-
-class "learning_hub::pages::courses_page.dart::_CustomScaffoldState" {
-  +Widget build()
-}
-
-"flutter::src::widgets::framework.dart::State<T>" <|-- "learning_hub::pages::courses_page.dart::_CustomScaffoldState"
 
 class "learning_hub::pages::dashboard_web_view.dart::DashboardWebView" {
   +CustomUser user
@@ -526,13 +349,6 @@ class "learning_hub::pages::dashboard_web_view.dart::DashboardWebView" {
 }
 
 "learning_hub::pages::dashboard_web_view.dart::DashboardWebView" o-- "learning_hub::objects::customUser.dart::CustomUser"
-"flutter::src::widgets::framework.dart::StatefulWidget" <|-- "learning_hub::pages::dashboard_web_view.dart::DashboardWebView"
-
-class "learning_hub::pages::dashboard_web_view.dart::DashboardWebViewState" {
-  +Widget build()
-}
-
-"flutter::src::widgets::framework.dart::State<T>" <|-- "learning_hub::pages::dashboard_web_view.dart::DashboardWebViewState"
 
 class "learning_hub::pages::dashboard_web_view.dart::_CustomBody" {
   +dynamic url
@@ -542,14 +358,11 @@ class "learning_hub::pages::dashboard_web_view.dart::_CustomBody" {
 }
 
 "learning_hub::pages::dashboard_web_view.dart::_CustomBody" o-- "learning_hub::objects::customUser.dart::CustomUser"
-"flutter::src::widgets::framework.dart::StatefulWidget" <|-- "learning_hub::pages::dashboard_web_view.dart::_CustomBody"
 
 class "learning_hub::pages::dashboard_web_view.dart::_CustomBodyState" {
   +Widget build()
   {static} -void _pushTimetablePage()
 }
-
-"flutter::src::widgets::framework.dart::State<T>" <|-- "learning_hub::pages::dashboard_web_view.dart::_CustomBodyState"
 
 class "learning_hub::pages::portal_web_view.dart::PortalWebView" {
   +CustomUser user
@@ -558,13 +371,6 @@ class "learning_hub::pages::portal_web_view.dart::PortalWebView" {
 }
 
 "learning_hub::pages::portal_web_view.dart::PortalWebView" o-- "learning_hub::objects::customUser.dart::CustomUser"
-"flutter::src::widgets::framework.dart::StatefulWidget" <|-- "learning_hub::pages::portal_web_view.dart::PortalWebView"
-
-class "learning_hub::pages::portal_web_view.dart::PortalWebViewState" {
-  +Widget build()
-}
-
-"flutter::src::widgets::framework.dart::State<T>" <|-- "learning_hub::pages::portal_web_view.dart::PortalWebViewState"
 
 class "learning_hub::pages::portal_web_view.dart::_CustomBody" {
   +dynamic url
@@ -573,14 +379,11 @@ class "learning_hub::pages::portal_web_view.dart::_CustomBody" {
 }
 
 "learning_hub::pages::portal_web_view.dart::_CustomBody" o-- "learning_hub::objects::customUser.dart::CustomUser"
-"flutter::src::widgets::framework.dart::StatefulWidget" <|-- "learning_hub::pages::portal_web_view.dart::_CustomBody"
 
 class "learning_hub::pages::portal_web_view.dart::_CustomBodyState" {
   +Widget build()
   {static} -void _pushTannoyPage()
 }
-
-"flutter::src::widgets::framework.dart::State<T>" <|-- "learning_hub::pages::portal_web_view.dart::_CustomBodyState"
 
 class "learning_hub::pages::tannoy_page.dart::TannoyPage" {
   +dynamic name
@@ -589,13 +392,6 @@ class "learning_hub::pages::tannoy_page.dart::TannoyPage" {
 }
 
 "learning_hub::pages::tannoy_page.dart::TannoyPage" o-- "learning_hub::objects::customUser.dart::CustomUser"
-"flutter::src::widgets::framework.dart::StatefulWidget" <|-- "learning_hub::pages::tannoy_page.dart::TannoyPage"
-
-class "learning_hub::pages::tannoy_page.dart::TannoyPageState" {
-  +Widget build()
-}
-
-"flutter::src::widgets::framework.dart::State<T>" <|-- "learning_hub::pages::tannoy_page.dart::TannoyPageState"
 
 class "learning_hub::pages::tannoy_page.dart::_CustomScaffold" {
   +CustomUser user
@@ -604,13 +400,11 @@ class "learning_hub::pages::tannoy_page.dart::_CustomScaffold" {
 }
 
 "learning_hub::pages::tannoy_page.dart::_CustomScaffold" o-- "learning_hub::objects::customUser.dart::CustomUser"
-"flutter::src::widgets::framework.dart::StatefulWidget" <|-- "learning_hub::pages::tannoy_page.dart::_CustomScaffold"
 
 class "learning_hub::pages::tannoy_page.dart::_CustomScaffoldState" {
   +Widget build()
+  {static} -void _pushTannoyPage()
 }
-
-"flutter::src::widgets::framework.dart::State<T>" <|-- "learning_hub::pages::tannoy_page.dart::_CustomScaffoldState"
 
 class "learning_hub::pages::timetable_page.dart::TimetablePage" {
   +dynamic name
@@ -619,13 +413,6 @@ class "learning_hub::pages::timetable_page.dart::TimetablePage" {
 }
 
 "learning_hub::pages::timetable_page.dart::TimetablePage" o-- "learning_hub::objects::customUser.dart::CustomUser"
-"flutter::src::widgets::framework.dart::StatefulWidget" <|-- "learning_hub::pages::timetable_page.dart::TimetablePage"
-
-class "learning_hub::pages::timetable_page.dart::TimetablePageState" {
-  +Widget build()
-}
-
-"flutter::src::widgets::framework.dart::State<T>" <|-- "learning_hub::pages::timetable_page.dart::TimetablePageState"
 
 class "learning_hub::pages::timetable_page.dart::_CustomScaffold" {
   +CustomUser user
@@ -634,13 +421,6 @@ class "learning_hub::pages::timetable_page.dart::_CustomScaffold" {
 }
 
 "learning_hub::pages::timetable_page.dart::_CustomScaffold" o-- "learning_hub::objects::customUser.dart::CustomUser"
-"flutter::src::widgets::framework.dart::StatefulWidget" <|-- "learning_hub::pages::timetable_page.dart::_CustomScaffold"
-
-class "learning_hub::pages::timetable_page.dart::_CustomScaffoldState" {
-  +Widget build()
-}
-
-"flutter::src::widgets::framework.dart::State<T>" <|-- "learning_hub::pages::timetable_page.dart::_CustomScaffoldState"
 
 class "learning_hub::pages::timetable_page.dart::_MainPage" {
   +CustomUser user
@@ -651,15 +431,11 @@ class "learning_hub::pages::timetable_page.dart::_MainPage" {
 }
 
 "learning_hub::pages::timetable_page.dart::_MainPage" o-- "learning_hub::objects::customUser.dart::CustomUser"
-"flutter::src::widgets::framework.dart::StatefulWidget" <|-- "learning_hub::pages::timetable_page.dart::_MainPage"
 
 class "learning_hub::pages::timetable_page.dart::_MainPageState" {
   +DateTime time
   +dynamic week
   +Widget build()
 }
-
-"flutter::src::widgets::framework.dart::State<T>" <|-- "learning_hub::pages::timetable_page.dart::_MainPageState"
-
 
 @enduml
