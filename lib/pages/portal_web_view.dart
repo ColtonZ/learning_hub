@@ -45,7 +45,7 @@ class _CustomBodyState extends State<_CustomBody> {
     CustomUser user = widget.user;
     return new InAppWebView(
       //load the webview according to the specific page which was passed
-      initialUrl: "https://pupils.stpaulsschool.org.uk$url",
+      initialUrl: url,
       //when loading begins, show a loading box to the user
       onLoadStart: (InAppWebViewController controller, String url) async {
         showDialog(
@@ -67,17 +67,23 @@ class _CustomBodyState extends State<_CustomBody> {
         //https://medium.com/flutter/the-power-of-webviews-in-flutter-a56234b57df2
         //https://medium.com/flutter-community/inappwebview-the-real-power-of-webviews-in-flutter-c6d52374209d
         //when loading is complete, pop the loading box currently visible
-        Navigator.of(context).pop();
-
         String currentPage = await controller.getUrl();
         //automatically fill the username box of the page
-        if (currentPage.startsWith("https://isams.stpaulsschool.org.uk/auth")) {
+        if (currentPage.startsWith("https://accounts.google.com")) {
           await controller.evaluateJavascript(
               source:
-                  "document.getElementById('login-username').value = \"${user.firebaseUser.email.replaceAll("@stpaulsschool.org.uk", "")}\"");
+                  "document.getElementById('identifierId').value = \"${user.firebaseUser.email}\"");
         }
-        //checks if the url ends with the same url that was passed (i.e. we are not on the login page)
-        if (currentPage.contains("/api/information/bulletin/")) {
+        if (Navigator.of(context).canPop()) {
+          Navigator.of(context).pop();
+        }
+
+        //checks if the url starts with the same url that was passed (i.e. we are not on the login page)
+        if (currentPage.startsWith(
+            "https://sites.google.com/stpaulsschool.org.uk/sps-co-curricular-hub")) {
+          if (Navigator.of(context).canPop()) {
+            Navigator.of(context).pop();
+          }
           //shows a dialog box saying that the tannoy notices are being loaded
           showDialog(
               context: context,
@@ -85,7 +91,7 @@ class _CustomBodyState extends State<_CustomBody> {
                 return WillPopScope(
                     child: AlertDialog(
                       content: Text(
-                        "Today's tannoy notices are being fetched from ISAMS, please wait.\n\nDo not close this page.",
+                        "Today's tannoy notices are being fetched from the Co-Curricular Hub, please wait.\n\nDo not close this page.",
                         style: header3Style,
                         textAlign: TextAlign.center,
                       ),
@@ -93,13 +99,18 @@ class _CustomBodyState extends State<_CustomBody> {
                     onWillPop: () async => false);
               });
           //evaluates the JavaScript, which gets a list of tannoy notices as a string, with each notice split by :-:, having been scraped from the page's html.
-          String tannoyText = await controller.evaluateJavascript(
-              source:
-                  "output = \"\"; var list = document.getElementsByTagName(\"td\");for(var i = 4; i<list.length; i++){if(i%4!=3){output += list[i].textContent;output+=\":-:\"}}");
-          //this adds the tannoy notices to the Firestore database, before popping the loading message and pushing the tannoy page again
-          addTannoy(user.firebaseUser, tannoyText).then((_) {
-            Navigator.of(context).canPop();
-            _pushTannoyPage(context, user);
+          controller
+              .evaluateJavascript(
+                  source:
+                      "output = \"\"; var list = document.getElementsByClassName(\"CDt4Ke zfr3Q\");for(var i = 4; i<list.length - 9; i++)if(list[i].textContent.replaceAll(\" \",\"\").length!=0){output += list[i].textContent;output+=list[i].children[0].children[0];output+=\":-:\"}output;")
+              .then((tannoyText) {
+            //this adds the tannoy notices to the Firestore database, before popping the loading message and pushing the tannoy page again
+            addTannoy(user.firebaseUser, tannoyText).then((_) {
+              if (Navigator.of(context).canPop()) {
+                Navigator.of(context).pop();
+              }
+              _pushTannoyPage(context, user);
+            });
           });
         }
       },

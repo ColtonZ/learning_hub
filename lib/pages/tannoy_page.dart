@@ -88,8 +88,9 @@ class _CustomScaffoldState extends State<_CustomScaffold> {
                   //https://stackoverflow.com/questions/54691767/navigation-inside-nested-future
                   return PortalWebView(
                     user: user,
-                    //this url is the page on the site https://pupils.stpaulsschool.org.uk to access
-                    url: "/api/information/bulletin/?",
+                    //this url is the page on the co-curricular hub to access
+                    url:
+                        "https://sites.google.com/stpaulsschool.org.uk/sps-co-curricular-hub",
                   );
                 } else {
                   //otherwise build the page
@@ -122,7 +123,7 @@ class _CustomScaffoldState extends State<_CustomScaffold> {
                                       padding:
                                           EdgeInsets.fromLTRB(15, 0, 15, 0),
                                       child: Text(
-                                        "You have no tannoy notices available to view at this time.\n\nSwipe down to refresh.",
+                                        "You have no tannoy notices from today available to view at this time.\n\nSwipe down to refresh.",
                                         style: header3Style,
                                         textAlign: TextAlign.center,
                                       ),

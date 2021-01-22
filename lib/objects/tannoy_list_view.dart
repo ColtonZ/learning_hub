@@ -1,4 +1,6 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_linkify/flutter_linkify.dart';
+import 'package:url_launcher/url_launcher.dart';
 
 import '../theming.dart';
 import 'notice.dart';
@@ -50,22 +52,19 @@ class _CustomListRowState extends State<_CustomListRow> {
     Notice notice = widget.notice;
     return ListTile(
       isThreeLine: true,
-      //return the notice's title & authour over two rows
-      title: Column(crossAxisAlignment: CrossAxisAlignment.start,
-        children: [
+      //return the notice's title
+      title: Column(crossAxisAlignment: CrossAxisAlignment.start, children: [
         Text(
           "${notice.title}",
           style: subtitleStyle,
         ),
-        Text(
-          "${notice.author}",
-          style: header4Style,
-        ),
       ]),
       //show the notice's body
-      subtitle: Text(
-        "${notice.body.replaceAll("\n", "")}",
-        style: header3Style,textAlign: TextAlign.justify,
+      subtitle: Linkify(
+        text: notice.body,
+        onOpen: (link) => launch(link.url),
+        style: header3Style,
+        //textAlign: TextAlign.justify,
       ),
     );
   }

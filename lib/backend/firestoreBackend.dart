@@ -3,6 +3,7 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'dart:core';
 
 import 'package:firebase_auth/firebase_auth.dart';
+import 'package:learning_hub/constants.dart';
 import 'package:learning_hub/objects/event.dart';
 import 'package:learning_hub/objects/assignment.dart';
 import '../objects/notice.dart';
@@ -657,10 +658,7 @@ Future<bool> addTannoy(User user, String tannoyText) async {
         .set({
       "modified": DateTime.now(),
       //replace extra tabs or 4 spaces from the tannoy text - these are a side effect of the web scraping
-      "notices": tannoyText
-          .substring(0, tannoyText.length - 3)
-          .replaceAll("\t", "")
-          .replaceAll("    ", "")
+      "notices": tannoyText.substring(0, tannoyText.length - 3)
     });
   } else {
     //create a new tannoy doc for that user, with the new time & new data
@@ -671,10 +669,7 @@ Future<bool> addTannoy(User user, String tannoyText) async {
         .add({
       "modified": DateTime.now(),
       //replace extra tabs or 4 spaces from the tannoy text - these are a side effect of the web scraping
-      "notices": tannoyText
-          .substring(0, tannoyText.length - 3)
-          .replaceAll("\t", "")
-          .replaceAll("    ", "")
+      "notices": tannoyText.substring(0, tannoyText.length - 3)
     });
   }
   //check if the tannoy data is empty, and return true or false accordingly
@@ -753,12 +748,31 @@ Future<List<Notice>> getNotices(User user) async {
 //split the tannoy data at ":-:", the placeholder between data items
   List<String> rawDetails = currentTannoy["notices"].toString().split(":-:");
 
-//loop through each tannoy notice & its three seperate parts. For each notice, create a notice object with the details given by the three parts
-  for (int i = 0; i < rawDetails.length; i += 3) {
-    notices.add(new Notice(
-        title: rawDetails[i],
-        author: rawDetails[i + 1],
-        body: rawDetails[i + 2]));
+//ensures that the notices being fetched are from today
+  if (!rawDetails[0].startsWith(days[DateTime.now().weekday - 1])) {
+    return null;
+  }
+
+//loop through each tannoy notice & its two seperate parts. For each notice, create a notice object with the details given by the two parts
+  for (int i = 1; i < rawDetails.length; i++) {
+    String title = rawDetails[i].replaceAll("[object HTMLElement]", "");
+    if (i < rawDetails.length -1) {
+      String body = "";
+      int j = i + 1;
+      while (j < rawDetails.length &&
+          !rawDetails[j].endsWith("[object HTMLElement]")) {
+        body += "${rawDetails[j]}\n";
+        j++;
+        i++;
+      }
+      if (body.endsWith("\n")) {
+        body = body.substring(0, body.length - 1);
+      }
+      if (body.endsWith("undefined")) {
+        body = body.substring(0, body.length - 9);
+      }
+      notices.add(new Notice(title: title, body: body));
+    }
   }
   return notices;
 }
