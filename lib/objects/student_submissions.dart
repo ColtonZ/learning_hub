@@ -45,7 +45,9 @@ class StudentSubmissionsState extends State<StudentSubmissions> {
                       alignment: Alignment.centerRight,
                       child: Text(
                         assignment.state == "RETURNED"
-                            ? "Grade: ${assignment.grade}/${assignment.points}"
+                            ? assignment.grade != null
+                                ? "Grade: ${assignment.grade}/${assignment.points}"
+                                : "Returned"
                             : assignment.state == "TURNED_IN"
                                 ? "Turned In${assignment.isLate != null ? " Late" : ""}"
                                 : assignment.isLate != null
@@ -142,7 +144,9 @@ class StudentSubmissionsState extends State<StudentSubmissions> {
                       alignment: Alignment.centerRight,
                       child: Text(
                         assignment.state == "RETURNED"
-                            ? "Grade: ${assignment.grade}/${assignment.points}"
+                            ? assignment.grade != null
+                                ? "Grade: ${assignment.grade}/${assignment.points}"
+                                : "Returned"
                             : assignment.state == "TURNED_IN"
                                 ? "Turned In${assignment.isLate != null ? " Late" : ""}"
                                 : assignment.isLate != null
@@ -236,7 +240,9 @@ class StudentSubmissionsState extends State<StudentSubmissions> {
                       alignment: Alignment.centerRight,
                       child: Text(
                         assignment.state == "RETURNED"
-                            ? "Grade: ${assignment.grade}/${assignment.points}"
+                            ? assignment.grade != null
+                                ? "Grade: ${assignment.grade}/${assignment.points}"
+                                : "Returned"
                             : assignment.state == "TURNED_IN"
                                 ? "Turned In${assignment.isLate != null ? " Late" : ""}"
                                 : assignment.isLate != null

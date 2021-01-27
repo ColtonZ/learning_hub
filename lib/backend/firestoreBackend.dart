@@ -756,7 +756,7 @@ Future<List<Notice>> getNotices(User user) async {
 //loop through each tannoy notice & its two seperate parts. For each notice, create a notice object with the details given by the two parts
   for (int i = 1; i < rawDetails.length; i++) {
     String title = rawDetails[i].replaceAll("[object HTMLElement]", "");
-    if (i < rawDetails.length -1) {
+    if (i < rawDetails.length - 1) {
       String body = "";
       int j = i + 1;
       while (j < rawDetails.length &&
