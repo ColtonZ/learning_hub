@@ -195,17 +195,19 @@ class _CustomScaffoldState extends State<_CustomScaffold> {
                 indent: 15,
                 endIndent: 15,
               ),
-
               //Returns a list. The first object is is the task's description (if there is one), and the rest of the objects are any attachments that are attached to the task
               Flexible(
                 fit: FlexFit.loose,
                 child: Stack(
                   children: [
-                    AttachmentsListView(
-                        description: assignment.description != null
-                            ? assignment.description
-                            : "This task has no description.",
-                        attachments: assignment.attachments),
+                    Padding(
+                      padding: EdgeInsets.fromLTRB(0, 0, 0, 75),
+                      child: AttachmentsListView(
+                          description: assignment.description != null
+                              ? assignment.description
+                              : "This task has no description.",
+                          attachments: assignment.attachments),
+                    ),
                     //returns a panel which allows the user to slide up and view their attached work
                     //from https://pub.dev/packages/sliding_up_panel
                     SlidingUpPanel(

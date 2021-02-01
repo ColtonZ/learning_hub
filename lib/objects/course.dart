@@ -1,4 +1,4 @@
-class Course {
+class Course implements Comparable<Course> {
   final String name;
   final String description;
   final String platform;
@@ -19,5 +19,10 @@ class Course {
           : json["descriptionHeading"],
       status: json["courseState"],
     );
+  }
+
+//defines how to compare to events to each other (for sorting a list of events)
+  int compareTo(Course other) {
+    return name.compareTo(other.name);
   }
 }

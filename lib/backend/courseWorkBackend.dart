@@ -35,6 +35,9 @@ Future<List<Course>> getCourses(CustomUser user) async {
     }
   });
 
+//sort the courses, as specified in the events class
+  courseList.sort((a, b) => a.compareTo(b));
+
   return courseList;
 }
 

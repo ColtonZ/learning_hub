@@ -58,24 +58,35 @@ class _FirstTileState extends State<_FirstTile> {
     bool attachments = widget.attachments;
     return ListTile(
       title: Column(
+        mainAxisSize: MainAxisSize.min,
+        mainAxisAlignment: MainAxisAlignment.start,
         children: [
-          Text(
-            description,
-          ),
+          if (description != "")
+            Row(children: [
+              Text(
+                description,
+              ),
+            ]),
           Container(
             height: attachments ? 15 : 0,
           ),
+          if (description != "" && attachments) Divider(),
+          if (description != "" && attachments)
+            Container(
+              height: attachments ? 15 : 0,
+            ),
           //returns a header for attachments if there are any - no header otherwise
-          attachments
-              ? Row(children: [
-                  Flexible(
-                      fit: FlexFit.loose,
-                      child: Text(
-                        "Attachments:",
-                        style: subtitleStyle,
-                      ))
-                ])
-              : Text(""),
+          if (attachments)
+            Row(children: [
+              Text(
+                "Attachments:",
+                style: subtitleStyle,
+              )
+            ]),
+          if (attachments)
+            Container(
+              height: attachments ? 15 : 0,
+            ),
         ],
       ),
     );

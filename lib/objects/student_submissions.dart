@@ -38,10 +38,16 @@ class StudentSubmissionsState extends State<StudentSubmissions> {
                 Row(
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   children: [
-                    Container(width: 100),
-                    Icon(Icons.expand_more),
+                    Container(width: 125),
+                    Column(children: [
+                      Icon(Icons.expand_more),
+                      Text(
+                        "Your work",
+                        style: header3Style,
+                      ),
+                    ]),
                     Container(
-                      width: 100,
+                      width: 125,
                       alignment: Alignment.centerRight,
                       child: Text(
                         assignment.state == "RETURNED"
@@ -63,10 +69,6 @@ class StudentSubmissionsState extends State<StudentSubmissions> {
                       ),
                     ),
                   ],
-                ),
-                Text(
-                  "Your work",
-                  style: header3Style,
                 ),
                 if (assignment.state != "TURNED_IN" &&
                     assignment.state != "RETURNED")
@@ -137,10 +139,16 @@ class StudentSubmissionsState extends State<StudentSubmissions> {
                 Row(
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   children: [
-                    Container(width: 100),
-                    Icon(Icons.expand_more),
+                    Container(width: 125),
+                    Column(children: [
+                      Icon(Icons.expand_more),
+                      Text(
+                        "Your work",
+                        style: header3Style,
+                      ),
+                    ]),
                     Container(
-                      width: 100,
+                      width: 125,
                       alignment: Alignment.centerRight,
                       child: Text(
                         assignment.state == "RETURNED"
@@ -163,10 +171,9 @@ class StudentSubmissionsState extends State<StudentSubmissions> {
                     ),
                   ],
                 ),
-                Text(
-                  "Your work",
-                  style: header3Style,
-                ),
+                if (assignment.state != "TURNED_IN" &&
+                    assignment.state != "RETURNED")
+                  Divider(),
                 if (assignment.state != "TURNED_IN" &&
                     assignment.state != "RETURNED")
                   Container(height: 15),
@@ -182,16 +189,15 @@ class StudentSubmissionsState extends State<StudentSubmissions> {
                     assignment.state != "RETURNED")
                   Divider(),
                 //show the user's response
-                Padding(
-                  padding: EdgeInsets.fromLTRB(5, 0, 0, 0),
-                  child: Text(
-                    assignment.answer != null
-                        ? "Your Response: "
-                        : "You have not submitted this task.",
-                    style: captionStyle,
-                    textScaleFactor: 1.5,
+                if (assignment.answer != null)
+                  Padding(
+                    padding: EdgeInsets.fromLTRB(5, 0, 0, 0),
+                    child: Text(
+                      "Your Response:",
+                      style: captionStyle,
+                      textScaleFactor: 1.5,
+                    ),
                   ),
-                ),
                 if (assignment.answer != null)
                   Padding(
                     padding: EdgeInsets.fromLTRB(0, 5, 0, 0),
@@ -200,9 +206,6 @@ class StudentSubmissionsState extends State<StudentSubmissions> {
                       textScaleFactor: 1.5,
                     ),
                   ),
-                if (assignment.state != "TURNED_IN" &&
-                    assignment.state != "RETURNED")
-                  Divider(),
               ],
             ),
           ),
@@ -233,10 +236,16 @@ class StudentSubmissionsState extends State<StudentSubmissions> {
                 Row(
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   children: [
-                    Container(width: 100),
-                    Icon(Icons.expand_more),
+                    Container(width: 125),
+                    Column(children: [
+                      Icon(Icons.expand_more),
+                      Text(
+                        "Your work",
+                        style: header3Style,
+                      ),
+                    ]),
                     Container(
-                      width: 100,
+                      width: 125,
                       alignment: Alignment.centerRight,
                       child: Text(
                         assignment.state == "RETURNED"
@@ -259,10 +268,9 @@ class StudentSubmissionsState extends State<StudentSubmissions> {
                     ),
                   ],
                 ),
-                Text(
-                  "Your work",
-                  style: header3Style,
-                ),
+                if (assignment.state != "TURNED_IN" &&
+                    assignment.state != "RETURNED")
+                  Divider(),
                 if (assignment.state != "TURNED_IN" &&
                     assignment.state != "RETURNED")
                   Container(height: 25),
