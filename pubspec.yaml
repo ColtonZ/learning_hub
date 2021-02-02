@@ -50,6 +50,7 @@ flutter_icons:
   ios: true
 
 dev_dependencies:
+  test:
   flutter_test:
     sdk: flutter
 
