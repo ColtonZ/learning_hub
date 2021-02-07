@@ -43,7 +43,7 @@ class Event implements Comparable<Event> {
 
 //https://www.woolha.com/tutorials/dart-sorting-list-with-comparator-and-comparable
 
-//defines how to compare to events to each other (for sorting a list of events)
+//defines how to compare events to each other (for sorting a list of events)
   int compareTo(Event other) {
     //if the tasks start at the same time, compare their end times; otherwise return the difference of their times
     if (times[0][1] == other.times[0][1]) {

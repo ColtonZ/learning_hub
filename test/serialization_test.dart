@@ -1,9 +1,10 @@
 import 'package:test/test.dart';
 
+import 'package:firebase_auth/firebase_auth.dart';
+
 import 'package:learning_hub/objects/assignment.dart';
 import 'package:learning_hub/objects/course.dart';
 import 'package:learning_hub/objects/event.dart';
-import 'package:learning_hub/objects/notice.dart';
 import 'package:learning_hub/objects/customUser.dart';
 import 'package:learning_hub/objects/question.dart';
 import 'package:learning_hub/objects/attachment.dart';
@@ -23,6 +24,126 @@ import 'package:learning_hub/objects/attachment.dart';
 //https://developers.google.com/classroom/reference/rest/v1/courses.courseWork/get
 
 void main() {
+  group("Question", () {
+    test("From JSON", () {
+      Map<String, Object> questionJSON = {
+        "choices": ["1", "2"],
+      };
+      Question targetQuestion =
+          new Question(type: "Multiple Choice", options: ["1", "2"]);
+      Question testQuestion = Question.fromJson(questionJSON);
+      identical(targetQuestion, testQuestion);
+    });
+    test("From list", () {
+      List<String> questionList = ["1", "2"];
+
+      Question targetQuestion =
+          new Question(type: "Multiple Choice", options: ["1", "2"]);
+      Question testQuestion = Question.fromList(questionList);
+      identical(targetQuestion, testQuestion);
+    });
+  });
+  group("Attachment", () {
+    test("Student submission file", () {
+      Map<String, Object> attachmentJson = {
+        "driveFile": {
+          "driveFile": {
+            "id": "3297086453",
+            "title": "[Template] Networking Questions.docx",
+            "alternateLink":
+                "https://drive.google.com/open?id=1Qj41Y0YRpo22ssaK_v_jYhHmvkBdmI7Y",
+            "thumbnailUrl":
+                "https://drive.google.com/thumbnail?id=1Qj41Y0YRpo22ssaK_v_jYhHmvkBdmI7Y&sz=s200"
+          }
+        }
+      };
+      Attachment targetAttachment = new Attachment(
+          id: "3297086453",
+          title: "[Template] Networking Questions.docx",
+          link:
+              "https://drive.google.com/open?id=1Qj41Y0YRpo22ssaK_v_jYhHmvkBdmI7Y",
+          thumbnail:
+              "https://drive.google.com/thumbnail?id=1Qj41Y0YRpo22ssaK_v_jYhHmvkBdmI7Y&sz=s200");
+      Attachment testAttachment = Attachment.fromJson(attachmentJson);
+      identical(targetAttachment, testAttachment);
+    });
+    test("Normal file", () {
+      Map<String, Object> attachmentJson = {
+        "driveFile": {
+          "id": "3297086453",
+          "title": "[Template] Networking Questions.docx",
+          "alternateLink":
+              "https://drive.google.com/open?id=1Qj41Y0YRpo22ssaK_v_jYhHmvkBdmI7Y",
+          "thumbnailUrl":
+              "https://drive.google.com/thumbnail?id=1Qj41Y0YRpo22ssaK_v_jYhHmvkBdmI7Y&sz=s200"
+        }
+      };
+      Attachment targetAttachment = new Attachment(
+          id: "3297086453",
+          title: "[Template] Networking Questions.docx",
+          link:
+              "https://drive.google.com/open?id=1Qj41Y0YRpo22ssaK_v_jYhHmvkBdmI7Y",
+          thumbnail:
+              "https://drive.google.com/thumbnail?id=1Qj41Y0YRpo22ssaK_v_jYhHmvkBdmI7Y&sz=s200");
+      Attachment testAttachment = Attachment.fromJson(attachmentJson);
+      identical(targetAttachment, testAttachment);
+    });
+    test("Link", () {
+      Map<String, Object> attachmentJson = {
+        "link": {
+          "title": "Google",
+          "url": "https://google.com",
+          "thumbnailUrl":
+              "https://drive.google.com/thumbnail?id=1Qj41Y0YRpo22ssaK_v_jYhHmvkBdmI7Y&sz=s200"
+        }
+      };
+      Attachment targetAttachment = new Attachment(
+          title: "Google",
+          link: "https://google.com",
+          thumbnail:
+              "https://drive.google.com/thumbnail?id=1Qj41Y0YRpo22ssaK_v_jYhHmvkBdmI7Y&sz=s200");
+      Attachment testAttachment = Attachment.fromJson(attachmentJson);
+      identical(targetAttachment, testAttachment);
+    });
+    test("YouTube", () {
+      Map<String, Object> attachmentJson = {
+        "youtubeVideo": {
+          "id": "38941055478",
+          "title": "How To Build a Flutter App",
+          "alternateLink": "https://www.youtube.com/watch?v=aiTTClKJbnw",
+          "thumbnailUrl":
+              "https://drive.google.com/thumbnail?id=1Qj41Y0YRpo22ssaK_v_jYhHmvkBdmI7Y&sz=s200"
+        }
+      };
+      Attachment targetAttachment = new Attachment(
+          id: "38941055478",
+          title: "How To Build a Flutter App",
+          link: "https://www.youtube.com/watch?v=aiTTClKJbnw",
+          thumbnail:
+              "https://drive.google.com/thumbnail?id=1Qj41Y0YRpo22ssaK_v_jYhHmvkBdmI7Y&sz=s200");
+      Attachment testAttachment = Attachment.fromJson(attachmentJson);
+      identical(targetAttachment, testAttachment);
+    });
+    test("Form", () {
+      Map<String, Object> attachmentJson = {
+        "form": {
+          "formUrl": "https://forms.gle/FbqdP74A7mWZfuc37",
+          "title": "Timings for the BIO",
+          "responseUrl":
+              "https://docs.google.com/forms/d/e/1FAIpQLSesnnVgd9lEuTYIvqEn_Vl-i3jfa4MCP7wdRnizXBiQClQvJw/viewform?usp=pp_url&entry.1310310133=5th&entry.1066283423=No&entry.1225213364=Ability+to+see+Google+Classroom+and+Firefly+tasks&entry.1121847520=Ability+to+see+your+timetable&entry.262606151=Ability+to+see+tannoy+notices&entry.459185044=Ability+to+create+personal+tasks&entry.1505050148=Ability+to+add+events+to+your+timetable&entry.1547443054=Ability+to+configure+notifications+before+each+lesson",
+          "thumbnailUrl":
+              "https://drive.google.com/thumbnail?id=1Qj41Y0YRpo22ssaK_v_jYhHmvkBdmI7Y&sz=s200"
+        }
+      };
+      Attachment targetAttachment = new Attachment(
+          title: "Timings for the BIO",
+          link: "https://forms.gle/FbqdP74A7mWZfuc37",
+          thumbnail:
+              "https://drive.google.com/thumbnail?id=1Qj41Y0YRpo22ssaK_v_jYhHmvkBdmI7Y&sz=s200");
+      Attachment testAttachment = Attachment.fromJson(attachmentJson);
+      identical(targetAttachment, testAttachment);
+    });
+  });
   group('Assignment', () {
     test('Basic assignment without submission', () {
       Map<String, dynamic> assignmentJson = {
@@ -391,5 +512,76 @@ void main() {
 
       identical(testAssignment, targetAssignment);
     });
+    test("Create custom assignment with description & course", () {
+      Assignment testAssignment = Assignment.createCustom(
+          "Assignment Title",
+          "Assignment Description",
+          "Assignment Subject",
+          new DateTime(2020, 2, 14));
+      Assignment targetAssignment = new Assignment(
+          platform: "LH",
+          title: "Assignment Title",
+          description: "Assignment Description",
+          courseName: "Personal Task • Assignment Subject",
+          dueDate: new DateTime(2020, 2, 14),
+          type: "PERSONAL");
+      identical(targetAssignment, testAssignment);
+    });
+    test("Create custom assignment with only title", () {
+      Assignment testAssignment = Assignment.createCustom(
+          "Assignment Title", "", "", new DateTime(2020, 2, 14));
+      Assignment targetAssignment = new Assignment(
+          platform: "LH",
+          title: "Assignment Title",
+          description: null,
+          courseName: "Personal Task",
+          dueDate: new DateTime(2020, 2, 14),
+          type: "PERSONAL");
+      identical(targetAssignment, testAssignment);
+    });
+  });
+  group("Course", () {
+    /*platform: "Google Classroom",
+      id: json["id"],
+      name: json["name"],
+      //if the course has no description, set the course's description to be: "This course has no description" for future use
+      description: json["descriptionHeading"] == null
+          ? "This course has no description"
+          : json["descriptionHeading"],
+      status: json["courseState"],*/
+    test("Course with description", () {
+      Map<String, Object> courseJson = {
+        "id": "2498376001548",
+        "name": "A-Level Computing",
+        "descriptionHeading": "This is the course's description",
+        "courseState": "ACTIVE",
+      };
+      Course targetCourse = new Course(
+          id: "2498376001548",
+          name: "A-Level Computing",
+          description: "This is the course's description",
+          status: "ACTIVE");
+      Course testCourse = Course.fromJson(courseJson);
+      identical(targetCourse, testCourse);
+    });
+    test("Course without description", () {
+      Map<String, Object> courseJson = {
+        "id": "2498376001548",
+        "name": "A-Level Computing",
+        "descriptionHeading": null,
+        "courseState": "ACTIVE",
+      };
+      Course targetCourse = new Course(
+          id: "2498376001548",
+          name: "A-Level Computing",
+          description: "This course has no description.",
+          status: "ACTIVE");
+      Course testCourse = Course.fromJson(courseJson);
+      identical(targetCourse, testCourse);
+    });
+  });
+  group("Event", () {});
+  group("CustomUser", () {
+    test("Create CustomUser", () {});
   });
 }

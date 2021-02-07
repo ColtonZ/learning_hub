@@ -21,7 +21,7 @@ class Course implements Comparable<Course> {
     );
   }
 
-//defines how to compare to events to each other (for sorting a list of events)
+//defines how to compare courses to each other (for sorting a list of courses)
   int compareTo(Course other) {
     return name.compareTo(other.name);
   }
