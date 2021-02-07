@@ -31,6 +31,7 @@ Future<List<Course>> getCourses(CustomUser user) async {
     //parses each json request into a course, and, if they are an active course, adds them to the course list
     Course course = Course.fromJson(details);
     if (course.status == "ACTIVE") {
+      print("${details["name"]} | ${details["id"]}");
       courseList.add(course);
     }
   });
@@ -85,6 +86,8 @@ Future<Assignment> sendAssignmentRequest(String courseId, String courseName,
 
 //create a list of the student submissions (there shoudl be one item - the student's submission)
   var submissions = submissionData["studentSubmissions"] as List;
+
+  print("${assignmentData["title"]} | ${assignmentData["id"]}");
 
   //converts the two json responses (the assignment details and the submission details) into an assignment object and returns it
   Assignment assignment =
