@@ -1,7 +1,8 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:equatable/equatable.dart';
 
 //this is a class for each event
-class Event implements Comparable<Event> {
+class Event extends Equatable implements Comparable<Event> {
   //this just says which variables are needed for each event object
   final String id;
   final String classSet;
@@ -57,5 +58,9 @@ class Event implements Comparable<Event> {
     } else {
       return int.parse(times[0][1]) - int.parse(other.times[0][1]);
     }
+  }
+
+  List<Object> get props {
+    return [id, classSet, location, name, platform, teacher, times];
   }
 }

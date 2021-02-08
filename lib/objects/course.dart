@@ -1,4 +1,6 @@
-class Course implements Comparable<Course> {
+import 'package:equatable/equatable.dart';
+
+class Course extends Equatable implements Comparable<Course> {
   final String name;
   final String description;
   final String platform;
@@ -24,5 +26,9 @@ class Course implements Comparable<Course> {
 //defines how to compare courses to each other (for sorting a list of courses)
   int compareTo(Course other) {
     return name.compareTo(other.name);
+  }
+
+  List<Object> get props {
+    return [name, description, platform, id, status];
   }
 }

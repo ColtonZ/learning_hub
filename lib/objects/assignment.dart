@@ -1,11 +1,12 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 
 import 'dart:core';
+import 'package:equatable/equatable.dart';
 
 import 'attachment.dart';
 import 'question.dart';
 
-class Assignment {
+class Assignment extends Equatable {
   //each assignment can have a lot of properties!
   final String url;
   final String platform;
@@ -272,8 +273,36 @@ class Assignment {
         courseName:
             subject == "" ? "Personal Task" : "Personal Task • $subject",
         dueDate: dueDate,
-        creationTime: DateTime.now(),
-        updateTime: DateTime.now(),
+        creationTime: DateTime(
+            DateTime.now().year, DateTime.now().month, DateTime.now().day),
+        updateTime: DateTime(
+            DateTime.now().year, DateTime.now().month, DateTime.now().day),
         type: "PERSONAL");
+  }
+  List<Object> get props {
+    return [
+      url,
+      platform,
+      courseId,
+      courseName,
+      submissionId,
+      title,
+      description,
+      id,
+      status,
+      type,
+      creationTime,
+      updateTime,
+      creatorId,
+      dueDate,
+      attachments,
+      submissionAttachments,
+      question,
+      points,
+      state,
+      isLate,
+      grade,
+      answer
+    ];
   }
 }

@@ -32,7 +32,7 @@ void main() {
       Question targetQuestion =
           new Question(type: "Multiple Choice", options: ["1", "2"]);
       Question testQuestion = Question.fromJson(questionJSON);
-      identical(targetQuestion, testQuestion);
+      expect(targetQuestion, testQuestion);
     });
     test("From list", () {
       List<String> questionList = ["1", "2"];
@@ -40,7 +40,7 @@ void main() {
       Question targetQuestion =
           new Question(type: "Multiple Choice", options: ["1", "2"]);
       Question testQuestion = Question.fromList(questionList);
-      identical(targetQuestion, testQuestion);
+      expect(targetQuestion, testQuestion);
     });
   });
   group("Attachment", () {
@@ -49,7 +49,7 @@ void main() {
         "driveFile": {
           "driveFile": {
             "id": "3297086453",
-            "title": "[Template] Networking Questions.docx",
+            "title": "Networking Questions.docx",
             "alternateLink":
                 "https://drive.google.com/open?id=1Qj41Y0YRpo22ssaK_v_jYhHmvkBdmI7Y",
             "thumbnailUrl":
@@ -59,13 +59,14 @@ void main() {
       };
       Attachment targetAttachment = new Attachment(
           id: "3297086453",
-          title: "[Template] Networking Questions.docx",
+          title: "Networking Questions.docx",
           link:
               "https://drive.google.com/open?id=1Qj41Y0YRpo22ssaK_v_jYhHmvkBdmI7Y",
           thumbnail:
-              "https://drive.google.com/thumbnail?id=1Qj41Y0YRpo22ssaK_v_jYhHmvkBdmI7Y&sz=s200");
+              "https://drive.google.com/thumbnail?id=1Qj41Y0YRpo22ssaK_v_jYhHmvkBdmI7Y&sz=s200",
+          type: "file");
       Attachment testAttachment = Attachment.fromJson(attachmentJson);
-      identical(targetAttachment, testAttachment);
+      expect(targetAttachment, testAttachment);
     });
     test("Normal file", () {
       Map<String, Object> attachmentJson = {
@@ -84,9 +85,10 @@ void main() {
           link:
               "https://drive.google.com/open?id=1Qj41Y0YRpo22ssaK_v_jYhHmvkBdmI7Y",
           thumbnail:
-              "https://drive.google.com/thumbnail?id=1Qj41Y0YRpo22ssaK_v_jYhHmvkBdmI7Y&sz=s200");
+              "https://drive.google.com/thumbnail?id=1Qj41Y0YRpo22ssaK_v_jYhHmvkBdmI7Y&sz=s200",
+          type: "file");
       Attachment testAttachment = Attachment.fromJson(attachmentJson);
-      identical(targetAttachment, testAttachment);
+      expect(targetAttachment, testAttachment);
     });
     test("Link", () {
       Map<String, Object> attachmentJson = {
@@ -101,9 +103,10 @@ void main() {
           title: "Google",
           link: "https://google.com",
           thumbnail:
-              "https://drive.google.com/thumbnail?id=1Qj41Y0YRpo22ssaK_v_jYhHmvkBdmI7Y&sz=s200");
+              "https://drive.google.com/thumbnail?id=1Qj41Y0YRpo22ssaK_v_jYhHmvkBdmI7Y&sz=s200",
+          type: "link");
       Attachment testAttachment = Attachment.fromJson(attachmentJson);
-      identical(targetAttachment, testAttachment);
+      expect(targetAttachment, testAttachment);
     });
     test("YouTube", () {
       Map<String, Object> attachmentJson = {
@@ -120,9 +123,10 @@ void main() {
           title: "How To Build a Flutter App",
           link: "https://www.youtube.com/watch?v=aiTTClKJbnw",
           thumbnail:
-              "https://drive.google.com/thumbnail?id=1Qj41Y0YRpo22ssaK_v_jYhHmvkBdmI7Y&sz=s200");
+              "https://drive.google.com/thumbnail?id=1Qj41Y0YRpo22ssaK_v_jYhHmvkBdmI7Y&sz=s200",
+          type: "YouTube");
       Attachment testAttachment = Attachment.fromJson(attachmentJson);
-      identical(targetAttachment, testAttachment);
+      expect(targetAttachment, testAttachment);
     });
     test("Form", () {
       Map<String, Object> attachmentJson = {
@@ -139,9 +143,10 @@ void main() {
           title: "Timings for the BIO",
           link: "https://forms.gle/FbqdP74A7mWZfuc37",
           thumbnail:
-              "https://drive.google.com/thumbnail?id=1Qj41Y0YRpo22ssaK_v_jYhHmvkBdmI7Y&sz=s200");
+              "https://drive.google.com/thumbnail?id=1Qj41Y0YRpo22ssaK_v_jYhHmvkBdmI7Y&sz=s200",
+          type: "form");
       Attachment testAttachment = Attachment.fromJson(attachmentJson);
-      identical(targetAttachment, testAttachment);
+      expect(targetAttachment, testAttachment);
     });
   });
   group('Assignment', () {
@@ -156,7 +161,7 @@ void main() {
             "driveFile": {
               "driveFile": {
                 "id": "141iZ4pt87i64FNHnK-3roeS1mvqPcDjy",
-                "title": "[Template] Database Question (U8th).pdf",
+                "title": "Database Question (U8th).pdf",
                 "alternateLink":
                     "https://drive.google.com/open?id=1Qj41Y0YRpo22ssaK_v_jYhHmvkBdmI7Y",
                 "thumbnailUrl":
@@ -191,23 +196,23 @@ void main() {
           courseName: "Course Name",
           url:
               "https://classroom.google.com/c/ODg4NDE2MDUxNTla/a/MjY4MDIyMzE0ODcy/details",
-          state: "MODIFIABLE_UNTIL_TURNED_IN",
           attachments: [
             new Attachment(
                 id: "141iZ4pt87i64FNHnK-3roeS1mvqPcDjy",
-                title: "[Template] Database Question (U8th).pdf",
+                title: "Database Question (U8th).pdf",
                 link:
                     "https://drive.google.com/open?id=1Qj41Y0YRpo22ssaK_v_jYhHmvkBdmI7Y",
                 thumbnail:
                     "https://drive.google.com/thumbnail?id=1Qj41Y0YRpo22ssaK_v_jYhHmvkBdmI7Y&sz=s200",
-                type: "FILE")
+                type: "file")
           ],
+          submissionAttachments: new List<Attachment>(),
           platform: "GC");
 
       final testAssignment = Assignment.fromJson(
           "Course Name", "GC", assignmentJson, submissionJson);
 
-      identical(testAssignment, targetAssignment);
+      expect(testAssignment, targetAssignment);
     });
     test('Basic assignment with submission', () {
       Map<String, dynamic> assignmentJson = {
@@ -220,7 +225,7 @@ void main() {
             "driveFile": {
               "driveFile": {
                 "id": "141iZ4pt87i64FNHnK-3roeS1mvqPcDjy",
-                "title": "[Template] Database Question (U8th).pdf",
+                "title": "Database Question (U8th).pdf",
                 "alternateLink":
                     "https://drive.google.com/open?id=1Qj41Y0YRpo22ssaK_v_jYhHmvkBdmI7Y",
                 "thumbnailUrl":
@@ -247,7 +252,7 @@ void main() {
               "driveFile": {
                 "driveFile": {
                   "id": "141iZ4pt87i64FNHnK-3roeS1mvqPcDjy",
-                  "title": "[Template] Database Question (U8th).pdf",
+                  "title": "Database Question (U8th).pdf",
                   "alternateLink":
                       "https://drive.google.com/open?id=1Qj41Y0YRpo22ssaK_v_jYhHmvkBdmI7Y",
                   "thumbnailUrl":
@@ -272,6 +277,7 @@ void main() {
           title: "Week 3 26/01/2021",
           description: "Database questions.  Please work through and submit.",
           status: "PUBLISHED",
+          state: "TURNED_IN",
           creationTime: new DateTime(2021, 1, 25, 14, 13, 05, 494),
           updateTime: new DateTime(2021, 1, 26, 08, 59, 11, 760),
           type: "ASSIGNMENT",
@@ -279,26 +285,25 @@ void main() {
           courseName: "Course Name",
           url:
               "https://classroom.google.com/c/ODg4NDE2MDUxNTla/a/MjY4MDIyMzE0ODcy/details",
-          state: "MODIFIABLE_UNTIL_TURNED_IN",
           attachments: [
             new Attachment(
                 id: "141iZ4pt87i64FNHnK-3roeS1mvqPcDjy",
-                title: "[Template] Database Question (U8th).pdf",
+                title: "Database Question (U8th).pdf",
                 link:
                     "https://drive.google.com/open?id=1Qj41Y0YRpo22ssaK_v_jYhHmvkBdmI7Y",
                 thumbnail:
                     "https://drive.google.com/thumbnail?id=1Qj41Y0YRpo22ssaK_v_jYhHmvkBdmI7Y&sz=s200",
-                type: "FILE")
+                type: "file")
           ],
           submissionAttachments: [
             new Attachment(
                 id: "141iZ4pt87i64FNHnK-3roeS1mvqPcDjy",
-                title: "[Template] Database Question (U8th).pdf",
+                title: "Database Question (U8th).pdf",
                 link:
                     "https://drive.google.com/open?id=1Qj41Y0YRpo22ssaK_v_jYhHmvkBdmI7Y",
                 thumbnail:
                     "https://drive.google.com/thumbnail?id=1Qj41Y0YRpo22ssaK_v_jYhHmvkBdmI7Y&sz=s200",
-                type: "FILE")
+                type: "file")
           ],
           grade: 20,
           isLate: false,
@@ -308,7 +313,7 @@ void main() {
       final testAssignment = Assignment.fromJson(
           "Course Name", "GC", assignmentJson, submissionJson);
 
-      identical(testAssignment, targetAssignment);
+      expect(testAssignment, targetAssignment);
     });
     test('Multiple choice assignment without submission', () {
       Map<String, dynamic> assignmentJson = {
@@ -349,16 +354,17 @@ void main() {
           courseName: "Course Name",
           url:
               "https://classroom.google.com/c/ODg4NDE2MDUxNTla/mc/MTg1NjQ2NDAwNjYx/details",
-          state: "MODIFIABLE_UNTIL_TURNED_IN",
           question: new Question(
               options: ["I'm here & I'm working on it."],
               type: "Multiple Choice"),
+          attachments: new List<Attachment>(),
+          submissionAttachments: new List<Attachment>(),
           platform: "GC");
 
       final testAssignment = Assignment.fromJson(
           "Course Name", "GC", assignmentJson, submissionJson);
 
-      identical(testAssignment, targetAssignment);
+      expect(testAssignment, targetAssignment);
     });
     test('Multiple choice assignment with submission', () {
       Map<String, dynamic> assignmentJson = {
@@ -405,19 +411,22 @@ void main() {
           courseName: "Course Name",
           url:
               "https://classroom.google.com/c/ODg4NDE2MDUxNTla/mc/MTg1NjQ2NDAwNjYx/details",
-          state: "MODIFIABLE_UNTIL_TURNED_IN",
+          state: "TURNED_IN",
           question: new Question(
               options: ["I'm here & I'm working on it."],
-              type: "MULTIPLE__CHOICE_QUESTION"),
+              type: "Multiple Choice"),
           grade: 10,
           isLate: true,
+          answer: "I'm here & I'm working on it.",
           submissionId: "224376012615",
+          attachments: new List<Attachment>(),
+          submissionAttachments: new List<Attachment>(),
           platform: "GC");
 
       final testAssignment = Assignment.fromJson(
           "Course Name", "GC", assignmentJson, submissionJson);
 
-      identical(testAssignment, targetAssignment);
+      expect(testAssignment, targetAssignment);
     });
     test('Short answer assignment without submission', () {
       Map<String, dynamic> assignmentJson = {
@@ -453,13 +462,14 @@ void main() {
           courseName: "Course Name",
           url:
               "https://classroom.google.com/c/MTU4MTc0OTExNzg2/sa/MjY4NzA0MTAzMTg2/details",
-          state: "MODIFIABLE_UNTIL_TURNED_IN",
+          attachments: new List<Attachment>(),
+          submissionAttachments: new List<Attachment>(),
           platform: "GC");
 
       final testAssignment = Assignment.fromJson(
           "Course Name", "GC", assignmentJson, submissionJson);
 
-      identical(testAssignment, targetAssignment);
+      expect(testAssignment, targetAssignment);
     });
     test('Short answer assignment with submission', () {
       Map<String, dynamic> assignmentJson = {
@@ -501,16 +511,19 @@ void main() {
           courseName: "Course Name",
           url:
               "https://classroom.google.com/c/MTU4MTc0OTExNzg2/sa/MjY4NzA0MTAzMTg2/details",
-          state: "MODIFIABLE_UNTIL_TURNED_IN",
+          state: "TURNED_IN",
           grade: 53,
           isLate: false,
           submissionId: "224376012615",
+          attachments: new List<Attachment>(),
+          submissionAttachments: new List<Attachment>(),
+          answer: "53",
           platform: "GC");
 
       final testAssignment = Assignment.fromJson(
           "Course Name", "GC", assignmentJson, submissionJson);
 
-      identical(testAssignment, targetAssignment);
+      expect(testAssignment, targetAssignment);
     });
     test("Create custom assignment with description & course", () {
       Assignment testAssignment = Assignment.createCustom(
@@ -524,8 +537,12 @@ void main() {
           description: "Assignment Description",
           courseName: "Personal Task • Assignment Subject",
           dueDate: new DateTime(2020, 2, 14),
+          creationTime: DateTime(
+              DateTime.now().year, DateTime.now().month, DateTime.now().day),
+          updateTime: DateTime(
+              DateTime.now().year, DateTime.now().month, DateTime.now().day),
           type: "PERSONAL");
-      identical(targetAssignment, testAssignment);
+      expect(targetAssignment, testAssignment);
     });
     test("Create custom assignment with only title", () {
       Assignment testAssignment = Assignment.createCustom(
@@ -533,11 +550,14 @@ void main() {
       Assignment targetAssignment = new Assignment(
           platform: "LH",
           title: "Assignment Title",
-          description: null,
           courseName: "Personal Task",
           dueDate: new DateTime(2020, 2, 14),
+          creationTime: DateTime(
+              DateTime.now().year, DateTime.now().month, DateTime.now().day),
+          updateTime: DateTime(
+              DateTime.now().year, DateTime.now().month, DateTime.now().day),
           type: "PERSONAL");
-      identical(targetAssignment, testAssignment);
+      expect(targetAssignment, testAssignment);
     });
   });
   group("Course", () {
@@ -558,11 +578,12 @@ void main() {
       };
       Course targetCourse = new Course(
           id: "2498376001548",
+          platform: "Google Classroom",
           name: "A-Level Computing",
           description: "This is the course's description",
           status: "ACTIVE");
       Course testCourse = Course.fromJson(courseJson);
-      identical(targetCourse, testCourse);
+      expect(targetCourse, testCourse);
     });
     test("Course without description", () {
       Map<String, Object> courseJson = {
@@ -573,11 +594,12 @@ void main() {
       };
       Course targetCourse = new Course(
           id: "2498376001548",
+          platform: "Google Classroom",
           name: "A-Level Computing",
-          description: "This course has no description.",
+          description: "This course has no description",
           status: "ACTIVE");
       Course testCourse = Course.fromJson(courseJson);
-      identical(targetCourse, testCourse);
+      expect(targetCourse, testCourse);
     });
   });
   group("Event", () {});

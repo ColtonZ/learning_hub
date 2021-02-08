@@ -1,6 +1,7 @@
-//this is a question class for if a question is part of an assignment
+import 'package:equatable/equatable.dart';
 
-class Question {
+//this is a question class for if a question is part of an assignment
+class Question extends Equatable {
   final String type;
   final List<String> options;
 
@@ -25,5 +26,9 @@ class Question {
       type: "Multiple Choice",
       options: list,
     );
+  }
+
+  List<Object> get props {
+    return [type, options];
   }
 }

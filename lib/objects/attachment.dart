@@ -1,6 +1,7 @@
 import 'dart:core';
+import 'package:equatable/equatable.dart';
 
-class Attachment {
+class Attachment extends Equatable {
   final String title;
   final String link;
   final String id;
@@ -71,5 +72,9 @@ class Attachment {
       thumbnail: list[3] == "null" ? null : list[3],
       type: list[4] == "null" ? null : list[4],
     );
+  }
+
+  List<Object> get props {
+    return [title, link, id, thumbnail, type];
   }
 }
