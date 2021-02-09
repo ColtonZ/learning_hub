@@ -33,11 +33,11 @@ class Event extends Equatable implements Comparable<Event> {
     return Event(
       //return the event's subject, room, teacher and time, having taken in the event details as a comma separated list
       id: document.id,
-      classSet: document["classSet"],
-      location: document["location"],
-      name: document["name"],
-      platform: document["platform"],
-      teacher: document["teacher"],
+      classSet: documentMap["classSet"],
+      location: documentMap["location"],
+      name: documentMap["name"],
+      platform: documentMap["platform"],
+      teacher: documentMap["teacher"],
       times: t,
     );
   }

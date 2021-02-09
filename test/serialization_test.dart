@@ -1,27 +1,11 @@
 import 'package:test/test.dart';
 
-import 'package:firebase_auth/firebase_auth.dart';
-
 import 'package:learning_hub/objects/assignment.dart';
 import 'package:learning_hub/objects/course.dart';
-import 'package:learning_hub/objects/event.dart';
-import 'package:learning_hub/objects/customUser.dart';
 import 'package:learning_hub/objects/question.dart';
 import 'package:learning_hub/objects/attachment.dart';
-
-/*  String courseName,
-      String platform,
-      Map<String, dynamic> assignmentJson,
-      Map<String, dynamic> submissionJson*/
-
-//Submission response:
-//https://classroom.googleapis.com//v1/courses/$courseId/courseWork/$assignmentId/studentSubmissions?fields=studentSubmissions(assignmentSubmission,assignedGrade,late,state,id,shortAnswerSubmission,multipleChoiceSubmission)
-
-//Assignment response:
-//https://classroom.googleapis.com//v1/courses/$courseId/courseWork/$assignmentId
-
-//For testing:
-//https://developers.google.com/classroom/reference/rest/v1/courses.courseWork/get
+import 'package:learning_hub/objects/event.dart';
+import 'mock_classes.dart';
 
 void main() {
   group("Question", () {
@@ -561,14 +545,6 @@ void main() {
     });
   });
   group("Course", () {
-    /*platform: "Google Classroom",
-      id: json["id"],
-      name: json["name"],
-      //if the course has no description, set the course's description to be: "This course has no description" for future use
-      description: json["descriptionHeading"] == null
-          ? "This course has no description"
-          : json["descriptionHeading"],
-      status: json["courseState"],*/
     test("Course with description", () {
       Map<String, Object> courseJson = {
         "id": "2498376001548",
@@ -602,8 +578,29 @@ void main() {
       expect(targetCourse, testCourse);
     });
   });
-  group("Event", () {});
-  group("CustomUser", () {
-    test("Create CustomUser", () {});
+  group("Event", () {
+    test("Event from Firestore document", () {
+      MockDocumentSnapshot mockDocument = new MockDocumentSnapshot(mockData: {
+        "classSet": "UFM.5",
+        "location": "SPS Room 228",
+        "name": "Mathematics (Further)",
+        "platform": "Firefly",
+        "teacher": "Robert Breslin",
+        "times": ["1, 0900, 0935, AB", "4, 1115, 1155, AB"]
+      }, id: "docID");
+      Event testEvent = Event.fromFirestore(mockDocument);
+      Event targetEvent = new Event(
+          id: "docID",
+          classSet: "UFM.5",
+          location: "SPS Room 228",
+          name: "Mathematics (Further)",
+          platform: "Firefly",
+          teacher: "Robert Breslin",
+          times: [
+            ["1", "0900", "0935", "AB"],
+            ["4", "1115", "1155", "AB"]
+          ]);
+      expect(targetEvent, testEvent);
+    });
   });
 }
