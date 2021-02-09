@@ -1,3 +1,4 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:test/test.dart';
 
 import 'package:learning_hub/objects/assignment.dart';
@@ -543,6 +544,56 @@ void main() {
           type: "PERSONAL");
       expect(targetAssignment, testAssignment);
     });
+    test("Create a full custom assignment from Firestore", () {
+      MockDocumentSnapshot mockDocument = new MockDocumentSnapshot(mockData: {
+        "courseName": "Personal Task • Maths",
+        "creationTime": Timestamp(1612523345, 0),
+        "description": "Do maths homework",
+        "dueDate": Timestamp(1612609723, 0),
+        "platform": "LH",
+        "title": "Personal Assignment",
+        "type": "PERSONAL",
+        "updateTime": Timestamp(1612523345, 0),
+      }, id: "docID");
+      Assignment testAssignment = Assignment.fromFirestore(mockDocument);
+      Assignment targetAssignment = new Assignment(
+          title: "Personal Assignment",
+          creationTime: new DateTime(2021, 2, 5, 11, 9, 5, 0),
+          updateTime: new DateTime(2021, 2, 5, 11, 9, 5, 0),
+          dueDate: new DateTime(2021, 2, 6, 11, 8, 43, 0),
+          type: "PERSONAL",
+          courseName: "Personal Task • Maths",
+          description: "Do maths homework",
+          attachments: new List<Attachment>(),
+          submissionAttachments: new List<Attachment>(),
+          platform: "LH");
+      expect(targetAssignment, testAssignment);
+    });
+    test(
+        "Create a custom assignment from Firestore without description or course",
+        () {
+      MockDocumentSnapshot mockDocument = new MockDocumentSnapshot(mockData: {
+        "courseName": "Personal Task",
+        "creationTime": Timestamp(1612523345, 0),
+        "dueDate": Timestamp(1612609723, 0),
+        "platform": "LH",
+        "title": "Personal Assignment",
+        "type": "PERSONAL",
+        "updateTime": Timestamp(1612523345, 0),
+      }, id: "docID");
+      Assignment testAssignment = Assignment.fromFirestore(mockDocument);
+      Assignment targetAssignment = new Assignment(
+          title: "Personal Assignment",
+          creationTime: new DateTime(2021, 2, 5, 11, 9, 5, 0),
+          updateTime: new DateTime(2021, 2, 5, 11, 9, 5, 0),
+          dueDate: new DateTime(2021, 2, 6, 11, 8, 43, 0),
+          type: "PERSONAL",
+          courseName: "Personal Task",
+          attachments: new List<Attachment>(),
+          submissionAttachments: new List<Attachment>(),
+          platform: "LH");
+      expect(targetAssignment, testAssignment);
+    });
   });
   group("Course", () {
     test("Course with description", () {
@@ -579,7 +630,7 @@ void main() {
     });
   });
   group("Event", () {
-    test("Event from Firestore document", () {
+    test("Full, repeating, Firefly event from Firestore document", () {
       MockDocumentSnapshot mockDocument = new MockDocumentSnapshot(mockData: {
         "classSet": "UFM.5",
         "location": "SPS Room 228",
@@ -600,6 +651,65 @@ void main() {
             ["1", "0900", "0935", "AB"],
             ["4", "1115", "1155", "AB"]
           ]);
+      expect(targetEvent, testEvent);
+    });
+    test("Firefly event from Firestore document with no location or teacher",
+        () {
+      MockDocumentSnapshot mockDocument = new MockDocumentSnapshot(mockData: {
+        "classSet": "UFM.5",
+        "name": "Mathematics (Further)",
+        "platform": "Firefly",
+        "times": ["1, 0900, 0935, AB"]
+      }, id: "docID");
+      Event testEvent = Event.fromFirestore(mockDocument);
+      Event targetEvent = new Event(
+          id: "docID",
+          classSet: "UFM.5",
+          name: "Mathematics (Further)",
+          platform: "Firefly",
+          times: [
+            ["1", "0900", "0935", "AB"]
+          ]);
+      expect(targetEvent, testEvent);
+    });
+    test("Full, repeating, custom event from Firestore document", () {
+      MockDocumentSnapshot mockDocument = new MockDocumentSnapshot(mockData: {
+        "classSet": null,
+        "location": "SPS Room 217",
+        "name": "Coding Projects Society",
+        "platform": "LH",
+        "teacher": "PrasadAR",
+        "times": ["0, 1235, 1330, AB", "1, 1235, 1330, A", "1, 1330, 1420, B"]
+      }, id: "docID");
+      Event testEvent = Event.fromFirestore(mockDocument);
+      Event targetEvent = new Event(
+          id: "docID",
+          name: "Coding Projects Society",
+          teacher: "PrasadAR",
+          location: "SPS Room 217",
+          platform: "LH",
+          times: [
+            ["0", "1235", "1330", "AB"],
+            ["1", "1235", "1330", "A"],
+            ["1", "1330", "1420", "B"]
+          ]);
+      expect(targetEvent, testEvent);
+    });
+    test("custom event from Firestore document with no location or teacher",
+        () {
+      MockDocumentSnapshot mockDocument = new MockDocumentSnapshot(mockData: {
+        "classSet": null,
+        "location": null,
+        "name": "Catch-Up",
+        "platform": "LH",
+        "teacher": null,
+        "times": ["2, 1500, 1730, AB"]
+      }, id: "docID");
+      Event testEvent = Event.fromFirestore(mockDocument);
+      Event targetEvent =
+          new Event(id: "docID", name: "Catch-Up", platform: "LH", times: [
+        ["2", "1500", "1730", "AB"]
+      ]);
       expect(targetEvent, testEvent);
     });
   });

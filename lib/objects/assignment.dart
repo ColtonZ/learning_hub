@@ -226,7 +226,9 @@ class Assignment extends Equatable {
 
 //if the assignment is a multiple choice question, add a Question object, otherwise return a null object (an error is thrown if the assignment is not a multiple choice question, which is caught)
     try {
-      q = Question.fromList(documentMap["question"].toString().split(":-:"));
+      q = documentMap["question"].toString() != "null"
+          ? Question.fromList(documentMap["question"].toString().split(":-:"))
+          : null;
     } catch (error) {
       q = null;
     }
