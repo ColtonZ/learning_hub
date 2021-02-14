@@ -53,6 +53,7 @@ dev_dependencies:
   test:
   mockito:
   equatable:
+  cloud_firestore_mocks:
   flutter_test:
     sdk: flutter
 

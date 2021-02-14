@@ -207,7 +207,7 @@ This is to try and limit the amount of duplicate data, as well as to make queryi
       String docId = firestoreEvent.id;
 
       //fetch the times of the event already in the database, so that they can be modified accordingly
-      List<dynamic> times = firestoreEvent.get("times");
+      List<dynamic> times = firestoreEvent.data()["times"];
 
       bool exists = false;
 
@@ -464,7 +464,7 @@ Future<String> addCustomEvent(
       String docId = firestoreEvent.id;
 
       //fetch the times of the event already in the database, so that they can be modified accordingly
-      List<dynamic> times = firestoreEvent.get("times");
+      List<dynamic> times = firestoreEvent.data()["times"];
 
       //set the document for the event in the database to the event with the afformentioned ID
       var docToUpdate = databaseReference
@@ -702,12 +702,12 @@ Future<bool> tannoyRecentlyChecked(
       .get();
 
 //if there is no tannoy data, return false, meaning that the notices need to be checked again
-  if (tannoyDocs.size == 0) {
+  if (tannoyDocs.docs.length == 0) {
     return false;
   }
 
 //get the tannoy data
-  DocumentSnapshot currentTannoy = tannoyDocs.docs.first;
+  Map<String, dynamic> currentTannoy = tannoyDocs.docs.first.data();
 
 //convert the day it was last checked to a date
   DateTime lastChecked = currentTannoy["modified"].toDate();
@@ -740,7 +740,8 @@ Future<List<Notice>> getNotices(User user) async {
   DocumentSnapshot currentTannoy = tannoyDocs.docs.first;
 
 //split the tannoy data at ":-:", the placeholder between data items
-  List<String> rawDetails = currentTannoy["notices"].toString().split(":-:");
+  List<String> rawDetails =
+      currentTannoy.data()["notices"].toString().split(":-:");
 
 //ensures that the notices being fetched are from today
   if (!rawDetails[0].startsWith(days[DateTime.now().weekday - 1])) {

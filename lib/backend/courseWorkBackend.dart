@@ -31,7 +31,6 @@ Future<List<Course>> getCourses(CustomUser user) async {
     //parses each json request into a course, and, if they are an active course, adds them to the course list
     Course course = Course.fromJson(details);
     if (course.status == "ACTIVE") {
-      print("${details["name"]} | ${details["id"]}");
       courseList.add(course);
     }
   });

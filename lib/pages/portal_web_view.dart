@@ -95,15 +95,17 @@ class _CustomBodyState extends State<_CustomBody> {
                     ),
                     onWillPop: () async => false);
               });
+
           //evaluates the JavaScript, which gets a list of tannoy notices as a string, with each notice split by :-:, having been scraped from the page's html.
           controller
               .evaluateJavascript(
                   source:
                       "output = \"\"; var list = document.getElementsByClassName(\"CDt4Ke zfr3Q\");for(var i = 4; i<list.length - 9; i++)if(list[i].textContent.replaceAll(\" \",\"\").length!=0){output += list[i].textContent;output+=list[i].children[0].children[0];output+=\":-:\"}output;")
               .then((tannoyText) {
+            Navigator.of(context).pop();
             //this adds the tannoy notices to the Firestore database, before popping the loading message and pushing the tannoy page again
             addTannoy(user.firebaseUser, tannoyText).then((_) {
-              if (Navigator.of(context).canPop()) {
+              while (Navigator.of(context).canPop()) {
                 Navigator.of(context).pop();
               }
               _pushTannoyPage(context, user);
