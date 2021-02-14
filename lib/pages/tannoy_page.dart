@@ -109,13 +109,11 @@ class _CustomScaffoldState extends State<_CustomScaffold> {
                               child: Container(
                                 child: GestureDetector(
                                   behavior: HitTestBehavior.translucent,
-                                  onVerticalDragEnd: (details) {
+                                  onVerticalDragEnd: (details) async {
                                     if (details.primaryVelocity > 0) {
                                       //if the user swipes down, refresh the page, and search for tannoy notices again.
-                                      removeCurrentTannoy(user.firebaseUser)
-                                          .then((_) {
-                                        _pushTannoyPage(context, user);
-                                      });
+                                      await clearTannoy(user.firebaseUser);
+                                      _pushTannoyPage(context, user);
                                     }
                                   },
                                   child: Center(

@@ -81,9 +81,6 @@ class _CustomBodyState extends State<_CustomBody> {
         //checks if the url starts with the same url that was passed (i.e. we are not on the login page)
         if (currentPage.startsWith(
             "https://sites.google.com/stpaulsschool.org.uk/sps-co-curricular-hub")) {
-          while (Navigator.of(context).canPop()) {
-            Navigator.of(context).pop();
-          }
           //shows a dialog box saying that the tannoy notices are being loaded
           showDialog(
               context: context,
@@ -106,7 +103,7 @@ class _CustomBodyState extends State<_CustomBody> {
               .then((tannoyText) {
             //this adds the tannoy notices to the Firestore database, before popping the loading message and pushing the tannoy page again
             addTannoy(user.firebaseUser, tannoyText).then((_) {
-              while (Navigator.of(context).canPop()) {
+              if (Navigator.of(context).canPop()) {
                 Navigator.of(context).pop();
               }
               _pushTannoyPage(context, user);

@@ -654,39 +654,21 @@ Future<bool> addTannoy(User user, String tannoyText) async {
       .get();
 
 //checks if there is already tannoy data for that user
-  if (currentDoc.size == 1) {
-    //modify the existing tannoy data, with the time the new tannoy data was added, and the new notices
-    databaseReference
-        .collection("users")
-        .doc(user.uid)
-        .collection("tannoy")
-        .doc(currentDoc.docs.first.id)
-        .set({
-      "modified": DateTime.now(),
-      //replace extra tabs or 4 spaces from the tannoy text - these are a side effect of the web scraping
-      "notices": tannoyText.substring(0, tannoyText.length - 3)
-    });
-  } else {
-    //create a new tannoy doc for that user, with the new time & new data
-    databaseReference
-        .collection("users")
-        .doc(user.uid)
-        .collection("tannoy")
-        .add({
-      "modified": DateTime.now(),
-      //replace extra tabs or 4 spaces from the tannoy text - these are a side effect of the web scraping
-      "notices": tannoyText.substring(0, tannoyText.length - 3)
-    });
+  if (currentDoc.size > 0) {
+    //delete the previous tannoys
+    await clearTannoy(user);
   }
-  //check if the tannoy data is empty, and return true or false accordingly
-  if (tannoyText == "") {
-    return false;
-  } else {
-    return true;
-  }
+  //create a new tannoy doc for that user, with the new time & new data
+  databaseReference.collection("users").doc(user.uid).collection("tannoy").add({
+    "modified": DateTime.now(),
+    //replace extra tabs or 4 spaces from the tannoy text - these are a side effect of the web scraping
+    "notices": tannoyText.substring(0, tannoyText.length - 3)
+  });
+
+  return true;
 }
 
-Future<bool> removeCurrentTannoy(User user) async {
+Future<bool> clearTannoy(User user) async {
   //remove the existing tannoy data for a given user
   QuerySnapshot tannoyDocs = await databaseReference
       .collection("users")
@@ -694,13 +676,18 @@ Future<bool> removeCurrentTannoy(User user) async {
       .collection("tannoy")
       .get();
 
-//the only item in the tannoy collection is the tannoy notice, so delete that
-  databaseReference
-      .collection("users")
-      .doc(user.uid)
-      .collection("tannoy")
-      .doc(tannoyDocs.docs.first.id)
-      .delete();
+//create a list of these notices
+  List<DocumentSnapshot> tannoyList = tannoyDocs.docs;
+
+//loop through the list, deleting each notice
+  tannoyList.forEach((tannoy) {
+    databaseReference
+        .collection("users")
+        .doc(user.uid)
+        .collection("tannoy")
+        .doc(tannoy.id)
+        .delete();
+  });
 
   return true;
 }
