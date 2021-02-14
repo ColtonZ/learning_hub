@@ -79,7 +79,7 @@ class _CustomScaffoldState extends State<_CustomScaffold> {
         //Otherwise, display a web view, which will allow the user to login to the portal and then will scrape the dashboard for the user's tannoy data.
         body: FutureBuilder(
             //check when the tannoy notices were last updated
-            future: tannoyRecentlyChecked(user.firebaseUser),
+            future: tannoyRecentlyChecked(databaseReference, user.firebaseUser),
             //https://flutter.dev/docs/development/ui/interactive
             builder: (context, snapshot) {
               if (snapshot.connectionState == ConnectionState.done) {

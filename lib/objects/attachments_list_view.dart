@@ -63,8 +63,11 @@ class _FirstTileState extends State<_FirstTile> {
         children: [
           if (description != "")
             Row(children: [
-              Text(
-                description,
+              Flexible(
+                fit: FlexFit.loose,
+                child: Text(
+                  description,
+                ),
               ),
             ]),
           Container(

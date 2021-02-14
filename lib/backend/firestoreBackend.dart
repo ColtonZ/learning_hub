@@ -9,7 +9,7 @@ import 'package:learning_hub/objects/assignment.dart';
 import '../objects/notice.dart';
 
 //initialzes an instance of the Firestore database
-final databaseReference = FirebaseFirestore.instance;
+final FirebaseFirestore databaseReference = FirebaseFirestore.instance;
 
 //counts the number of events in the database added automatically from Firefly
 Future<List<Event>> getEventsList(User firebaseUser) async {
@@ -289,7 +289,8 @@ This is to try and limit the amount of duplicate data, as well as to make queryi
   return "done";
 }
 
-Future<String> getCurrentWeek(User firebaseUser, DateTime date) async {
+Future<String> getCurrentWeek(FirebaseFirestore databaseReference,
+    User firebaseUser, DateTime date) async {
   //get the user's doc
   DocumentSnapshot userDoc =
       await databaseReference.collection("users").doc(firebaseUser.uid).get();
@@ -298,7 +299,12 @@ Future<String> getCurrentWeek(User firebaseUser, DateTime date) async {
   DateTime weekA = userDoc.data()["weekA"].toDate();
 
 //if that happened an even number of weeks ago, it must be week A, otherwise it'll be week B
-  return (-weekA.difference(date).inDays) ~/ 7 % 2 == 0 ? "A" : "B";
+  return ((weekA.difference(date).inDays < 0
+              ? weekA.difference(date).inDays ~/ 7 % 2
+              : (weekA.difference(date).inDays + 6) ~/ 7 % 2) ==
+          0
+      ? "A"
+      : "B");
 }
 
 Future<List<Assignment>> getFirestoreTasks(User firebaseUser) async {
@@ -699,7 +705,8 @@ Future<bool> removeCurrentTannoy(User user) async {
   return true;
 }
 
-Future<bool> tannoyRecentlyChecked(User user) async {
+Future<bool> tannoyRecentlyChecked(
+    FirebaseFirestore databaseReference, User user) async {
   //see if the tannoy notices were checked today or not
   QuerySnapshot tannoyDocs = await databaseReference
       .collection("users")

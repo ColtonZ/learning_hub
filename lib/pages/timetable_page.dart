@@ -213,7 +213,7 @@ class _MainPageState extends State<_MainPage> {
         ),
         FutureBuilder(
             //show the day's date of the selected date, followed by the week (A or B)
-            future: getCurrentWeek(user.firebaseUser, time),
+            future: getCurrentWeek(databaseReference, user.firebaseUser, time),
             builder: (context, snapshot) {
               if (snapshot.connectionState == ConnectionState.done) {
                 week = snapshot.data;

@@ -8,7 +8,7 @@ import 'firestoreBackend.dart';
 Future<List<Event>> getEvents(
     DateTime eventsDate, User user, List<Event> allEvents) async {
   //get the current week (A or B)
-  String week = await getCurrentWeek(user, DateTime.now());
+  String week = await getCurrentWeek(databaseReference, user, DateTime.now());
 
   List<Event> events = new List<Event>();
 
