@@ -308,7 +308,8 @@ Future<String> getCurrentWeek(FirebaseFirestore databaseReference,
       : "B");
 }
 
-Future<List<Assignment>> getFirestoreTasks(User firebaseUser) async {
+Future<List<Assignment>> getFirestoreTasks(
+    FirebaseFirestore databaseReference, User firebaseUser) async {
   //gets all assignments from the Firestore db
   try {
     QuerySnapshot tasksSnapshot = await databaseReference
@@ -723,7 +724,8 @@ Future<bool> tannoyRecentlyChecked(
   }
 }
 
-Future<List<Notice>> getNotices(User user) async {
+Future<List<Notice>> getNotices(
+    FirebaseFirestore databaseReference, User user) async {
   List<Notice> notices = new List<Notice>();
 
 //get the tannoy data for a given user
@@ -734,8 +736,8 @@ Future<List<Notice>> getNotices(User user) async {
       .get();
 
 //if there is no tannoy data, return an empty list
-  if (tannoyDocs.size == 0) {
-    return notices;
+  if (tannoyDocs.size == 0 || tannoyDocs.size == null) {
+    return null;
   }
 
 //get the tannoy data

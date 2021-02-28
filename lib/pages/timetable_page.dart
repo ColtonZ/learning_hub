@@ -388,7 +388,7 @@ class _MainPageState extends State<_MainPage> {
           fit: FlexFit.loose,
           child: FutureBuilder(
             //get the user's tasks that need doing
-            future: getFirestoreTasks(user.firebaseUser),
+            future: getFirestoreTasks(databaseReference, user.firebaseUser),
             builder: (context, tasksSnapshot) {
               if (tasksSnapshot.connectionState == ConnectionState.done) {
                 if (tasksSnapshot.data.length > 0) {

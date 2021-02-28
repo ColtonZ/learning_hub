@@ -96,7 +96,7 @@ class _CustomScaffoldState extends State<_CustomScaffold> {
                   //otherwise build the page
                   return FutureBuilder(
                       //get the tannoy notices from the user's firebase profile. If there are no tannoy notices, tell the user as such, and allow them to refresh the page.
-                      future: getNotices(user.firebaseUser),
+                      future: getNotices(databaseReference, user.firebaseUser),
                       builder: (context, snapshot) {
                         if (snapshot.connectionState == ConnectionState.done) {
                           if (snapshot.data != null) {
