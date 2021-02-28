@@ -12,7 +12,8 @@ import '../objects/notice.dart';
 final FirebaseFirestore databaseReference = FirebaseFirestore.instance;
 
 //counts the number of events in the database added automatically from Firefly
-Future<List<Event>> getEventsList(User firebaseUser) async {
+Future<List<Event>> getEventsList(
+    FirebaseFirestore databaseReference, User firebaseUser) async {
   //https://stackoverflow.com/questions/54456665/how-to-count-the-number-of-documents-firestore-on-flutter
   //gets all events from the database which were added automatically from the pupil dashboard
 
@@ -544,7 +545,8 @@ Future<String> addCustomEvent(
   return "done";
 }
 
-Future<Event> getEvent(User user, String id) async {
+Future<Event> getEvent(
+    FirebaseFirestore databaseReference, User user, String id) async {
   //get an event object from its Firestore id
   DocumentSnapshot eventSnapshot = await databaseReference
       .collection("users")

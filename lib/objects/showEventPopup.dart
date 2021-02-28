@@ -25,7 +25,7 @@ class ShowEventState extends State<ShowEvent> {
     //returns the event popup
     return AlertDialog(
       content: FutureBuilder(
-          future: getEvent(user.firebaseUser, id),
+          future: getEvent(databaseReference, user.firebaseUser, id),
           builder: (context, snapshot) {
             if (snapshot.connectionState == ConnectionState.done) {
               Event event = snapshot.data;

@@ -86,8 +86,6 @@ Future<Assignment> sendAssignmentRequest(String courseId, String courseName,
 //create a list of the student submissions (there shoudl be one item - the student's submission)
   var submissions = submissionData["studentSubmissions"] as List;
 
-  print("${assignmentData["title"]} | ${assignmentData["id"]}");
-
   //converts the two json responses (the assignment details and the submission details) into an assignment object and returns it
   Assignment assignment =
       Assignment.fromJson(courseName, "GC", assignmentData, submissions[0]);

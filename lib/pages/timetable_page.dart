@@ -87,7 +87,7 @@ class _CustomScaffoldState extends State<_CustomScaffold> {
         //Otherwise, display a web view, which will allow the user to login to Firefly and then will scrape the dashboard for the user's timetable data.
         body: FutureBuilder(
             //counts how many Firefly events the user has
-            future: getEventsList(user.firebaseUser),
+            future: getEventsList(databaseReference, user.firebaseUser),
             //https://flutter.dev/docs/development/ui/interactive
             builder: (context, snapshot) {
               if (snapshot.connectionState == ConnectionState.done) {
@@ -321,7 +321,7 @@ class _MainPageState extends State<_MainPage> {
             },
             child: FutureBuilder(
               //get a list of today's events
-              future: getEventsList(user.firebaseUser)
+              future: getEventsList(databaseReference, user.firebaseUser)
                   .then((events) => getEvents(time, user.firebaseUser, events)),
               builder: (context, eventsSnaphsot) {
                 if (eventsSnaphsot.connectionState == ConnectionState.done) {
