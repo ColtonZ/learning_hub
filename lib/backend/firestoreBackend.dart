@@ -458,15 +458,42 @@ Future<String> addCustomEvent(
 
   for (int day in weekDays) {
     //this tries to get all events in the user's events collection where the class, teacher, set, location are the same (and the event was added by Firefly)
-    QuerySnapshot matchingEvent = await databaseReference
-        .collection("users")
-        .doc(firebaseUser.uid)
-        .collection("events")
-        .where("name", isEqualTo: name)
-        .where("platform", isEqualTo: "LH")
-        .where("location", isEqualTo: location)
-        .where("teacher", isEqualTo: teacher)
-        .get();
+    //for null values, these are ommitted during the comparison
+    QuerySnapshot matchingEvent = location != null && teacher != null
+        ? await databaseReference
+            .collection("users")
+            .doc(firebaseUser.uid)
+            .collection("events")
+            .where("name", isEqualTo: name)
+            .where("platform", isEqualTo: "LH")
+            .where("location", isEqualTo: location)
+            .where("teacher", isEqualTo: teacher)
+            .get()
+        : location == null && teacher == null
+            ? await databaseReference
+                .collection("users")
+                .doc(firebaseUser.uid)
+                .collection("events")
+                .where("name", isEqualTo: name)
+                .where("platform", isEqualTo: "LH")
+                .get()
+            : location == null && teacher != null
+                ? await databaseReference
+                    .collection("users")
+                    .doc(firebaseUser.uid)
+                    .collection("events")
+                    .where("name", isEqualTo: name)
+                    .where("platform", isEqualTo: "LH")
+                    .where("teacher", isEqualTo: teacher)
+                    .get()
+                : await databaseReference
+                    .collection("users")
+                    .doc(firebaseUser.uid)
+                    .collection("events")
+                    .where("name", isEqualTo: name)
+                    .where("platform", isEqualTo: "LH")
+                    .where("location", isEqualTo: location)
+                    .get();
 
     //if a matching event exists, then the current event's details are simply added to the event just found in the database (to stop too much duplicate data)
     //otherwise, a new event is added according to the given details
