@@ -408,30 +408,6 @@ Future<String> firestoreToDoAdd(FirebaseFirestore databaseReference,
   return "done";
 }
 
-void removeClassroomTasks(
-    FirebaseFirestore databaseReference, User user) async {
-  //fetch all existing Firestore events added from Firefly
-  QuerySnapshot tasks = await databaseReference
-      .collection("users")
-      .doc(user.uid)
-      .collection("toDo")
-      .where("platform", isEqualTo: "GC")
-      .get();
-
-//create a list of these events
-  List<DocumentSnapshot> tasksList = tasks.docs;
-
-//loop through the list, deleting each event
-  tasksList.forEach((event) {
-    databaseReference
-        .collection("users")
-        .doc(user.uid)
-        .collection("toDo")
-        .doc(event.id)
-        .delete();
-  });
-}
-
 Future<String> addCustomEvent(
     FirebaseFirestore databaseReference,
     User firebaseUser,
