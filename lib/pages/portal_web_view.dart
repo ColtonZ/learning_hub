@@ -104,7 +104,7 @@ class _CustomBodyState extends State<_CustomBody> {
               .then((tannoyText) {
             Navigator.of(context).pop();
             //this adds the tannoy notices to the Firestore database, before popping the loading message and pushing the tannoy page again
-            addTannoy(user.firebaseUser, tannoyText).then((_) {
+            addTannoy(databaseReference,user.firebaseUser, tannoyText).then((_) {
               while (Navigator.of(context).canPop()) {
                 Navigator.of(context).pop();
               }

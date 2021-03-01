@@ -346,7 +346,7 @@ class AddEventState extends State<AddEvent> {
                         (boxValueA || boxValueB) &&
                         int.parse(start) < int.parse(end)) {
                       daysFilled = true;
-                      await addCustomEvent(user.firebaseUser, title, teacher,
+                      await addCustomEvent(databaseReference,user.firebaseUser, title, teacher,
                           location, days, boxValueA, boxValueB, start, end);
                       Navigator.of(context).pop();
                     }

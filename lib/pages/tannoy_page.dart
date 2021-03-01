@@ -112,7 +112,8 @@ class _CustomScaffoldState extends State<_CustomScaffold> {
                                   onVerticalDragEnd: (details) async {
                                     if (details.primaryVelocity > 0) {
                                       //if the user swipes down, refresh the page, and search for tannoy notices again.
-                                      await clearTannoy(user.firebaseUser);
+                                      await clearTannoy(
+                                          databaseReference, user.firebaseUser);
                                       _pushTannoyPage(context, user);
                                     }
                                   },

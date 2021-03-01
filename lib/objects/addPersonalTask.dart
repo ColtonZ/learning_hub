@@ -131,7 +131,8 @@ class AddPersonalTaskState extends State<AddPersonalTask> {
                     if (_formKey.currentState.validate()) {
                       Assignment assignment = new Assignment.createCustom(
                           title, description, subject, dueDate);
-                      await firestoreToDoAdd(user.firebaseUser, assignment);
+                      await firestoreToDoAdd(
+                          databaseReference, user.firebaseUser, assignment);
                       Navigator.of(context).pop();
                     }
                   },

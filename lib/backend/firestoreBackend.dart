@@ -67,7 +67,7 @@ void checkFirestoreUser(User firebaseUser) async {
 
 //adds Firefly events to a user's Firestore database, given the user's ID, and a correctly formatted string of the events.
 //the current week (A or B) is also passed, as the order of the events string is dependent on the current week.
-Future<String> addFirestoreEvents(
+Future<String> addFirestoreEvents(FirebaseFirestore databaseReference,
     User firebaseUser, String eventsText, String week) async {
 /*
 First, existing events (added from Firefly) must be deleted, so as to stop duplicates.
@@ -106,7 +106,7 @@ This is to try and limit the amount of duplicate data, as well as to make queryi
           ? ["B", "A"]
           : ["A", "B"];
 
-  updateFirestoreWeek(firebaseUser, weeks[0]);
+  updateFirestoreWeek(databaseReference, firebaseUser, weeks[0]);
 
 //each event is in the format: "<class>, <teacher>, <start time> - <end time> in <room> (<set>)" (where the <> indicate a parameter)
 //first the string is split into a list of events (each being seperated by a semicolon and a space), and then each event is split into individual details accordingly.
@@ -186,17 +186,27 @@ This is to try and limit the amount of duplicate data, as well as to make queryi
     //performs absolute division of the event day by 5, so that, if the day is greater than 5, we know it must occur in the second week (as each user has at least one Firefly event each day, and no Firefly events on weekends).
     String eventWeek = weeks[day ~/ 5];
 
-    //this tries to get all events in the user's events collection where the class, teacher, set, location are the same (and the event was added by Firefly)
-    QuerySnapshot matchingEvent = await databaseReference
-        .collection("users")
-        .doc(firebaseUser.uid)
-        .collection("events")
-        .where("name", isEqualTo: eventDetails[0])
-        .where("platform", isEqualTo: "Firefly")
-        .where("classSet", isEqualTo: classSet)
-        .where("location", isEqualTo: location)
-        .where("teacher", isEqualTo: eventDetails[1])
-        .get();
+    //this tries to get all events in the user's events collection where the class, teacher, set, location are the same (and the event was added by Firefly). If the location is null (the only one that can be), it is ommitted from the match.
+    QuerySnapshot matchingEvent = location != null
+        ? await databaseReference
+            .collection("users")
+            .doc(firebaseUser.uid)
+            .collection("events")
+            .where("name", isEqualTo: eventDetails[0])
+            .where("platform", isEqualTo: "Firefly")
+            .where("classSet", isEqualTo: classSet)
+            .where("location", isEqualTo: location)
+            .where("teacher", isEqualTo: eventDetails[1])
+            .get()
+        : await databaseReference
+            .collection("users")
+            .doc(firebaseUser.uid)
+            .collection("events")
+            .where("name", isEqualTo: eventDetails[0])
+            .where("platform", isEqualTo: "Firefly")
+            .where("classSet", isEqualTo: classSet)
+            .where("teacher", isEqualTo: eventDetails[1])
+            .get();
 
     //if a matching event exists, then the current event's details are simply added to the event just found in the database (to stop too much duplicate data)
     //otherwise, a new event is added according to the given details
@@ -335,7 +345,7 @@ Future<List<Assignment>> getFirestoreTasks(
   }
 }
 
-Future<String> firestoreToDoAdd(
+Future<String> firestoreToDoAdd(FirebaseFirestore databaseReference,
     User firebaseUser, Assignment assignment) async {
   List<String> attachmentStrings = new List<String>();
   try {
@@ -398,7 +408,8 @@ Future<String> firestoreToDoAdd(
   return "done";
 }
 
-void removeClassroomTasks(User user) async {
+void removeClassroomTasks(
+    FirebaseFirestore databaseReference, User user) async {
   //fetch all existing Firestore events added from Firefly
   QuerySnapshot tasks = await databaseReference
       .collection("users")
@@ -422,6 +433,7 @@ void removeClassroomTasks(User user) async {
 }
 
 Future<String> addCustomEvent(
+    FirebaseFirestore databaseReference,
     User firebaseUser,
     String name,
     String teacher,
@@ -559,7 +571,8 @@ Future<Event> getEvent(
   return Event.fromFirestore(eventSnapshot);
 }
 
-Future<String> deleteEvent(User user, String id) async {
+Future<String> deleteEvent(
+    FirebaseFirestore databaseReference, User user, String id) async {
   //delete an event with the matching id
   databaseReference
       .collection("users")
@@ -571,7 +584,8 @@ Future<String> deleteEvent(User user, String id) async {
   return "done";
 }
 
-Future<String> deleteData(User user, int type) async {
+Future<String> deleteData(
+    FirebaseFirestore databaseReference, User user, int type) async {
   //delete a user's data. If the type is 0, delete their event data. If it is 1, delete their tasks data, and if it is 2 delete all their data.
 //if the type is 2, we have to delete events and tasks data as well so those two sections run too
   if (type == 0 || type == 2) {
@@ -648,7 +662,8 @@ Future<String> deleteData(User user, int type) async {
   return "done";
 }
 
-Future<bool> addTannoy(User user, String tannoyText) async {
+Future<bool> addTannoy(
+    FirebaseFirestore databaseReference, User user, String tannoyText) async {
 //gets the tannoy docs for a given user
   QuerySnapshot currentDoc = await databaseReference
       .collection("users")
@@ -659,7 +674,7 @@ Future<bool> addTannoy(User user, String tannoyText) async {
 //checks if there is already tannoy data for that user
   if (currentDoc.size > 0) {
     //delete the previous tannoys
-    await clearTannoy(user);
+    await clearTannoy(databaseReference, user);
   }
   //create a new tannoy doc for that user, with the new time & new data
   databaseReference.collection("users").doc(user.uid).collection("tannoy").add({
@@ -671,7 +686,7 @@ Future<bool> addTannoy(User user, String tannoyText) async {
   return true;
 }
 
-Future<bool> clearTannoy(User user) async {
+Future<bool> clearTannoy(FirebaseFirestore databaseReference, User user) async {
   //remove the existing tannoy data for a given user
   QuerySnapshot tannoyDocs = await databaseReference
       .collection("users")
@@ -776,7 +791,8 @@ Future<List<Notice>> getNotices(
   return notices;
 }
 
-Future<bool> updateFirestoreWeek(User user, String week) async {
+Future<bool> updateFirestoreWeek(
+    FirebaseFirestore databaseReference, User user, String week) async {
   //update the last weekA in the Firestore db. I.e., if this week is a week A, add the date of this Monday to the database, otherwise add the date of the monday prior.
   databaseReference.collection("users").doc(user.uid).update({
     "weekA": week == "A"

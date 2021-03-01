@@ -115,6 +115,7 @@ class _CustomBodyState extends State<_CustomBody> {
           //this adds the events to the Firestore database, before popping the dialog box & pushing the timetable page again
           events
               ? addFirestoreEvents(
+                  databaseReference,
                   user.firebaseUser,
                   eventsText,
                   week,
@@ -123,6 +124,7 @@ class _CustomBodyState extends State<_CustomBody> {
                   _pushTimetablePage(context, user);
                 })
               : updateFirestoreWeek(
+                      databaseReference,
                       user.firebaseUser,
                       DateTime.now().weekday == 1
                           ? week

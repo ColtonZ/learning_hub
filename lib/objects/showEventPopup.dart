@@ -87,7 +87,7 @@ class ShowEventState extends State<ShowEvent> {
                                         child: Text("Delete"),
                                         color: Theme.of(context).accentColor,
                                         onPressed: () async {
-                                          await deleteEvent(
+                                          await deleteEvent(databaseReference,
                                               user.firebaseUser, id);
                                           Navigator.of(context).pop();
                                         }),

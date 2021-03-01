@@ -160,7 +160,7 @@ class _CustomScaffoldState extends State<_CustomScaffold> {
                           ),
                           onPressed: () {
                             //when pressed, delete the user's event data
-                            deleteData(user.firebaseUser, 0).then((_) {
+                            deleteData(databaseReference,user.firebaseUser, 0).then((_) {
                               setState(() {
                                 showEventConfirm = false;
                               });
@@ -214,7 +214,7 @@ class _CustomScaffoldState extends State<_CustomScaffold> {
                             style: header3Style,
                           ),
                           onPressed: () {
-                            deleteData(user.firebaseUser, 1).then((_) {
+                            deleteData(databaseReference,user.firebaseUser, 1).then((_) {
                               //when pressed, delete the user's task data
                               setState(() {
                                 showTasksConfirm = false;
@@ -268,7 +268,7 @@ class _CustomScaffoldState extends State<_CustomScaffold> {
                             style: header3Style,
                           ),
                           onPressed: () {
-                            deleteData(user.firebaseUser, 2).then((_) {
+                            deleteData(databaseReference,user.firebaseUser, 2).then((_) {
                               //when pressed, delete the user's data and then sign them out
                               setState(() {
                                 showAllConfirm = false;
