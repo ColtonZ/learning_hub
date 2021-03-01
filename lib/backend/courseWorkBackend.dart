@@ -1,14 +1,13 @@
 import 'dart:async';
 import 'dart:convert';
 
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:http/http.dart' as http;
 import 'package:cloud_firestore/cloud_firestore.dart';
 
 import '../objects/course.dart';
 import '../objects/assignment.dart';
 import '../objects/customUser.dart';
-
-import 'firestoreBackend.dart';
 
 Future<List<Course>> getCourses(CustomUser user) async {
   //gets the user's auth headers
@@ -146,26 +145,43 @@ Future<bool> isCourseDone(String id, CustomUser user) async {
   return done;
 }
 
-Future<String> markAsDone(CustomUser user, Assignment assignment) async {
-  //get the matching task from the db
-  QuerySnapshot assignments = await databaseReference
-      .collection("users")
-      .doc(user.firebaseUser.uid)
-      .collection("toDo")
-      .where("id", isEqualTo: assignment.id)
-      .where("courseName", isEqualTo: assignment.courseName)
-      .where("platform", isEqualTo: assignment.platform)
-      .where("title", isEqualTo: assignment.title)
-      .where("creationTime", isEqualTo: assignment.creationTime)
-      .get();
+Future<String> markAsDone(FirebaseFirestore databaseReference,
+    User firebaseUser, Assignment assignment) async {
+  //get the matching task from the db, removing the description field from the comparison if it's null
+  QuerySnapshot assignments = assignment.description != null
+      ? await databaseReference
+          .collection("users")
+          .doc(firebaseUser.uid)
+          .collection("toDo")
+          .where("description", isEqualTo: assignment.description)
+          .where("courseName", isEqualTo: assignment.courseName)
+          .where("platform", isEqualTo: assignment.platform)
+          .where("title", isEqualTo: assignment.title)
+          .where("creationTime",
+              isEqualTo: Timestamp.fromDate(assignment.creationTime))
+          .get()
+      : await databaseReference
+          .collection("users")
+          .doc(firebaseUser.uid)
+          .collection("toDo")
+          .where("courseName", isEqualTo: assignment.courseName)
+          .where("platform", isEqualTo: assignment.platform)
+          .where("title", isEqualTo: assignment.title)
+          .where("creationTime",
+              isEqualTo: Timestamp.fromDate(assignment.creationTime))
+          .get();
 
-//delete the assignment
-  databaseReference
-      .collection("users")
-      .doc(user.firebaseUser.uid)
-      .collection("toDo")
-      .doc(assignments.docs.first.id)
-      .delete();
+//delete the assignment (assuming it exists)
+  if (assignments.docs.isNotEmpty) {
+    List<QueryDocumentSnapshot> assignmentDocs = assignments.docs;
+
+    await databaseReference
+        .collection("users")
+        .doc(firebaseUser.uid)
+        .collection("toDo")
+        .doc(assignmentDocs[0].id)
+        .delete();
+  }
 
   return "done";
 }

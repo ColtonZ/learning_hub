@@ -6,6 +6,7 @@ import 'attachments_list_view.dart';
 import 'customUser.dart';
 import '../backend/courseWorkBackend.dart';
 import 'package:url_launcher/url_launcher.dart';
+import '../backend/firestoreBackend.dart';
 
 class StudentSubmissions extends StatefulWidget {
   final Assignment assignment;
@@ -336,7 +337,8 @@ class StudentSubmissionsState extends State<StudentSubmissions> {
               onPressed: () {
                 setState(() {
                   //delete the task from the database when marked as done
-                  markAsDone(user, assignment).then((_) {
+                  markAsDone(databaseReference, user.firebaseUser, assignment)
+                      .then((_) {
                     Navigator.of(context).pop();
                     Navigator.of(context).pushReplacementNamed("/timetable",
                         arguments: {"user": user});

@@ -675,7 +675,7 @@ Future<bool> addTannoy(
       .get();
 
 //checks if there is already tannoy data for that user
-  if (currentDoc.size > 0) {
+  if (currentDoc.size != null && currentDoc.size > 0) {
     //delete the previous tannoys
     await clearTannoy(databaseReference, user);
   }
@@ -754,7 +754,8 @@ Future<List<Notice>> getNotices(
       .get();
 
 //if there is no tannoy data, return an empty list
-  if (tannoyDocs.size == 0 || tannoyDocs.size == null) {
+  if ((tannoyDocs.docs.length == 0 || tannoyDocs.docs.length == null) &&
+      tannoyDocs.size == null) {
     return null;
   }
 
