@@ -3,7 +3,6 @@ import "package:cloud_firestore_mocks/cloud_firestore_mocks.dart";
 import 'package:learning_hub/backend/courseWorkBackend.dart';
 import "package:learning_hub/backend/firestoreBackend.dart";
 import 'package:learning_hub/backend/helperBackend.dart';
-import 'package:learning_hub/objects/addPersonalTask.dart';
 import 'package:learning_hub/objects/assignment.dart';
 import 'mock_classes.dart';
 import "package:test/test.dart";

@@ -50,6 +50,7 @@ class _CustomBodyState extends State<_CustomBody> {
       onLoadStart: (InAppWebViewController controller, String url) async {
         showDialog(
             context: context,
+            useRootNavigator: false,
             builder: (BuildContext context) {
               return WillPopScope(
                   child: AlertDialog(
@@ -73,17 +74,21 @@ class _CustomBodyState extends State<_CustomBody> {
           await controller.evaluateJavascript(
               source:
                   "document.getElementById('identifierId').value = \"${user.firebaseUser.email}\"");
-        }
-        if (Navigator.of(context).canPop()) {
-          Navigator.of(context).pop();
+          if (Navigator.of(context).canPop()) {
+            Navigator.of(context).pop();
+          }
         }
 
         //checks if the url starts with the same url that was passed (i.e. we are not on the login page)
         if (currentPage.startsWith(
             "https://sites.google.com/stpaulsschool.org.uk/sps-co-curricular-hub")) {
           //shows a dialog box saying that the tannoy notices are being loaded
-          showDialog(
+          if (Navigator.of(context).canPop()) {
+            Navigator.of(context).pop();
+          }
+          /*showDialog(
               context: context,
+              useRootNavigator: false,
               builder: (BuildContext context) {
                 return WillPopScope(
                     child: AlertDialog(
@@ -94,7 +99,7 @@ class _CustomBodyState extends State<_CustomBody> {
                       ),
                     ),
                     onWillPop: () async => false);
-              });
+              });*/
 
           //evaluates the JavaScript, which gets a list of tannoy notices as a string, with each notice split by :-:, having been scraped from the page's html.
           controller
@@ -102,9 +107,9 @@ class _CustomBodyState extends State<_CustomBody> {
                   source:
                       "output = \"\"; var list = document.getElementsByClassName(\"CDt4Ke zfr3Q\");for(var i = 4; i<list.length - 9; i++)if(list[i].textContent.replaceAll(\" \",\"\").length!=0){output += list[i].textContent;output+=list[i].children[0].children[0];output+=\":-:\"}output;")
               .then((tannoyText) {
-            Navigator.of(context).pop();
             //this adds the tannoy notices to the Firestore database, before popping the loading message and pushing the tannoy page again
-            addTannoy(databaseReference,user.firebaseUser, tannoyText).then((_) {
+            addTannoy(databaseReference, user.firebaseUser, tannoyText)
+                .then((_) {
               while (Navigator.of(context).canPop()) {
                 Navigator.of(context).pop();
               }
@@ -119,8 +124,7 @@ class _CustomBodyState extends State<_CustomBody> {
 //defines the method for pushing the tannoy page
   static void _pushTannoyPage(BuildContext context, CustomUser user) {
     Map args = {"user": user};
-    Navigator.of(context).pushNamedAndRemoveUntil(
-        '/tannoy', ModalRoute.withName("/"),
-        arguments: args);
+    Navigator.of(context).maybePop();
+    Navigator.of(context).pushReplacementNamed('/tannoy', arguments: args);
   }
 }

@@ -676,8 +676,15 @@ Future<bool> addTannoy(
 
 //checks if there is already tannoy data for that user
   if (currentDoc.size != null && currentDoc.size > 0) {
-    //delete the previous tannoys
-    await clearTannoy(databaseReference, user);
+    //checks that the tannoy was not updated in the last 30 seconds (to stop uneccesary reads and writes)
+    if (currentDoc.docs.first
+            .data()["modified"]
+            .toDate()
+            .difference(DateTime.now())
+            .inSeconds() >
+        -30)
+      //delete the previous tannoys
+      await clearTannoy(databaseReference, user);
   }
   //create a new tannoy doc for that user, with the new time & new data
   databaseReference.collection("users").doc(user.uid).collection("tannoy").add({

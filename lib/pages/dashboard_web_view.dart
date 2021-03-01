@@ -57,6 +57,7 @@ class _CustomBodyState extends State<_CustomBody> {
       onLoadStart: (InAppWebViewController controller, String url) async {
         showDialog(
             context: context,
+            useRootNavigator: false,
             builder: (BuildContext context) {
               return WillPopScope(
                   child: AlertDialog(
@@ -89,6 +90,7 @@ class _CustomBodyState extends State<_CustomBody> {
           //shows a dialog box, telling the user that their events are currently being fetched (or that the week is updating, depending on the value of events)
           showDialog(
               context: context,
+              useRootNavigator: false,
               builder: (BuildContext context) {
                 return WillPopScope(
                     child: AlertDialog(
