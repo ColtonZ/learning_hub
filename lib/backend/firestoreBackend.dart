@@ -681,17 +681,33 @@ Future<bool> addTannoy(
             .data()["modified"]
             .toDate()
             .difference(DateTime.now())
-            .inSeconds() >
-        -30)
+            .inSeconds <
+        -30) {
       //delete the previous tannoys
       await clearTannoy(databaseReference, user);
+      //create a new tannoy doc for that user, with the new time & new data
+      databaseReference
+          .collection("users")
+          .doc(user.uid)
+          .collection("tannoy")
+          .add({
+        "modified": DateTime.now(),
+        //replace extra tabs or 4 spaces from the tannoy text - these are a side effect of the web scraping
+        "notices": tannoyText.substring(0, tannoyText.length - 3)
+      });
+    }
+  } else {
+    //create a new tannoy doc for that user, with the new time & new data
+    databaseReference
+        .collection("users")
+        .doc(user.uid)
+        .collection("tannoy")
+        .add({
+      "modified": DateTime.now(),
+      //replace extra tabs or 4 spaces from the tannoy text - these are a side effect of the web scraping
+      "notices": tannoyText.substring(0, tannoyText.length - 3)
+    });
   }
-  //create a new tannoy doc for that user, with the new time & new data
-  databaseReference.collection("users").doc(user.uid).collection("tannoy").add({
-    "modified": DateTime.now(),
-    //replace extra tabs or 4 spaces from the tannoy text - these are a side effect of the web scraping
-    "notices": tannoyText.substring(0, tannoyText.length - 3)
-  });
 
   return true;
 }

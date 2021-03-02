@@ -13,12 +13,12 @@ if (flutterRoot == null) {
 
 def flutterVersionCode = localProperties.getProperty('flutter.versionCode')
 if (flutterVersionCode == null) {
-    flutterVersionCode = '10'
+    flutterVersionCode = '11'
 }
 
 def flutterVersionName = localProperties.getProperty('flutter.versionName')
 if (flutterVersionName == null) {
-    flutterVersionName = '1.1.4'
+    flutterVersionName = '1.1.5'
 }
 
 def keystoreProperties = new Properties()
@@ -48,8 +48,8 @@ android {
         applicationId "com.coltonz.learning_hub"
         minSdkVersion 17
         targetSdkVersion 29
-        versionCode 10
-        versionName "1.1.4"
+        versionCode 11
+        versionName "1.1.5"
         multiDexEnabled true
     }
 

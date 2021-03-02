@@ -86,21 +86,6 @@ class _CustomBodyState extends State<_CustomBody> {
           if (Navigator.of(context).canPop()) {
             Navigator.of(context).pop();
           }
-          /*showDialog(
-              context: context,
-              useRootNavigator: false,
-              builder: (BuildContext context) {
-                return WillPopScope(
-                    child: AlertDialog(
-                      content: Text(
-                        "Today's tannoy notices are being fetched from the Co-Curricular Hub, please wait.\n\nDo not close this page.",
-                        style: header3Style,
-                        textAlign: TextAlign.center,
-                      ),
-                    ),
-                    onWillPop: () async => false);
-              });*/
-
           //evaluates the JavaScript, which gets a list of tannoy notices as a string, with each notice split by :-:, having been scraped from the page's html.
           controller
               .evaluateJavascript(
@@ -111,6 +96,9 @@ class _CustomBodyState extends State<_CustomBody> {
             addTannoy(databaseReference, user.firebaseUser, tannoyText)
                 .then((_) {
               while (Navigator.of(context).canPop()) {
+                Navigator.of(context).pop();
+              }
+              if (Navigator.of(context).canPop()) {
                 Navigator.of(context).pop();
               }
               _pushTannoyPage(context, user);
