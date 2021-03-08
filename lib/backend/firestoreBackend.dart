@@ -800,6 +800,21 @@ Future<List<Notice>> getNotices(
     if (i < rawDetails.length - 1) {
       String body = "";
       int j = i + 1;
+      if (rawDetails[i].startsWith("Lunch Timings")) {
+        for (var k = 0; k < 5; k++) {
+          if (rawDetails[j].endsWith("\n")) {
+            rawDetails[j] =
+                rawDetails[j].substring(0, rawDetails[i + k + 1].length - 1);
+          }
+          if (rawDetails[j].endsWith("undefined")) {
+            rawDetails[j] =
+                rawDetails[j].substring(0, rawDetails[i + k + 1].length - 9);
+          }
+          body += "${rawDetails[j].replaceAll("[object HTMLElement]", "")}\n";
+          j++;
+          i++;
+        }
+      }
       while (j < rawDetails.length &&
           !rawDetails[j].endsWith("[object HTMLElement]")) {
         if (rawDetails[j].endsWith("\n")) {
@@ -818,9 +833,7 @@ Future<List<Notice>> getNotices(
       if (body.endsWith("undefined")) {
         body = body.substring(0, body.length - 9);
       }
-      if (body != "") {
-        notices.add(new Notice(title: title, body: body));
-      }
+      notices.add(new Notice(title: title, body: body));
     }
   }
   return notices;
