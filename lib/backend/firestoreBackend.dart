@@ -802,6 +802,12 @@ Future<List<Notice>> getNotices(
       int j = i + 1;
       while (j < rawDetails.length &&
           !rawDetails[j].endsWith("[object HTMLElement]")) {
+        if (rawDetails[j].endsWith("\n")) {
+          rawDetails[j] = rawDetails[j].substring(0, rawDetails[j].length - 1);
+        }
+        if (rawDetails[j].endsWith("undefined")) {
+          rawDetails[j] = rawDetails[j].substring(0, rawDetails[j].length - 9);
+        }
         body += "${rawDetails[j]}\n";
         j++;
         i++;
@@ -812,7 +818,9 @@ Future<List<Notice>> getNotices(
       if (body.endsWith("undefined")) {
         body = body.substring(0, body.length - 9);
       }
-      notices.add(new Notice(title: title, body: body));
+      if (body != "") {
+        notices.add(new Notice(title: title, body: body));
+      }
     }
   }
   return notices;
