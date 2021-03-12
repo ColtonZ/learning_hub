@@ -16,7 +16,7 @@ Future<List<Course>> getCourses(CustomUser user) async {
   //requests the user's courses with an http request
   http.Response response = await http.get(
       Uri.encodeFull(
-          "https://classroom.googleapis.com/v1/courses?fields=courses(id,name,descriptionHeading,courseState)"),
+          "https://classroom.googleapis.com/v1/courses?fields=courses(id,name,descriptionHeading,courseState,alternateLink)"),
       headers: headers);
 
   //converts the response into JSON

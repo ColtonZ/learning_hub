@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:url_launcher/url_launcher.dart';
 
 import '../backend/courseWorkBackend.dart';
 import '../theming.dart';
@@ -85,6 +86,9 @@ class _CustomListRowState extends State<_CustomListRow> {
           course.description,
           style: header3Style,
         ),
+        onLongPress: () {
+          launch(course.url);
+        },
         //opens the assignments of the course when you click on it
         onTap: () {
           _pushAssignmentsPage(context, user, course.name, course.id);
