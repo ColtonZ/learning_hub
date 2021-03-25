@@ -191,7 +191,7 @@ void main() {
                     "https://drive.google.com/thumbnail?id=1Qj41Y0YRpo22ssaK_v_jYhHmvkBdmI7Y&sz=s200",
                 type: "file")
           ],
-          submissionAttachments: new List<Attachment>(),
+          submissionAttachments: [],
           platform: "GC");
 
       final testAssignment = Assignment.fromJson(
@@ -342,8 +342,8 @@ void main() {
           question: new Question(
               options: ["I'm here & I'm working on it."],
               type: "Multiple Choice"),
-          attachments: new List<Attachment>(),
-          submissionAttachments: new List<Attachment>(),
+          attachments: [],
+          submissionAttachments: [],
           platform: "GC");
 
       final testAssignment = Assignment.fromJson(
@@ -404,8 +404,8 @@ void main() {
           isLate: true,
           answer: "I'm here & I'm working on it.",
           submissionId: "224376012615",
-          attachments: new List<Attachment>(),
-          submissionAttachments: new List<Attachment>(),
+          attachments: [],
+          submissionAttachments: [],
           platform: "GC");
 
       final testAssignment = Assignment.fromJson(
@@ -447,8 +447,8 @@ void main() {
           courseName: "Course Name",
           url:
               "https://classroom.google.com/c/MTU4MTc0OTExNzg2/sa/MjY4NzA0MTAzMTg2/details",
-          attachments: new List<Attachment>(),
-          submissionAttachments: new List<Attachment>(),
+          attachments: [],
+          submissionAttachments: [],
           platform: "GC");
 
       final testAssignment = Assignment.fromJson(
@@ -500,8 +500,8 @@ void main() {
           grade: 53,
           isLate: false,
           submissionId: "224376012615",
-          attachments: new List<Attachment>(),
-          submissionAttachments: new List<Attachment>(),
+          attachments: [],
+          submissionAttachments: [],
           answer: "53",
           platform: "GC");
 
@@ -564,8 +564,8 @@ void main() {
           type: "PERSONAL",
           courseName: "Personal Task • Maths",
           description: "Do maths homework",
-          attachments: new List<Attachment>(),
-          submissionAttachments: new List<Attachment>(),
+          attachments: [],
+          submissionAttachments: [],
           platform: "LH");
       expect(targetAssignment, testAssignment);
     });
@@ -589,8 +589,8 @@ void main() {
           dueDate: new DateTime(2021, 2, 6, 11, 8, 43, 0),
           type: "PERSONAL",
           courseName: "Personal Task",
-          attachments: new List<Attachment>(),
-          submissionAttachments: new List<Attachment>(),
+          attachments: [],
+          submissionAttachments: [],
           platform: "LH");
       expect(targetAssignment, testAssignment);
     });

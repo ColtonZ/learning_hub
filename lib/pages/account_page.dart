@@ -108,14 +108,16 @@ class _CustomScaffoldState extends State<_CustomScaffold> {
                 height: 10,
               ),
               //creates a Sign Out button
-              RaisedButton(
-                  color: Theme.of(context).accentColor,
+              ElevatedButton(
+                  style: ButtonStyle(
+                      backgroundColor: MaterialStateProperty.all<Color>(
+                          Theme.of(context).accentColor)),
                   child: Container(
                     width: 100,
                     child: Row(
                       children: <Widget>[
                         Flexible(
-                        fit:FlexFit.loose,
+                          fit: FlexFit.loose,
                           child: Text(
                             "Sign Out",
                             style: header3Style,
@@ -153,14 +155,15 @@ class _CustomScaffoldState extends State<_CustomScaffold> {
               //if a user has requested to delete their event data, show a delete button and cancel button
               showEventConfirm
                   ? Row(mainAxisAlignment: MainAxisAlignment.center, children: [
-                      FlatButton(
+                      TextButton(
                           child: Text(
                             "Delete",
                             style: header3Style,
                           ),
                           onPressed: () {
                             //when pressed, delete the user's event data
-                            deleteData(databaseReference,user.firebaseUser, 0).then((_) {
+                            deleteData(databaseReference, user.firebaseUser, 0)
+                                .then((_) {
                               setState(() {
                                 showEventConfirm = false;
                               });
@@ -169,7 +172,7 @@ class _CustomScaffoldState extends State<_CustomScaffold> {
                       Container(
                         width: 15,
                       ),
-                      FlatButton(
+                      TextButton(
                           child: Text(
                             "Cancel",
                             style: header3Style,
@@ -183,7 +186,7 @@ class _CustomScaffoldState extends State<_CustomScaffold> {
                     ])
                   : !showTasksConfirm && !showAllConfirm
                       //if the user has requested to delete their tasks or all their data, this button is hidden
-                      ? FlatButton(
+                      ? TextButton(
                           child:
                               Text("Delete Your Events", style: header3Style),
                           onPressed: () {
@@ -208,13 +211,14 @@ class _CustomScaffoldState extends State<_CustomScaffold> {
               //if a user has requested to delete their event data, show a delete button and cancel button
               showTasksConfirm
                   ? Row(mainAxisAlignment: MainAxisAlignment.center, children: [
-                      FlatButton(
+                      TextButton(
                           child: Text(
                             "Delete",
                             style: header3Style,
                           ),
                           onPressed: () {
-                            deleteData(databaseReference,user.firebaseUser, 1).then((_) {
+                            deleteData(databaseReference, user.firebaseUser, 1)
+                                .then((_) {
                               //when pressed, delete the user's task data
                               setState(() {
                                 showTasksConfirm = false;
@@ -224,7 +228,7 @@ class _CustomScaffoldState extends State<_CustomScaffold> {
                       Container(
                         width: 15,
                       ),
-                      FlatButton(
+                      TextButton(
                           child: Text(
                             "Cancel",
                             style: header3Style,
@@ -238,7 +242,7 @@ class _CustomScaffoldState extends State<_CustomScaffold> {
                     ])
                   : !showEventConfirm && !showAllConfirm
                       //if the user has requested to delete their events or all their data, this button is hidden
-                      ? FlatButton(
+                      ? TextButton(
                           child: Text("Delete Your Tasks", style: header3Style),
                           onPressed: () {
                             setState(() {
@@ -262,13 +266,14 @@ class _CustomScaffoldState extends State<_CustomScaffold> {
               //if a user has requested to delete all data, show a delete button and cancel button
               showAllConfirm
                   ? Row(mainAxisAlignment: MainAxisAlignment.center, children: [
-                      FlatButton(
+                      TextButton(
                           child: Text(
                             "Delete",
                             style: header3Style,
                           ),
                           onPressed: () {
-                            deleteData(databaseReference,user.firebaseUser, 2).then((_) {
+                            deleteData(databaseReference, user.firebaseUser, 2)
+                                .then((_) {
                               //when pressed, delete the user's data and then sign them out
                               setState(() {
                                 showAllConfirm = false;
@@ -279,7 +284,7 @@ class _CustomScaffoldState extends State<_CustomScaffold> {
                       Container(
                         width: 15,
                       ),
-                      FlatButton(
+                      TextButton(
                           child: Text(
                             "Cancel",
                             style: header3Style,
@@ -293,7 +298,7 @@ class _CustomScaffoldState extends State<_CustomScaffold> {
                     ])
                   : !showTasksConfirm && !showEventConfirm
                       //if the user has requested to delete their tasks or their event data, this button is hidden
-                      ? FlatButton(
+                      ? TextButton(
                           child: Text(
                             "Delete Your Data",
                             style: header3Style,

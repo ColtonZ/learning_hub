@@ -200,7 +200,7 @@ class Assignment extends Equatable {
 
 //creates a list of attachments for each task. If an error is thrown, this means that the task has no attachment, and so an empty list is returned.
     try {
-      a = new List<Attachment>();
+      a = [];
       (documentMap["attachments"] as List).forEach((attachment) {
         //this converts each attachment string into an actual attachment object
         Attachment att = Attachment.fromList(attachment.toString().split(", "));
@@ -213,7 +213,7 @@ class Assignment extends Equatable {
 
 //attempts to create a list of attachments which have been submitted by a student. If this fails, it means that the student has not submitted anything, and so the attachments list is empty.
     try {
-      s = new List<Attachment>();
+      s = [];
       (documentMap["submissionAttachments"] as List).forEach((attachment) {
         //this converts each attachment string into an actual attachment object
         Attachment att = Attachment.fromList(attachment.toString().split(", "));

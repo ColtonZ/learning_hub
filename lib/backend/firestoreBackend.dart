@@ -28,7 +28,7 @@ Future<List<Event>> getEventsList(
 //get the document for each event
     List<DocumentSnapshot> events = eventsSnapshot.docs;
 
-    List<Event> eventsList = new List<Event>();
+    List<Event> eventsList = [];
 
 //foreach event in the list of events, add it to the events list
     events.forEach((event) {
@@ -331,7 +331,7 @@ Future<List<Assignment>> getFirestoreTasks(
     //create a list of the assignment docs
     List<DocumentSnapshot> assignments = tasksSnapshot.docs;
 
-    List<Assignment> assignmentsList = new List<Assignment>();
+    List<Assignment> assignmentsList = [];
 
 //for each assignment in the list, convert it into an Assignment object, and add it to the list
     assignments.forEach((assignment) {
@@ -347,7 +347,7 @@ Future<List<Assignment>> getFirestoreTasks(
 
 Future<String> firestoreToDoAdd(FirebaseFirestore databaseReference,
     User firebaseUser, Assignment assignment) async {
-  List<String> attachmentStrings = new List<String>();
+  List<String> attachmentStrings = [];
   try {
     assignment.attachments.forEach((attachment) {
       //foreach of the task's attachments, convert its details into a string so that it can be uploaded to Firestore
@@ -355,7 +355,7 @@ Future<String> firestoreToDoAdd(FirebaseFirestore databaseReference,
           "${attachment.id}, ${attachment.title}, ${attachment.link}, ${attachment.thumbnail}, ${attachment.type}");
     });
   } catch (e) {}
-  List<String> submissionStrings = new List<String>();
+  List<String> submissionStrings = [];
   try {
     assignment.submissionAttachments.forEach((attachment) {
       //foreach of the student's attachments, convert its details into a string so that it can be uploaded to Firestore
@@ -419,7 +419,7 @@ Future<String> addCustomEvent(
     bool weekB,
     String start,
     String end) async {
-  List<int> weekDays = new List<int>();
+  List<int> weekDays = [];
 
 //if the location or teacher are blank, set their values to null
   location = location == "" ? null : location;
@@ -767,7 +767,7 @@ Future<bool> tannoyRecentlyChecked(
 
 Future<List<Notice>> getNotices(
     FirebaseFirestore databaseReference, User user) async {
-  List<Notice> notices = new List<Notice>();
+  List<Notice> notices = [];
 
 //get the tannoy data for a given user
   QuerySnapshot tannoyDocs = await databaseReference

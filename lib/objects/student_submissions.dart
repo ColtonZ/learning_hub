@@ -113,8 +113,13 @@ class StudentSubmissionsState extends State<StudentSubmissions> {
 //allow the user to view the task in Google Classroom
                 Padding(
                   padding: EdgeInsets.fromLTRB(0, 25, 0, 0),
-                  child: RaisedButton(
-                    color: Theme.of(context).accentColor,
+                  child: ElevatedButton(
+                    style: ButtonStyle(
+                                            backgroundColor:
+                                                MaterialStateProperty.all<
+                                                        Color>(
+                                                    Theme.of(context)
+                                                        .accentColor)),
                     child: Text("View in Classroom"),
                     onPressed: () {
                       launch(assignment.url);
@@ -213,8 +218,13 @@ class StudentSubmissionsState extends State<StudentSubmissions> {
 //allow the user to view the task in Classroom
           Padding(
             padding: EdgeInsets.fromLTRB(0, 15, 0, 15),
-            child: RaisedButton(
-              color: Theme.of(context).accentColor,
+            child: ElevatedButton(
+              style: ButtonStyle(
+                                            backgroundColor:
+                                                MaterialStateProperty.all<
+                                                        Color>(
+                                                    Theme.of(context)
+                                                        .accentColor)),
               child: Text("View in Classroom"),
               onPressed: () {
                 launch(assignment.url);
@@ -298,8 +308,13 @@ class StudentSubmissionsState extends State<StudentSubmissions> {
           //allow the user to view the task in classroom
           Padding(
             padding: EdgeInsets.fromLTRB(0, 25, 0, 25),
-            child: RaisedButton(
-              color: Theme.of(context).accentColor,
+            child: ElevatedButton(
+              style: ButtonStyle(
+                                            backgroundColor:
+                                                MaterialStateProperty.all<
+                                                        Color>(
+                                                    Theme.of(context)
+                                                        .accentColor)),
               child: Text("View in Classroom"),
               onPressed: () {
                 launch(assignment.url);
@@ -331,8 +346,13 @@ class StudentSubmissionsState extends State<StudentSubmissions> {
           //allow the user to mark the personal task as done
           Padding(
             padding: EdgeInsets.fromLTRB(0, 0, 0, 25),
-            child: RaisedButton(
-              color: Theme.of(context).accentColor,
+            child: ElevatedButton(
+              style: ButtonStyle(
+                                            backgroundColor:
+                                                MaterialStateProperty.all<
+                                                        Color>(
+                                                    Theme.of(context)
+                                                        .accentColor)),
               child: Text("Mark task as done"),
               onPressed: () {
                 setState(() {

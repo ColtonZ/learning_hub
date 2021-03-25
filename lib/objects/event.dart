@@ -25,7 +25,7 @@ class Event extends Equatable implements Comparable<Event> {
   //creates a event object, given a Firestore document
   factory Event.fromFirestore(DocumentSnapshot document) {
     Map<String, dynamic> documentMap = document.data();
-    List<List<String>> t = new List<List<String>>();
+    List<List<String>> t = [];
     //loop through each of the event's times, and convert it into a list
     (documentMap["times"] as List).forEach((time) {
       t.add(time.toString().split(", "));

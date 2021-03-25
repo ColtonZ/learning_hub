@@ -6,7 +6,6 @@ import 'mock_classes.dart';
 import "package:test/test.dart";
 import 'package:learning_hub/objects/event.dart';
 import 'package:learning_hub/objects/assignment.dart';
-import 'package:learning_hub/objects/attachment.dart';
 import 'package:learning_hub/constants.dart';
 
 /*
@@ -971,7 +970,7 @@ void main() async {
         "lastChecked": null,
         "weekA": Timestamp.fromDate(DateTime(2021, 2, 8))
       });
-      expect(await getEventsList(databaseReference, user), new List<Event>());
+      expect(await getEventsList(databaseReference, user), []);
     });
   });
   group("Get user-made tasks", () {
@@ -1009,8 +1008,8 @@ void main() async {
             type: "PERSONAL",
             courseName: "Personal Task • Maths",
             description: "Do maths homework",
-            attachments: new List<Attachment>(),
-            submissionAttachments: new List<Attachment>(),
+            attachments: [],
+            submissionAttachments: [],
             platform: "LH")
       ];
 
@@ -1081,8 +1080,8 @@ void main() async {
             type: "PERSONAL",
             courseName: "Personal Task • Maths",
             description: "Do maths homework",
-            attachments: new List<Attachment>(),
-            submissionAttachments: new List<Attachment>(),
+            attachments: [],
+            submissionAttachments: [],
             platform: "LH"),
         Assignment(
             title: "Personal Assignment",
@@ -1092,8 +1091,8 @@ void main() async {
             type: "PERSONAL",
             courseName: "Personal Task",
             description: null,
-            attachments: new List<Attachment>(),
-            submissionAttachments: new List<Attachment>(),
+            attachments: [],
+            submissionAttachments: [],
             platform: "LH"),
         Assignment(
             title: "Difficult Task",
@@ -1103,8 +1102,8 @@ void main() async {
             type: "PERSONAL",
             courseName: "Personal Task",
             description: "Finish Writing Email",
-            attachments: new List<Attachment>(),
-            submissionAttachments: new List<Attachment>(),
+            attachments: [],
+            submissionAttachments: [],
             platform: "LH")
       ];
 
@@ -1121,7 +1120,7 @@ void main() async {
         "weekA": Timestamp.fromDate(DateTime(2021, 2, 8))
       });
       expect(await getFirestoreTasks(databaseReference, user),
-          new List<Assignment>());
+          []);
     });
   });
   group("Get tannoy notices", () {

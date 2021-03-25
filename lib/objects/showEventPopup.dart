@@ -83,18 +83,28 @@ class ShowEventState extends State<ShowEvent> {
                                     MainAxisAlignment.spaceEvenly,
                                 children: [
                                     //if the user has confirmed they want to delete the event and the event was added from Learning Hub, show a button allowing for the event to be deleted.
-                                    FlatButton(
+                                    TextButton(
                                         child: Text("Delete"),
-                                        color: Theme.of(context).accentColor,
+                                        style: ButtonStyle(
+                                            backgroundColor:
+                                                MaterialStateProperty.all<
+                                                        Color>(
+                                                    Theme.of(context)
+                                                        .accentColor)),
                                         onPressed: () async {
                                           await deleteEvent(databaseReference,
                                               user.firebaseUser, id);
                                           Navigator.of(context).pop();
                                         }),
                                     //allow the user to cancel the deletion of the data
-                                    FlatButton(
+                                    TextButton(
                                         child: Text("Cancel"),
-                                        color: Theme.of(context).accentColor,
+                                        style: ButtonStyle(
+                                            backgroundColor:
+                                                MaterialStateProperty.all<
+                                                        Color>(
+                                                    Theme.of(context)
+                                                        .accentColor)),
                                         onPressed: () {
                                           setState(() {
                                             showConfirm = false;
@@ -102,9 +112,12 @@ class ShowEventState extends State<ShowEvent> {
                                         }),
                                   ])
                             //create the first delete event button
-                            : RaisedButton(
+                            : ElevatedButton(
                                 child: Text("Delete Event"),
-                                color: Theme.of(context).accentColor,
+                                style: ButtonStyle(
+                                    backgroundColor:
+                                        MaterialStateProperty.all<Color>(
+                                            Theme.of(context).accentColor)),
                                 onPressed: () {
                                   setState(() {
                                     //show the confirmation dialogue when button pressed

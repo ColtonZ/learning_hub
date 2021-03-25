@@ -10,7 +10,7 @@ Future<List<Event>> getEvents(
   //get the current week (A or B)
   String week = await getCurrentWeek(databaseReference, user, eventsDate);
 
-  List<Event> events = new List<Event>();
+  List<Event> events = [];
 
 //loop through every event in the user's Firestore database
   for (Event event in allEvents) {

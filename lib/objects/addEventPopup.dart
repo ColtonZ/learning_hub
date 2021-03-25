@@ -293,7 +293,7 @@ class AddEventState extends State<AddEvent> {
                   children: [
                     //creates two flat buttons, one for the event's start time and one for the event's end time.
                     //when one of these buttons is tapped, the corresponding time is changed, and the text on the button is updated to reflect that.
-                    FlatButton(
+                    TextButton(
                       child: Text(
                           "${start.substring(0, 2)}:${start.substring(2)}"),
                       onPressed: () async {
@@ -310,7 +310,7 @@ class AddEventState extends State<AddEvent> {
                           });
                       },
                     ),
-                    FlatButton(
+                    TextButton(
                       child: Text("${end.substring(0, 2)}:${end.substring(2)}"),
                       onPressed: () async {
                         TimeOfDay selected = await showTimePicker(
@@ -337,8 +337,10 @@ class AddEventState extends State<AddEvent> {
               Container(
                 padding: const EdgeInsets.symmetric(vertical: 8.0),
                 //a raised button allowing for the event to be added. It ensures that the requirements for a valid event are fulfilled, and then it is added to the db.
-                child: RaisedButton(
-                  color: Theme.of(context).accentColor,
+                child: ElevatedButton(
+                  style: ButtonStyle(
+                      backgroundColor: MaterialStateProperty.all<Color>(
+                          Theme.of(context).accentColor)),
                   onPressed: () async {
                     // this ensures that the event timings and repeats are valid
                     if (_formKey.currentState.validate() &&
@@ -346,8 +348,17 @@ class AddEventState extends State<AddEvent> {
                         (boxValueA || boxValueB) &&
                         int.parse(start) < int.parse(end)) {
                       daysFilled = true;
-                      await addCustomEvent(databaseReference,user.firebaseUser, title, teacher,
-                          location, days, boxValueA, boxValueB, start, end);
+                      await addCustomEvent(
+                          databaseReference,
+                          user.firebaseUser,
+                          title,
+                          teacher,
+                          location,
+                          days,
+                          boxValueA,
+                          boxValueB,
+                          start,
+                          end);
                       Navigator.of(context).pop();
                     }
                     //if no day has been selected return that error

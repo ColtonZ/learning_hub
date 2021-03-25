@@ -105,7 +105,7 @@ class AddPersonalTaskState extends State<AddPersonalTask> {
               Padding(
                 padding: EdgeInsets.fromLTRB(0, 10, 0, 10),
                 //creates a button that the user can press to select the task's due date
-                child: FlatButton(
+                child: TextButton(
                   child: Text(
                       "${days[dueDate.weekday - 1]} ${dueDate.day} ${months[dueDate.month - 1]} ${dueDate.year}"),
                   onPressed: () async {
@@ -124,8 +124,10 @@ class AddPersonalTaskState extends State<AddPersonalTask> {
               ),
               Container(
                 padding: const EdgeInsets.symmetric(vertical: 8.0),
-                child: RaisedButton(
-                  color: Theme.of(context).accentColor,
+                child: ElevatedButton(
+                  style: ButtonStyle(
+                      backgroundColor: MaterialStateProperty.all<Color>(
+                          Theme.of(context).accentColor)),
                   onPressed: () async {
                     // if a title has been given, add the task to the firestore db, and close the popup
                     if (_formKey.currentState.validate()) {

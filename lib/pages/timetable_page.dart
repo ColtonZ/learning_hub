@@ -224,13 +224,16 @@ class _MainPageState extends State<_MainPage> {
                         "${days[time.weekday - 1]} ${time.day} ${months[time.month - 1]} ${time.year} • ",
                         style: subtitleStyle,
                       ),
-                      FlatButton(
+                      TextButton(
                         child: Text(
                           "Week ${snapshot.data}",
                           style: subtitleStyle,
                         ),
-                        minWidth: 0,
-                        padding: EdgeInsets.zero,
+                        style: ButtonStyle(
+                            padding: MaterialStateProperty.all<EdgeInsets>(
+                                EdgeInsets.zero),
+                            minimumSize:
+                                MaterialStateProperty.all<Size>(Size(0, 0))),
                         onPressed: null,
                         onLongPress: () {
                           showDialog(
@@ -250,13 +253,13 @@ class _MainPageState extends State<_MainPage> {
                                         mainAxisAlignment:
                                             MainAxisAlignment.center,
                                         children: [
-                                          FlatButton(
+                                          TextButton(
                                             onPressed: () {
                                               Navigator.of(context).pop();
                                             },
                                             child: Text("No"),
                                           ),
-                                          FlatButton(
+                                          TextButton(
                                             onPressed: () {
                                               Navigator.of(context).pop();
                                               Navigator.of(context).push(
@@ -293,13 +296,16 @@ class _MainPageState extends State<_MainPage> {
                         "${days[time.weekday - 1]} ${time.day} ${months[time.month - 1]} ${time.year} • ",
                         style: subtitleStyle,
                       ),
-                      FlatButton(
+                      TextButton(
                         child: Text(
                           "Week $week",
                           style: subtitleStyle,
                         ),
-                        minWidth: 0,
-                        padding: EdgeInsets.zero,
+                        style: ButtonStyle(
+                            padding: MaterialStateProperty.all<EdgeInsets>(
+                                EdgeInsets.zero),
+                            minimumSize:
+                                MaterialStateProperty.all<Size>(Size(0, 0))),
                         onPressed: () {},
                       ),
                     ]);
